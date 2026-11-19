@@ -38,12 +38,12 @@
       <p class="overline" style="color:var(--ink-muted)">{{ prod.brand }} · {{ prod.type_l }}</p>
       <h1>{{ prod.title_l }}</h1>
       <div class="pd-badges">
-        <span class="badge {{ 'badge-refurb' if prod.cond == 'Generalüberholt' else 'badge-used' }}">{{ icon('check') }}{{ prod.cond_l }}</span>
         {% if prod.kind == 'endoscope' %}<span class="badge badge-warranty">{{ icon('shield') }}{{ t('warranty_12') }}</span>{% endif %}
+        <span class="badge {{ 'badge-refurb' if prod.cond == 'Generalüberholt' else 'badge-used' }}">{{ icon('check') }}{{ prod.cond_l }}</span>
       </div>
       <div class="pd-price">{% if prod.price %}<strong>{{ prod.price }}</strong><span class="hint">{{ t('price_note') }}</span>{% else %}<strong>{{ t('price_on_request') }}</strong>{% endif %}</div>
       <div class="pd-ctas" id="anfrage">
-        <button type="button" class="btn btn-primary btn-block" data-inq-open aria-expanded="false" aria-controls="inq">{{ tr(G.inquiry_t) }}</button>
+        <button type="button" class="btn btn-primary" data-inq-open aria-expanded="false" aria-controls="inq">{{ tr(G.inquiry_t) }}</button>
         <form class="inq" id="inq" hidden data-form data-success="inq-ok" action="#">
           <div><h2 class="h3">{{ tr(G.inquiry_t) }}: {{ prod.model }}</h2><p class="hint" style="margin-top:4px">{{ tr(G.inquiry_s) }}</p></div>
           {{ field('firma', t('f_company'), req=True, ac='organization') }}
@@ -58,7 +58,7 @@
           <button class="btn btn-primary" type="submit">{{ tr(G.send) }} {{ icon('arrow') }}</button>
         </form>
         <div class="notice notice-ok" id="inq-ok" hidden data-success-box>{{ icon('check') }}<div><b>{{ tr(G.sent_t) }}</b><p>{{ tr(G.sent_s) }}</p></div></div>
-        {% if prod.kind == 'endoscope' %}<a class="btn btn-secondary btn-block" href="{{ url('reparatur-auftrag', '?hersteller=' ~ prod.brand ~ '&typ=' ~ prod.type ~ '&modell=' ~ prod.model) }}">{{ icon('wrench') }} {{ tr(G.repair_this) }}</a>{% endif %}
+        {% if prod.kind == 'endoscope' %}<a class="btn btn-secondary" href="{{ url('reparatur-auftrag', '?hersteller=' ~ prod.brand ~ '&typ=' ~ prod.type ~ '&modell=' ~ prod.model) }}">{{ icon('wrench') }} {{ tr(G.repair_this) }}</a>{% endif %}
       </div>
 
     </div>

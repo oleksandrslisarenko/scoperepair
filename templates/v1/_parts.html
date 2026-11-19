@@ -6,8 +6,8 @@
     {% if x.img %}<img src="{{ x.img[480] }}" srcset="{{ x.img[480] }} 480w, {{ x.img[960] }} 960w" sizes="(max-width:640px) 100vw, (max-width:1100px) 50vw, 400px" alt="{{ x.title_l }}" loading="lazy" decoding="async">
     {% else %}<div class="ph">{{ icon('image') }}<span>{{ t('no_photo') }}</span></div>{% endif %}
     <div class="pcard-badges">
-      <span class="badge {{ 'badge-refurb' if x.cond == 'Generalüberholt' else 'badge-used' }}">{{ icon('check') }}{{ x.cond_l }}</span>
       {% if x.kind == 'endoscope' %}<span class="badge badge-warranty">{{ icon('shield') }}{{ t('warranty_12') }}</span>{% endif %}
+      <span class="badge {{ 'badge-refurb' if x.cond == 'Generalüberholt' else 'badge-used' }}">{{ icon('check') }}{{ x.cond_l }}</span>
     </div>
   </div>
   <div class="pcard-body">

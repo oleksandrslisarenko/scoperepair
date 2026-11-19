@@ -205,9 +205,14 @@ def zip_hero():
 # ──────────────────────────────────────────────────────────────────────────
 # Data helpers for templates
 # ──────────────────────────────────────────────────────────────────────────
+_hide = os.path.join(ROOT, 'assets', 'photos', 'products-glass', '_hide_from_gallery.txt')
+HIDDEN_PHOTOS = ['products__' + os.path.splitext(l.strip())[0].replace('/', '__')
+                 for l in (open(_hide).read().split() if os.path.exists(_hide) else [])]
+
+
 def product_view(p, lang, images):
     gal = [images.get(u) for u in p['gallery']]
-    gal = [g for g in gal if g]
+    gal = [g for g in gal if g and not any(h + '-' in str(g) or h + '__g-' in str(g) for h in HIDDEN_PHOTOS)]
     # lead with a glass-backdrop shot so catalog cards look consistent
     if gal and '__g-' not in str(gal[0]):
         gi = next((i for i, g in enumerate(gal) if '__g-' in str(g)), None)
