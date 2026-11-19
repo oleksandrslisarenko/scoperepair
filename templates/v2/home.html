@@ -111,9 +111,10 @@
       <div><p class="x-over">{{ tr(p.used_o) }}</p><h2 id="used-h">{{ tr(p.used_h) }}</h2></div>
       <a class="x-link" href="{{ url('gebrauchte-endoskope') }}">{{ t('cta_all_endoscopes') }} ({{ endos|length }}) {{ icon('arrow') }}</a>
     </div>
-    {% set shown = [] %}
-    {% for e in endos if e.img and shown|length < 3 and (e.brand not in shown|map(attribute='brand')|list) %}{% set _ = shown.append(e) %}{% endfor %}
-    <div class="grid3 rvl">{% for e in shown %}{{ pcard(e) }}{% endfor %}</div>
+    {% set four = pid in ('index-b', 'index-c') %}
+    {% set shown = [] %}{% set keys = [] %}
+    {% for e in endos if e.img and shown|length < (4 if four else 3) and ((e.brand ~ e.type) if four else e.brand) not in keys %}{% set _ = shown.append(e) %}{% set _ = keys.append((e.brand ~ e.type) if four else e.brand) %}{% endfor %}
+    <div class="{{ 'x-cards4' if four else 'grid3' }} rvl">{% for e in shown %}{{ pcard(e) }}{% endfor %}</div>
     <div class="x-trade rvl">
       <span class="x-ico x-ico-lg">{{ icon('swap') }}</span>
       <div><h3>{{ tr(p.tradein_t) }}</h3><p>{{ tr(p.tradein_s) }}</p></div>
@@ -142,18 +143,17 @@
 {# ── FAQ ── #}
 {% if faq %}
 <section class="x-sec" aria-labelledby="faq-h">
-  <div class="wrap x-split x-split-faq">
-    <div class="x-head rvl">
-      <p class="x-over">FAQ</p>
-      <h2 id="faq-h">{{ t('faq') }}</h2>
-      <div class="x-askcard">
+  <div class="wrap x-faq-wrap">
+    <div class="x-head rvl"><p class="x-over">FAQ</p><h2 id="faq-h">{{ t('faq') }}</h2></div>
+    <div class="x-faq-grid">
+      <div class="x-askcard rvl">
         <p>{{ t('faq_more') }}</p>
         <a class="x-link" href="{{ company.phone_href }}">{{ icon('phone') }} {{ company.phone }}</a>
         <a class="x-link" href="mailto:{{ company.email }}">{{ icon('mail') }} {{ company.email }}</a>
       </div>
-    </div>
-    <div class="x-faq rvl" data-faq>
-      {% for q, a in faq %}<details {% if loop.first %}open{% endif %}><summary>{{ q }}<span aria-hidden="true">{{ icon('plus') }}</span></summary><div class="x-faq-a"><p>{{ a }}</p></div></details>{% endfor %}
+      <div class="x-faq rvl" data-faq>
+        {% for q, a in faq %}<details><summary>{{ q }}<span aria-hidden="true">{{ icon('plus') }}</span></summary><div class="x-faq-a"><p>{{ a }}</p></div></details>{% endfor %}
+      </div>
     </div>
   </div>
 </section>
