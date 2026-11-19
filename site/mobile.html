@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>scopeREPAIR – Mobil-Ansicht</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/img/Favicon_Scoperepair_neu_2024_transparent.png">
+<link rel="stylesheet" href="/static/css/fonts.css">
+<link rel="stylesheet" href="/static/css/hub.css">
+</head>
+<body class="mv">
+<div class="mv-app">
+  <aside class="mv-side">
+    <a class="mv-back" href="/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>Übersicht</a>
+    <div class="mv-tabs" role="tablist" aria-label="Variante">
+      <button type="button" role="tab" data-v="v1"><b>01</b> Klar</button><button type="button" role="tab" data-v="v2"><b>02</b> Variante 2</button>
+    </div>
+    <label class="mv-lang"><span>Sprache</span>
+      <select data-lang><option value="de">DE</option><option value="en">EN</option><option value="fr">FR</option><option value="ru">RU</option></select></label>
+    <nav class="mv-list" aria-label="Seiten"><ol>
+      <li><button type="button" data-p="index.html">Startseite</button></li><li><button type="button" data-p="reparatur.html">Reparatur</button></li><li><button type="button" data-p="reparatur-auftrag.html">Abholauftrag (Wizard)</button></li><li><button type="button" data-p="leihgeraete.html">Leihgeräte</button></li><li><button type="button" data-p="leihgeraet-anfragen.html">Leihgerät anfragen (Wizard)</button></li><li><button type="button" data-p="gebrauchte-endoskope.html">Gebrauchte Endoskope</button></li><li><button type="button" data-p="endoskop/gastroskop-pentax-eg-1580k.html">Produktseite</button></li><li><button type="button" data-p="ankauf.html">Ankauf</button></li><li><button type="button" data-p="ankauf-anfrage.html">Gerät verkaufen (Wizard)</button></li><li><button type="button" data-p="endoskopie-anlagen.html">Endoskopie-Anlagen</button></li><li><button type="button" data-p="rechner.html">Kostenrechner</button></li><li><button type="button" data-p="ueber-uns.html">Über uns</button></li><li><button type="button" data-p="kontakt.html">Kontakt / Rückruf</button></li><li><button type="button" data-p="impressum.html">Impressum</button></li><li><button type="button" data-p="datenschutz.html">Datenschutz</button></li><li><button type="button" data-p="agb.html">AGB</button></li><li><button type="button" data-p="rechtliches.html">Text- und Bildrechte</button></li>
+    </ol></nav>
+  </aside>
+  <section class="mv-stage">
+    <div class="phone">
+      <iframe title="Mobil-Ansicht" data-frame></iframe>
+    </div>
+    <p class="mv-url"><span data-url></span> <a data-open target="_blank" rel="noopener">In neuem Tab öffnen</a></p>
+  </section>
+</div>
+<script>
+(function () {
+  var screens = [{"id": "index", "label": "Startseite", "path": "index.html"}, {"id": "reparatur", "label": "Reparatur", "path": "reparatur.html"}, {"id": "reparatur-auftrag", "label": "Abholauftrag (Wizard)", "path": "reparatur-auftrag.html"}, {"id": "leihgeraete", "label": "Leihgeräte", "path": "leihgeraete.html"}, {"id": "leihgeraet-anfragen", "label": "Leihgerät anfragen (Wizard)", "path": "leihgeraet-anfragen.html"}, {"id": "gebrauchte-endoskope", "label": "Gebrauchte Endoskope", "path": "gebrauchte-endoskope.html"}, {"id": "produkt", "label": "Produktseite", "path": "endoskop/gastroskop-pentax-eg-1580k.html"}, {"id": "ankauf", "label": "Ankauf", "path": "ankauf.html"}, {"id": "ankauf-anfrage", "label": "Gerät verkaufen (Wizard)", "path": "ankauf-anfrage.html"}, {"id": "endoskopie-anlagen", "label": "Endoskopie-Anlagen", "path": "endoskopie-anlagen.html"}, {"id": "rechner", "label": "Kostenrechner", "path": "rechner.html"}, {"id": "ueber-uns", "label": "Über uns", "path": "ueber-uns.html"}, {"id": "kontakt", "label": "Kontakt / Rückruf", "path": "kontakt.html"}, {"id": "impressum", "label": "Impressum", "path": "impressum.html"}, {"id": "datenschutz", "label": "Datenschutz", "path": "datenschutz.html"}, {"id": "agb", "label": "AGB", "path": "agb.html"}, {"id": "rechtliches", "label": "Text- und Bildrechte", "path": "rechtliches.html"}], variants = [{"id": "v1", "num": "01", "tag": "Aktuell", "name": "Klar", "desc": "Der freigegebene Entwurf: hell, ruhig, Navy und Signalblau aus dem Logo, runde Bedienelemente und das Segment-Motiv als Fortschrittsanzeige.", "status": "Fertig zur Durchsicht", "ready": true}, {"id": "v2", "num": "02", "tag": "Neu", "name": "Variante 2", "desc": "Alternative Gestaltung mit denselben Seiten und Funktionen.", "status": "In Arbeit", "ready": false}];
+  var q = new URLSearchParams(location.search);
+  var v = q.get('v') || 'v1', p = q.get('p') || 'de/index.html';
+  var frame = document.querySelector('[data-frame]'), langSel = document.querySelector('[data-lang]');
+  function lang() { return p.split('/')[0]; }
+  function rest() { return p.split('/').slice(1).join('/'); }
+  function src() { var r = rest(); return '/' + v + '/' + lang() + '/' + (r === 'index.html' ? '' : r); }
+  function sync(push) {
+    var s = src(); if (frame.getAttribute('src') !== s) frame.setAttribute('src', s);
+    document.querySelectorAll('[data-v]').forEach(function (b) { b.setAttribute('aria-selected', b.dataset.v === v); });
+    document.querySelectorAll('[data-p]').forEach(function (b) { b.setAttribute('aria-current', b.dataset.p === rest() ? 'true' : 'false'); });
+    langSel.value = lang();
+    document.querySelector('[data-url]').textContent = '?v=' + v + '&p=' + p;
+    document.querySelector('[data-open]').href = s;
+    var u = '?v=' + v + '&p=' + p; if (push) history.replaceState(null, '', u);
+  }
+  document.querySelectorAll('[data-v]').forEach(function (b) { b.onclick = function () { v = b.dataset.v; sync(true); }; });
+  document.querySelectorAll('[data-p]').forEach(function (b) { b.onclick = function () { p = lang() + '/' + b.dataset.p; sync(true); }; });
+  langSel.onchange = function () { p = langSel.value + '/' + rest(); sync(true); };
+  frame.addEventListener('load', function () {
+    try { var path = frame.contentWindow.location.pathname.split('/').filter(Boolean); if (path.length >= 2) { v = path[0]; p = path.slice(1).join('/') || 'index.html'; if (p === path[1]) p += '/index.html'; sync(true); } } catch (e) {}
+  });
+  sync(false);
+})();
+</script>
+</body>
+</html>

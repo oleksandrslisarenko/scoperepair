@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% from '_icons.html' import icon with context %}
+{% from '_forms.html' import field, tiles, salutation, photos, consent, send_error, calendar with context %}
+{% from '_wizard.html' import wizard, done_panel, device_picker with context %}
+{% block main %}
+{% set P = p %}
+{% set rows = [('@devices', tr(P.review_dev)), ('defekt', tr(P.review_def)), ('fotos', t('f_photos')), ('leihgeraet', tr(P.review_loan)), ('datum', tr(P.review_pick))] %}
+{% call wizard('wz-repair', P, rows, P.side_list) %}
+  {# 1 device #}
+  <section class="wz-step" data-step>
+    <div class="ai" data-ai data-badge="{{ tr(P.ai_badge) }}">
+      <div class="ai-head"><span class="ai-cam">{{ icon('camera') }}<span class="ai-pill">AI</span></span>
+        <div><h3>{{ tr(P.ai_t) }}</h3><p class="muted">{{ tr(P.ai_s) }}</p></div></div>
+      <div class="ai-body">
+        <div>
+          <div class="ai-actions" data-ai-idle>
+            <label class="btn btn-primary">{{ icon('camera') }} {{ tr(P.ai_btn) }}<input type="file" accept="image/*" capture="environment"></label>
+            <button type="button" class="btn btn-secondary" data-ai-demo>{{ tr(P.ai_demo) }}</button>
+          </div>
+          <div class="ai-scan" role="status" aria-live="polite" data-ai-scanning hidden><span class="spin" aria-hidden="true"></span>{{ tr(P.ai_scan) }}</div>
+          <div data-ai-done hidden style="display:flex;flex-direction:column;gap:10px">
+            <div class="ai-ok" role="status">{{ icon('check-c') }}<span>{{ tr(P.ai_ok) }}</span></div>
+            <div class="ai-found"><span><span class="muted">{{ tr(P.ai_found) }}:</span> <b>Olympus · {{ tr(C.TYPES['Koloskop']) }} · CF-HQ190L</b></span><span class="mono">S/N 2812345</span></div>
+            <button type="button" class="ai-undo" data-ai-undo>{{ tr(P.ai_undo) }}</button>
+          </div>
+          <p class="proto-note">{{ tr(P.ai_note) }}</p>
+        </div>
+        <div class="ai-prev" data-ai-prev hidden>
+          <img alt="" hidden>
+          <svg viewBox="0 0 320 200" role="img" aria-label="OLYMPUS CF-HQ190L, S/N 2812345"><defs><linearGradient id="aibg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2b3238"/><stop offset="1" stop-color="#14191d"/></linearGradient><linearGradient id="ailb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4f6f8"/><stop offset=".5" stop-color="#d9dee3"/><stop offset="1" stop-color="#eef1f4"/></linearGradient></defs><rect width="320" height="200" fill="url(#aibg)"/><g transform="rotate(-4 160 100)"><rect x="40" y="38" width="240" height="124" rx="8" fill="url(#ailb)" stroke="#9aa5ae"/><text x="58" y="70" font-family="Arial" font-size="20" font-weight="700" fill="#1d2a6b" letter-spacing="1.5">OLYMPUS</text><text x="58" y="98" font-family="Arial" font-size="17" font-weight="700" fill="#1b1f23">CF-HQ190L</text><text x="58" y="120" font-family="Courier New, monospace" font-size="13" fill="#2a2f34">S/N 2812345</text><g fill="#1b1f23"><rect x="200" y="104" width="2" height="34"/><rect x="204" y="104" width="1" height="34"/><rect x="207" y="104" width="3" height="34"/><rect x="212" y="104" width="1" height="34"/><rect x="215" y="104" width="2" height="34"/><rect x="219" y="104" width="1" height="34"/><rect x="222" y="104" width="3" height="34"/><rect x="227" y="104" width="1" height="34"/><rect x="230" y="104" width="2" height="34"/><rect x="234" y="104" width="1" height="34"/><rect x="237" y="104" width="3" height="34"/><rect x="242" y="104" width="2" height="34"/><rect x="246" y="104" width="1" height="34"/><rect x="249" y="104" width="2" height="34"/><rect x="253" y="104" width="3" height="34"/></g></g></svg>
+        </div>
+      </div>
+    </div>
+    {{ device_picker(models_json, ['Gastroskop', 'Koloskop', 'Bronchoskop', 'Duodenoskop', 'Zystoskop', 'Ultraschallendoskop']) }}
+  </section>
+
+  {# 2 defect #}
+  <section class="wz-step" data-step hidden>
+    <fieldset class="fieldset field" data-field="defekt" data-req-group>
+      <legend>{{ tr(P.defects_l) }}<span class="req" aria-hidden="true">*</span> <span class="opt">– {{ tr(P.multi) }}</span></legend>
+      <div class="tiles">{% for k, l, s in C.DEFECTS %}<label class="tile"><input type="checkbox" name="defekt" value="{{ k }}" data-label="{{ tr(l) }}"><span class="tile-in"><b>{{ tr(l) }}</b><span>{{ tr(s) }}</span></span></label>{% endfor %}</div>
+      <span class="err" role="alert">{{ icon('info') }}<span></span></span>
+    </fieldset>
+    {{ field('beschreibung', tr(P.desc_l), 'textarea', ph=tr(P.desc_ph)) }}
+    {{ photos('fotos', hint=tr(P.photo_tip)) }}
+  </section>
+
+  {# 3 loaner #}
+  <section class="wz-step" data-step hidden>
+    <fieldset class="fieldset field" data-field="leihgeraet" data-req-group>
+      <legend>{{ tr(P.loaner_q) }}<span class="req" aria-hidden="true">*</span></legend>
+      <div class="tiles">
+        <label class="tile"><input type="radio" name="leihgeraet" value="ja" data-label="{{ tr(P.loaner_yes) }}"><span class="tile-in"><b>{{ tr(P.loaner_yes) }}</b><span>{{ tr(P.loaner_yes_s) }}</span></span></label>
+        <label class="tile"><input type="radio" name="leihgeraet" value="nein" data-label="{{ tr(P.loaner_no) }}"><span class="tile-in"><b>{{ tr(P.loaner_no) }}</b><span>{{ tr(P.loaner_no_s) }}</span></span></label>
+      </div>
+      <span class="err" role="alert">{{ icon('info') }}<span></span></span>
+    </fieldset>
+    <div class="notice notice-ok" data-show-if="leihgeraet=ja" hidden>{{ icon('check') }}<p>{{ tr(P.loaner_panel) }}</p></div>
+  </section>
+
+  {# 4 pick-up #}
+  <section class="wz-step" data-step hidden>
+    <div class="fgrid-3">
+      {{ field('strasse', t('f_street'), req=True, ac='street-address') }}
+      {{ field('plz', t('f_zip'), 'zip', req=True, ac='postal-code') }}
+      {{ field('ort', t('f_city'), req=True, ac='address-level2') }}
+    </div>
+    <div style="display:flex;gap:32px;flex-wrap:wrap;align-items:flex-start">
+      {{ calendar('datum') }}
+      <div style="display:flex;flex-direction:column;gap:16px;min-width:220px;flex:1">
+        <fieldset class="fieldset field" data-field="zeit"><legend>{{ t('f_time') }} <span class="opt">({{ t('optional') }})</span></legend>
+          <div class="chips"><label class="chip"><input type="radio" name="zeit" value="vm" data-label="{{ t('morning') }}"><span>{{ t('morning') }}</span></label><label class="chip"><input type="radio" name="zeit" value="nm" data-label="{{ t('afternoon') }}"><span>{{ t('afternoon') }}</span></label></div>
+        </fieldset>
+        <p class="hint">{{ tr(P.date_hint) }}</p>
+      </div>
+    </div>
+    <div class="fgrid">
+      {{ field('vor_ort', t('f_onsite')) }}
+      {{ field('hinweis', t('f_notes')) }}
+    </div>
+    <div><button type="button" class="btn btn-text btn-s" data-demo='{"strasse":"Rathausplatz 4","plz":"22767","ort":"Hamburg","vor_ort":"Empfang"}' data-date="1">{{ t('fill_demo') }}</button></div>
+  </section>
+
+  {# 5 contact #}
+  <section class="wz-step" data-step hidden>
+    {{ salutation() }}
+    <div class="fgrid">
+      {{ field('firma', t('f_company'), req=True, cls='span2', ac='organization') }}
+      {{ field('vorname', t('f_firstname'), req=True, ac='given-name') }}
+      {{ field('nachname', t('f_lastname'), req=True, ac='family-name') }}
+      {{ field('email', t('f_email'), 'email', req=True, ac='email') }}
+      {{ field('telefon', t('f_phone'), 'phone', req=True, ac='tel') }}
+    </div>
+    <p class="proto-note">{{ t('proto_error_hint') }}</p>
+    <div><button type="button" class="btn btn-text btn-s" data-demo='{"anrede":"{{ tr(T.sal[1]) }}","firma":"Praxis Muster","vorname":"Anna","nachname":"Muster","email":"praxis@beispiel.de","telefon":"040 000000"}'>{{ t('fill_demo') }}</button></div>
+  </section>
+
+  {# 6 review #}
+  <section class="wz-step" data-step hidden>
+    <div class="review" data-review-box data-edit="{{ t('edit') }}" data-groups='{{ json.dumps([
+      {"title": tr(P.review_dev), "step": 0, "fields": [{"custom": "devices"}]},
+      {"title": tr(P.review_def), "step": 1, "fields": [{"name": "defekt"}, {"name": "beschreibung"}, {"name": "fotos", "label": t("f_photos")}]},
+      {"title": tr(P.review_loan), "step": 2, "fields": [{"name": "leihgeraet"}]},
+      {"title": tr(P.review_pick), "step": 3, "fields": [{"name": "strasse"}, {"name": "plz"}, {"name": "ort"}, {"name": "datum", "label": t("f_date")}, {"name": "zeit", "label": t("f_time")}, {"name": "vor_ort", "label": t("f_onsite")}, {"name": "hinweis", "label": t("f_notes")}]},
+      {"title": tr(P.review_contact), "step": 4, "fields": [{"name": "firma"}, {"name": "anrede"}, {"name": "vorname"}, {"name": "nachname"}, {"name": "email"}, {"name": "telefon"}]}
+    ], ensure_ascii=False) }}'></div>
+    <div class="notice">{{ icon('info') }}<p>{{ tr(P.review_panel) }}</p></div>
+    {{ consent() }}
+    {{ send_error() }}
+    <p class="proto-note">{{ t('proto_note') }}</p>
+  </section>
+{% endcall %}
+{{ done_panel('done', tr(P.done_h), tr(P.done_s), P.done_steps) }}
+{% endblock %}

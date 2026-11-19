@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% from '_icons.html' import icon with context %}
+{% from '_parts.html' import phero, pcard, faq_section, contact_block with context %}
+{% block main %}
+{% set actions %}<a class="btn btn-primary" href="{{ url('kontakt', '?betreff=anlage') }}">{{ tr(p.cta_btn) }} {{ icon('arrow') }}</a><a class="btn btn-secondary" href="#stock">{{ tr(p.stock_h) }}</a>{% endset %}
+{{ phero(tr(p.o), tr(p.h1), tr(p.lead), 'banner-systems', [('', tr(p.title))], actions) }}
+
+<section class="sec">
+  <div class="wrap split">
+    <div class="rvl">
+      <p class="overline">{{ tr(p.o) }}</p>
+      <h2 class="h2" style="margin:12px 0 24px">{{ tr(p.parts_h) }}</h2>
+      <div class="tiles" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr))">
+        {% for part in p.parts %}<div class="part">{{ tr(part) }}</div>{% endfor %}
+      </div>
+      <p class="notice" style="margin-top:24px">{{ icon('shield') }}<span>{{ tr(p.warranty) }}</span></p>
+    </div>
+    <div class="rvl">
+      <ol class="tl">
+        {% for h, s in p.steps %}<li><span class="st-ico">{{ icon(['users','doc','truck','check-doc','wrench'][loop.index0]) }}</span><div><span class="step-n">{{ t('step_of', n=loop.index, total=p.steps|length) }}</span><h3>{{ tr(h) }}</h3><p>{{ tr(s) }}</p></div></li>{% endfor %}
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="sec sec-alt" id="stock" aria-labelledby="stock-h">
+  <div class="wrap">
+    <div class="sec-head rvl"><div><h2 class="h2" id="stock-h">{{ tr(p.stock_h) }}</h2><p class="lead">{{ systems|length }} · Olympus, Pentax, Fujinon</p></div></div>
+    <div class="grid3">{% for s in systems %}{{ pcard(s) }}{% endfor %}</div>
+  </div>
+</section>
+
+<section class="sec-s">
+  <div class="wrap">
+    <div class="cta-band card-navy rvl">
+      <div><h2 style="color:#fff">{{ tr(p.cta_h) }}</h2><p style="color:var(--ink-inverse-muted)">{{ tr(p.cta_s) }}</p></div>
+      <div class="actions"><a class="btn btn-blue" href="{{ url('kontakt', '?betreff=anlage') }}">{{ tr(p.cta_btn) }} {{ icon('arrow') }}</a><a class="btn btn-ghost-inv" href="{{ company.phone_href }}">{{ icon('phone') }} {{ company.phone }}</a></div>
+    </div>
+  </div>
+</section>
+{{ faq_section(faq) }}
+{% endblock %}

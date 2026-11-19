@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% from '_icons.html' import icon with context %}
+{% from '_parts.html' import phero with context %}
+{% block main %}
+{{ phero(tr(p.o), tr(p.h1), tr(p.lead), '', [(url('reparatur'), tr(C.P['reparatur']['title'])), ('', tr(p.title))]) }}
+<section class="sec">
+  <div class="wrap">
+    <div class="calc" data-calc data-pos="{{ tr(p.out_diff_pos) }}" data-neg="{{ tr(p.out_diff_neg) }}" data-per="{{ tr(p.per_device) }}">
+      <div class="card calc-in">
+        <h2 class="h3">{{ tr(p.in_h) }}</h2>
+        {% for k, l, unit, hint in p.fields %}
+        <div class="field"><label class="label" for="c-{{ k }}">{{ tr(l) }}</label>
+          <div class="unit"><input class="input num" id="c-{{ k }}" name="{{ k }}" inputmode="decimal" autocomplete="off"><span>{{ tr(unit) if unit is mapping else unit }}</span></div>
+          {% if tr(hint) %}<span class="hint">{{ tr(hint) }}</span>{% endif %}</div>
+        {% endfor %}
+        <div><button type="button" class="btn btn-text btn-s" data-calc-reset>{{ tr(p.reset) }}</button></div>
+      </div>
+      <div class="calc-out">
+        <div class="card card-navy" aria-live="polite">
+          <h2 class="h3">{{ tr(p.out_h) }}</h2>
+          <p data-calc-empty style="margin-top:12px">{{ tr(p.out_empty) }}</p>
+          <div data-calc-res hidden>
+            <div class="bars">
+              <div class="bar-row"><header><span>{{ tr(p.out_a) }}</span><span data-out-a></span></header><div class="bar"><i data-bar-a></i></div></div>
+              <div class="bar-row"><header><span>{{ tr(p.out_b) }}</span><span data-out-b></span></header><div class="bar"><i data-bar-b></i></div></div>
+            </div>
+            <div class="calc-diff"><span data-out-diff-l></span><b data-out-diff></b><span data-out-per></span></div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:16px">
+          <h3 style="font-size:17px">{{ tr(p.formula_h) }}</h3>
+          <ul class="checks" style="margin-top:12px">{% for f in p.formula %}<li style="font-size:15px;line-height:22px">{{ icon('info') }}<span>{{ tr(f) }}</span></li>{% endfor %}</ul>
+          <a class="btn btn-primary btn-block" style="margin-top:20px" href="{{ url('reparatur-auftrag') }}">{{ tr(p.cta) }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

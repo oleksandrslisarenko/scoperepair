@@ -1,0 +1,95 @@
+{% from '_icons.html' import icon with context %}
+{# Wizard frame: header, stepper, card with steps (caller), side summary, footer. #}
+{% macro wizard(id, P, side_rows, side_list=None, success_id='done') -%}
+<div class="wrap wz-page" data-wz>
+  <ol class="crumbs" aria-label="{{ t('breadcrumb') }}"><li><a href="{{ url('index') }}">{{ t('home') }}</a></li><li><span aria-current="page">{{ tr(P.title) }}</span></li></ol>
+  <h1 style="margin-top:12px">{{ tr(P.h1) }}</h1>
+  <p class="lead">{{ tr(P.lead) }}</p>
+  <nav aria-label="{{ t('progress') }}"><ol class="stepper">{% for s in P.steps %}<li><i></i><span>{{ tr(s) }}</span></li>{% endfor %}</ol>
+  <div class="stepper-m"><span data-step-m></span></div></nav>
+  <div class="wz">
+    <form class="wz-card" id="{{ id }}" data-wizard data-success="{{ success_id }}" data-heads='{{ heads_json(P.heads) }}' action="#" method="post">
+      <p class="overline" data-step-no></p>
+      <h2 data-step-head></h2>
+      <p class="sub" data-step-sub></p>
+      {{ caller() }}
+      <div class="wz-foot">
+        <button type="button" class="btn btn-secondary" data-back>{{ icon('chev-l') }} {{ t('back') }}</button>
+        <span class="grow"></span>
+        <button type="button" class="btn btn-primary" data-next>{{ t('next') }} {{ icon('chev-r') }}</button>
+        <button type="submit" class="btn btn-primary" data-submit hidden>{{ tr(P.submit) }} {{ icon('arrow') }}</button>
+      </div>
+    </form>
+    <div class="wz-side">
+      <aside class="summary" aria-label="{{ t('summary') }}" data-summary>
+        <div class="summary-head" data-sum-toggle aria-expanded="false"><h3>{{ tr(P.side_t) if P.side_t else t('summary') }}</h3><span class="sum-toggle btn btn-text btn-s">{{ icon('chev') }}</span></div>
+        <dl>{% for k, l in side_rows %}<dt>{{ l }}</dt><dd data-sum="{{ k }}">–</dd>{% endfor %}</dl>
+        {% if side_list %}<ul>{% for l in side_list %}<li>{{ icon('check') }}{{ tr(l) }}</li>{% endfor %}</ul>{% endif %}
+      </aside>
+    </div>
+  </div>
+</div>
+{%- endmacro %}
+
+{% macro done_panel(id, title, text, steps=None) -%}
+<div class="wrap wz-page" id="{{ id }}" hidden data-success-box>
+  <div class="done">
+    <div class="done-ico">{{ icon('check') }}</div>
+    <h1>{{ title }}</h1>
+    <p class="lead">{{ text }}</p>
+    {% if steps %}
+    <h2 class="h3" style="margin:40px 0 8px">{{ tr(C.P['reparatur-auftrag']['done_next']) }}</h2>
+    <div>{% for h, s in steps %}<div class="next-li"><span class="n">{{ loop.index }}</span><div><strong style="display:block;font-size:17px">{{ tr(h) }}</strong><span class="muted">{{ tr(s) }}</span></div></div>{% endfor %}</div>
+    {% endif %}
+    <div class="notice" style="margin-top:28px">{{ icon('phone') }}<p>{{ t('faq_more') }} <a href="{{ company.phone_href }}"><b>{{ company.phone }}</b></a></p></div>
+    <div class="done-actions">
+      <a class="btn btn-primary" href="{{ url('index') }}">{{ t('to_home') }}</a>
+      <button type="button" class="btn btn-secondary" data-restart>{{ t('new_request') }}</button>
+    </div>
+  </div>
+</div>
+{%- endmacro %}
+
+{# device picker: brand tiles → type tiles → model chips (+ free text) → serial #}
+{% macro device_picker(models_json, types, with_serial=True, with_qty=False, model_req=True, with_add=True, brand_req=True) -%}
+<div class="field" data-device data-models='{{ models_json }}' data-not-listed="{{ t('model_not_listed') }}" data-remove="{{ tr(C.P['reparatur-auftrag']['remove']) }}" {% if with_qty %}data-qty="1"{% endif %} {% if model_req %}data-model-req="1"{% endif %} style="gap:28px">
+  <div class="dev-list" data-dev-list></div>
+  <fieldset class="fieldset field" data-field="hersteller">
+    <legend>{{ t('f_brand') }}<span class="req" aria-hidden="true">*</span><span data-ai-slot></span></legend>
+    <div class="tiles">
+      {% for b in ['Olympus', 'Pentax', 'Fujinon'] %}<label class="tile"><input type="radio" name="hersteller" value="{{ b }}" data-label="{{ b }}"><span class="tile-in"><b>{{ b }}</b></span></label>{% endfor %}
+      <label class="tile"><input type="radio" name="hersteller" value="Andere" data-label="{{ t('brand_other') }}"><span class="tile-in"><b>{{ t('brand_other') }}</b><span>{{ t('brand_other_sub') }}</span></span></label>
+    </div>
+    <span class="err" role="alert">{{ icon('info') }}<span></span></span>
+  </fieldset>
+  <fieldset class="fieldset field" data-field="typ" data-dev-types hidden>
+    <legend>{{ t('f_type') }}<span class="req" aria-hidden="true">*</span><span data-ai-slot></span></legend>
+    <div class="tiles tiles-s">
+      {% for ty in types %}<label class="tile"><input type="radio" name="typ" value="{{ ty }}" data-label="{{ tr(C.TYPES.get(ty) or C.FORM_DEVICE_TYPES_TR.get(ty)) }}"><span class="tile-in"><b>{{ tr(C.TYPES.get(ty) or C.FORM_DEVICE_TYPES_TR.get(ty)) }}</b></span></label>{% endfor %}
+    </div>
+    <span class="err" role="alert">{{ icon('info') }}<span></span></span>
+  </fieldset>
+  <div data-dev-models hidden style="display:flex;flex-direction:column;gap:20px">
+    <fieldset class="fieldset field" data-field="modell">
+      <legend>{{ t('f_model') }}{% if model_req %}<span class="req" aria-hidden="true">*</span>{% endif %}<span data-ai-slot></span></legend>
+      <div class="search" style="max-width:320px"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg><input class="input" type="search" data-model-filter placeholder="{{ t('f_model') }}…" aria-label="{{ t('f_model') }}"></div>
+      <div><div class="chips chips-scroll" data-model-chips></div></div>
+      <input type="hidden" name="modell">
+      <div class="field" data-model-free hidden style="max-width:420px">
+        <label class="label" for="f-modell-frei">{{ t('model_free') }}<span class="req" aria-hidden="true">*</span></label>
+        <input class="input" id="f-modell-frei" name="modell_frei" placeholder="{{ t('model_free_ph') }}">
+      </div>
+      <span class="err" role="alert">{{ icon('info') }}<span></span></span>
+    </fieldset>
+    <div class="fgrid">
+      {% if with_serial %}
+      <div class="field"><label class="label" for="f-sn">{{ t('f_serial') }} <span class="opt">({{ t('optional') }})</span><span data-ai-slot></span></label><input class="input mono" id="f-sn" name="seriennummer" placeholder="2812345"><span class="hint">{{ t('serial_hint') }}</span></div>
+      {% endif %}
+      {% if with_qty %}
+      <div class="field" style="max-width:160px"><label class="label" for="f-qty">{{ tr(C.P['ankauf-anfrage']['qty_l']) }}</label><input class="input" id="f-qty" name="anzahl" type="number" min="1" value="1" inputmode="numeric"></div>
+      {% endif %}
+    </div>
+  </div>
+  {% if with_add %}<div><button type="button" class="btn btn-secondary btn-s" data-dev-add>{{ icon('plus') }} {{ tr(C.P['reparatur-auftrag']['add_device']) }}</button></div>{% endif %}
+</div>
+{%- endmacro %}

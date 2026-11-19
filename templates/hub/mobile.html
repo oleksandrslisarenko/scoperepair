@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>scopeREPAIR – Mobil-Ansicht</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/img/Favicon_Scoperepair_neu_2024_transparent.png">
+<link rel="stylesheet" href="/static/css/fonts.css">
+<link rel="stylesheet" href="/static/css/hub.css">
+</head>
+<body class="mv">
+<div class="mv-app">
+  <aside class="mv-side">
+    <a class="mv-back" href="/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>Übersicht</a>
+    <div class="mv-tabs" role="tablist" aria-label="Variante">
+      {% for v in variants %}<button type="button" role="tab" data-v="{{ v.id }}"><b>{{ v.num }}</b> {{ v.name }}</button>{% endfor %}
+    </div>
+    <label class="mv-lang"><span>Sprache</span>
+      <select data-lang>{% for l in langs %}<option value="{{ l }}">{{ l|upper }}</option>{% endfor %}</select></label>
+    <nav class="mv-list" aria-label="Seiten"><ol>
+      {% for s in screens %}<li><button type="button" data-p="{{ s.path }}">{{ s.label }}</button></li>{% endfor %}
+    </ol></nav>
+  </aside>
+  <section class="mv-stage">
+    <div class="phone">
+      <iframe title="Mobil-Ansicht" data-frame></iframe>
+    </div>
+    <p class="mv-url"><span data-url></span> <a data-open target="_blank" rel="noopener">In neuem Tab öffnen</a></p>
+  </section>
+</div>
+<script>
+(function () {
+  var screens = {{ screens_json }}, variants = {{ variants_json }};
+  var q = new URLSearchParams(location.search);
+  var v = q.get('v') || 'v1', p = q.get('p') || 'de/index.html';
+  var frame = document.querySelector('[data-frame]'), langSel = document.querySelector('[data-lang]');
+  function lang() { return p.split('/')[0]; }
+  function rest() { return p.split('/').slice(1).join('/'); }
+  function src() { var r = rest(); return '/' + v + '/' + lang() + '/' + (r === 'index.html' ? '' : r); }
+  function sync(push) {
+    var s = src(); if (frame.getAttribute('src') !== s) frame.setAttribute('src', s);
+    document.querySelectorAll('[data-v]').forEach(function (b) { b.setAttribute('aria-selected', b.dataset.v === v); });
+    document.querySelectorAll('[data-p]').forEach(function (b) { b.setAttribute('aria-current', b.dataset.p === rest() ? 'true' : 'false'); });
+    langSel.value = lang();
+    document.querySelector('[data-url]').textContent = '?v=' + v + '&p=' + p;
+    document.querySelector('[data-open]').href = s;
+    var u = '?v=' + v + '&p=' + p; if (push) history.replaceState(null, '', u);
+  }
+  document.querySelectorAll('[data-v]').forEach(function (b) { b.onclick = function () { v = b.dataset.v; sync(true); }; });
+  document.querySelectorAll('[data-p]').forEach(function (b) { b.onclick = function () { p = lang() + '/' + b.dataset.p; sync(true); }; });
+  langSel.onchange = function () { p = langSel.value + '/' + rest(); sync(true); };
+  frame.addEventListener('load', function () {
+    try { var path = frame.contentWindow.location.pathname.split('/').filter(Boolean); if (path.length >= 2) { v = path[0]; p = path.slice(1).join('/') || 'index.html'; if (p === path[1]) p += '/index.html'; sync(true); } } catch (e) {}
+  });
+  sync(false);
+})();
+</script>
+</body>
+</html>

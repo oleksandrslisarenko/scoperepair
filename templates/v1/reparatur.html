@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% from '_icons.html' import icon with context %}
+{% from '_parts.html' import phero, faq_section, contact_block, help_band with context %}
+{% block main %}
+{% set actions %}<a class="btn btn-primary" href="{{ url('reparatur-auftrag') }}">{{ t('cta_repair') }} {{ icon('arrow') }}</a><a class="btn btn-secondary" href="{{ url('leihgeraete') }}">{{ icon('swap') }} {{ t('cta_loaner') }}</a>{% endset %}
+{{ phero(tr(p.o), tr(p.h1), tr(p.lead), 'banner-repair', [('', tr(p.title))], actions, p.facts) }}
+
+<section class="sec">
+  <div class="wrap split">
+    <div class="prose rvl">
+      <h2>{{ tr(p.intro_h) }}</h2>
+      {% for para in p.intro %}<p>{{ tr(para) }}</p>{% endfor %}
+      <ul class="checks" style="margin-top:8px">
+        {% for b in ['Olympus', 'Pentax', 'Fujinon', 'Storz'] %}<li>{{ icon('check') }}<span><b>{{ b }}</b> – {{ tr(C.L('flexible Endoskope aller gängigen Typen', 'flexible endoscopes of all common types', 'endoscopes souples de tous types courants', 'гибкие эндоскопы всех распространённых типов')) }}</span></li>{% endfor %}
+      </ul>
+    </div>
+    <div class="rvl" style="display:flex;flex-direction:column;gap:16px">
+      <div class="card card-navy card-row">
+        <h3>{{ tr(p.loaner_t) }}</h3><p>{{ tr(p.loaner_s) }}</p>
+        <div><a class="btn btn-blue btn-s" href="{{ url('leihgeraete') }}">{{ t('cta_more') }} {{ icon('arrow') }}</a></div>
+      </div>
+      <div class="card card-row">
+        <h3>{{ tr(p.swap_t) }}</h3><p>{{ tr(p.swap_s) }}</p>
+        <div><a class="btn btn-secondary btn-s" href="{{ url('gebrauchte-endoskope') }}">{{ t('cta_catalog') }} {{ icon('arrow') }}</a></div>
+      </div>
+      <div class="card card-row" style="background:var(--blue-25)">
+        <h3>{{ tr(C.P['rechner']['h1']) }}</h3><p>{{ tr(C.P['rechner']['lead']) }}</p>
+        <div><a class="btn btn-secondary btn-s" href="{{ url('rechner') }}">{{ icon('calc') }} {{ t('cta_calc') }}</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec sec-alt" aria-labelledby="tl-h">
+  <div class="wrap split split-74">
+    <div>
+      <div class="sec-head rvl" style="margin-bottom:40px"><div><p class="overline">{{ tr(C.P['index']['process_o']) }}</p><h2 class="h2" id="tl-h">{{ tr(p.process_h) }}</h2></div></div>
+      <ol class="tl">
+        {% for s in C.REPAIR_STEPS %}
+        <li class="rvl"><span class="st-ico" style="{{ 'background:var(--navy-900);border-color:var(--navy-900);color:#fff' if loop.index == 4 }}">{{ icon(s.icon) }}</span>
+          <div><span class="step-n">{{ t('step_of', n=loop.index, total=7) }}</span><h3>{{ tr(s.t) }}{% if s.m %}<span class="tag">{{ icon('check') }}{{ tr(s.m) }}</span>{% endif %}</h3><p>{{ tr(s.l) }}</p></div></li>
+        {% endfor %}
+      </ol>
+    </div>
+    <aside class="sticky-card rvl">
+      <div class="card card-row">
+        <h3>{{ tr(C.P['reparatur-auftrag']['side_t']) }}</h3>
+        <p>{{ tr(C.P['reparatur-auftrag']['lead']) }}</p>
+        <a class="btn btn-primary btn-block" href="{{ url('reparatur-auftrag') }}">{{ t('cta_repair') }}</a>
+      </div>
+      <div class="card card-row">
+        <h3>{{ tr(p.call_t) }}</h3>
+        <a class="hdr-phone" style="font-size:20px" href="{{ company.phone_href }}">{{ icon('phone') }} {{ company.phone }}</a>
+        <p class="hint">{% for d, h in C.HOURS %}{{ tr(d) }} {{ h }}{% if not loop.last %}<br>{% endif %}{% endfor %}</p>
+      </div>
+    </aside>
+  </div>
+</section>
+
+{{ faq_section(faq) }}
+{{ help_band() }}
+{% endblock %}

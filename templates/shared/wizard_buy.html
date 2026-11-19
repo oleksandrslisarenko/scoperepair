@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% from '_icons.html' import icon with context %}
+{% from '_forms.html' import field, salutation, photos, consent, send_error with context %}
+{% from '_wizard.html' import wizard, done_panel, device_picker with context %}
+{% block main %}
+{% set P = p %}
+{% set rows = [('@devices', t('f_model')), ('zustand', tr(P.review_cond)), ('preis', tr(P.price_l)), ('fotos', t('f_photos'))] %}
+{% call wizard('wz-buy', P, rows, [C.L('Auch defekte und unvollständige Geräte', 'Defective and incomplete devices too', 'Appareils défectueux et incomplets aussi', 'И неисправные, и некомплектные'), C.L('Bei mehreren Geräten: Bewertung vor Ort', 'Several devices: on-site assessment', 'Plusieurs appareils : évaluation sur place', 'Несколько аппаратов: оценка на месте'), C.L('Inzahlungnahme möglich', 'Trade-in possible', 'Reprise possible', 'Возможен приём в зачёт')]) %}
+  <section class="wz-step" data-step>
+    {{ device_picker(models_json, C.FORM_DEVICE_TYPES, with_serial=False, with_qty=True, model_req=False) }}
+    {{ field('baujahr', tr(P.year_l), attrs='inputmode="numeric" style="max-width:200px"') }}
+  </section>
+  <section class="wz-step" data-step hidden>
+    <fieldset class="fieldset field" data-field="zustand" data-req-group>
+      <legend>{{ tr(P.heads[1][0]) }}<span class="req" aria-hidden="true">*</span></legend>
+      <div class="tiles">{% for k, l, s in P.cond %}<label class="tile"><input type="radio" name="zustand" value="{{ k }}" data-label="{{ tr(l) }}"><span class="tile-in"><b>{{ tr(l) }}</b><span>{{ tr(s) }}</span></span></label>{% endfor %}</div>
+      <span class="err" role="alert">{{ icon('info') }}<span></span></span>
+    </fieldset>
+    <div data-show-if="zustand=def" hidden>{{ field('defekt', tr(P.defect_l), 'textarea') }}</div>
+    {{ field('zubehoer', tr(P.acc_l), 'textarea') }}
+  </section>
+  <section class="wz-step" data-step hidden>
+    <div class="field" data-field="preis" style="max-width:320px">
+      <label class="label" for="f-preis">{{ tr(P.price_l) }}<span class="req" aria-hidden="true">*</span></label>
+      <div class="unit"><input class="input" id="f-preis" name="preis" inputmode="decimal" data-req required><span>€</span></div>
+      <span class="hint">{{ tr(P.price_hint) }}</span>
+      <span class="err" role="alert">{{ icon('info') }}<span></span></span>
+    </div>
+    {{ photos('fotos') }}
+  </section>
+  <section class="wz-step" data-step hidden>
+    {{ salutation() }}
+    <div class="fgrid">
+      {{ field('firma', t('f_company'), req=True, cls='span2', ac='organization') }}
+      {{ field('vorname', t('f_firstname'), req=True, ac='given-name') }}
+      {{ field('nachname', t('f_lastname'), req=True, ac='family-name') }}
+      {{ field('email', t('f_email'), 'email', req=True, ac='email') }}
+      {{ field('telefon', t('f_phone'), 'phone', ac='tel') }}
+    </div>
+    <p class="proto-note">{{ t('proto_error_hint') }}</p>
+    <div><button type="button" class="btn btn-text btn-s" data-demo='{"anrede":"{{ tr(T.sal[1]) }}","firma":"Praxis Muster","vorname":"Anna","nachname":"Muster","email":"praxis@beispiel.de","telefon":"040 000000"}'>{{ t('fill_demo') }}</button></div>
+  </section>
+  <section class="wz-step" data-step hidden>
+    <div class="review" data-review-box data-edit="{{ t('edit') }}" data-groups='{{ json.dumps([
+      {"title": t("f_model"), "step": 0, "fields": [{"custom": "devices"}, {"name": "baujahr", "label": tr(P.year_l)}]},
+      {"title": tr(P.review_cond), "step": 1, "fields": [{"name": "zustand"}, {"name": "defekt"}, {"name": "zubehoer", "label": tr(P.acc_l)}]},
+      {"title": tr(P.review_price), "step": 2, "fields": [{"name": "preis", "label": tr(P.price_l)}, {"name": "fotos", "label": t("f_photos")}]},
+      {"title": tr(C.P["reparatur-auftrag"]["review_contact"]), "step": 3, "fields": [{"name": "firma"}, {"name": "anrede"}, {"name": "vorname"}, {"name": "nachname"}, {"name": "email"}, {"name": "telefon"}]}
+    ], ensure_ascii=False) }}'></div>
+    {{ consent() }}
+    {{ send_error() }}
+    <p class="proto-note">{{ t('proto_note') }}</p>
+  </section>
+{% endcall %}
+{{ done_panel('done', tr(P.done_h), tr(P.done_s)) }}
+{% endblock %}

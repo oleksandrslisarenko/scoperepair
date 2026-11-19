@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% from '_icons.html' import icon with context %}
+{% from '_parts.html' import pcard, faq_section, contact_block, help_band, steps7 with context %}
+{% block main %}
+{% set P = p %}
+<section class="hero">
+  {% if images.get('hero-endoscopes') %}<div class="hero-img" style="background-image:url({{ images['hero-endoscopes'][1600] }})" role="presentation"></div>{% endif %}
+  <div class="wrap hero-in">
+    <div class="hero-copy">
+      <h1>{{ tr(P.h1) }}</h1>
+      <p class="lead">{{ tr(P.lead) }}</p>
+    </div>
+    <div class="scenarios">
+      {% for s in P.scenarios %}
+      <a class="scn {{ 'is-primary' if s.primary }}" href="{{ url(s.id) }}">
+        <span class="scn-ico">{{ icon(s.icon) }}</span>
+        <span class="scn-t">{{ tr(s.t) }}</span>
+        <span class="scn-s">{{ tr(s.s) }}</span>
+        <span class="scn-go">{{ t('next') }} {{ icon('arrow') }}</span>
+      </a>
+      {% endfor %}
+    </div>
+    <div class="trust">{% for ic, l in C.TRUST %}<span>{{ icon(ic) }}{{ tr(l) }}</span>{% endfor %}</div>
+  </div>
+</section>
+
+{{ help_band() }}
+
+<section class="sec" aria-labelledby="proc-h">
+  <div class="wrap">
+    <div class="sec-head rvl">
+      <div><p class="overline">{{ tr(P.process_o) }}</p><h2 class="h2" id="proc-h">{{ tr(P.process_h) }}</h2><p class="lead">{{ tr(P.process_s) }}</p></div>
+      <a class="btn btn-primary" href="{{ url('reparatur-auftrag') }}" style="flex:none">{{ t('cta_repair') }} {{ icon('arrow') }}</a>
+    </div>
+    {{ steps7(C.REPAIR_STEPS) }}
+  </div>
+</section>
+
+<section class="sec sky" aria-labelledby="pr-h" style="padding:112px 0">
+  <svg viewBox="0 0 1440 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><filter id="pb" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="60"/></filter></defs><ellipse cx="1120" cy="260" rx="300" ry="200" fill="#fff" fill-opacity=".6" filter="url(#pb)"/><circle cx="1560" cy="980" r="760" fill="none" stroke="#fff" stroke-width="1.5" stroke-opacity=".9"/><circle cx="1560" cy="980" r="840" fill="none" stroke="#fff" stroke-width="1" stroke-opacity=".55"/></svg>
+  <div class="wrap" style="display:flex;flex-direction:column;gap:48px">
+    <div class="rvl" style="display:flex;flex-direction:column;gap:14px;max-width:900px">
+      <p class="overline">{{ tr(P.principle_o) }}</p>
+      <h2 class="h2-xl" id="pr-h">{{ tr(P.principle_h1) }}<br><span style="color:var(--blue-700)">{{ tr(P.principle_h2) }}</span></h2>
+    </div>
+    <div class="cmp">
+      <div class="cmp-card cmp-a rvl">
+        <div><p class="overline">{{ tr(P.principle_a_o) }}</p><h3>{{ tr(P.principle_a_t) }}</h3></div>
+        <ul>{% for l in P.principle_a %}<li><span class="dot">{{ icon('minus') }}</span>{{ tr(l) }}</li>{% endfor %}</ul>
+      </div>
+      <div class="cmp-card cmp-b rvl" style="transition-delay:.1s">
+        <div><p class="overline">{{ tr(P.principle_b_o) }}</p><h3>scopeREPAIR</h3></div>
+        <ul>{% for l in P.principle_b %}<li><span class="dot">{{ icon('check') }}</span>{{ tr(l) }}</li>{% endfor %}</ul>
+      </div>
+    </div>
+    <div class="rvl"><a class="pill-link" href="{{ url('rechner') }}">{{ icon('calc') }} {{ tr(P.principle_cta) }} {{ icon('arrow') }}</a></div>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="used-h">
+  <div class="wrap">
+    <div class="sec-head rvl">
+      <div><p class="overline">{{ tr(P.used_o) }}</p><h2 class="h2" id="used-h">{{ tr(P.used_h) }}</h2></div>
+      <a class="link-arrow" href="{{ url('gebrauchte-endoskope') }}">{{ t('cta_all_endoscopes') }} ({{ endos|length }}) {{ icon('arrow') }}</a>
+    </div>
+    {% set picks = ['olympus-gif-h190', 'videokoloskop-pentax-ec-3890li', 'gastroskop-pentax-eg-1580k'] %}
+    {% set shown = [] %}
+    {% for e in endos if e.img and shown|length < 3 and (e.brand not in shown|map(attribute='brand')|list) %}{% set _ = shown.append(e) %}{% endfor %}
+    <div class="grid3 rvl">{% for e in shown %}{{ pcard(e) }}{% endfor %}</div>
+    <div class="ribbon rvl">
+      <span class="ribbon-ico">{{ icon('swap') }}</span>
+      <div><h3>{{ tr(P.tradein_t) }}</h3><p>{{ tr(P.tradein_s) }}</p></div>
+      <a class="btn btn-primary" href="{{ url('ankauf-anfrage') }}" style="flex:none">{{ tr(P.tradein_cta) }}</a>
+    </div>
+  </div>
+</section>
+
+<section class="sec deep" aria-labelledby="ws-h" style="padding:112px 0">
+  <svg viewBox="0 0 1440 900" preserveAspectRatio="none" aria-hidden="true"><path d="M900 0C1020 170 1180 380 1440 600V0Z" fill="#fff" fill-opacity=".04"/><path d="M1120 0C1200 120 1300 230 1440 300V0Z" fill="#fff" fill-opacity=".05"/></svg>
+  <div class="wrap" style="display:flex;flex-direction:column;gap:56px">
+    <div class="sec-head rvl" style="margin:0">
+      <div><p class="overline" style="color:var(--blue)">{{ tr(P.workshop_o) }}</p><h2 class="h2-xl" id="ws-h">{{ tr(P.workshop_h) }}</h2></div>
+      <a class="btn btn-ghost-inv" href="{{ url('ueber-uns') }}">{{ icon('award', '') }} {{ t('iso_cert') }}</a>
+    </div>
+    <div class="figs">
+      {% for f in C.FIGURES %}
+      <div class="fig rvl" style="transition-delay:{{ loop.index0 * 80 }}ms">
+        <span class="fig-num">{% if f.pre %}<small>{{ tr(f.pre) }}</small>{% endif %}{{ f.num }}{% if f.unit %}<em> {{ tr(f.unit) if f.unit is mapping else f.unit }}</em>{% endif %}</span>
+        <span class="fig-l">{{ tr(f.label) }}</span>
+      </div>
+      {% endfor %}
+    </div>
+    {% set gp = by_slug.get('gastroskop-pentax-eg-1580k') %}
+    <div class="photos2 rvl">
+      <figure class="photo"><img src="{{ images['banner-repair'][1600] }}" alt="" loading="lazy"><figcaption>{{ tr(P.workshop_cap1) }}</figcaption></figure>
+      <figure class="photo">{% if gp and gp.img %}<img src="{{ gp.img[960] }}" alt="{{ gp.title_l }}" loading="lazy">{% endif %}<figcaption>{{ tr(P.workshop_cap2) }}</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="br-h">
+  <div class="wrap">
+    <div class="sec-head rvl"><div><p class="overline">{{ tr(P.brands_o) }}</p><h2 class="h2" id="br-h">{{ tr(P.brands_h) }}</h2><p class="lead">{{ tr(P.brands_s) }}</p></div></div>
+    {% set types = ['Gastroskop', 'Koloskop', 'Bronchoskop', 'Duodenoskop', 'Zystoskop'] %}
+    <table class="matrix rvl">
+      <thead><tr><th scope="col"><span class="sr-only">{{ t('f_brand') }}</span></th>{% for ty in types %}<th scope="col">{{ tr(C.TYPES_PLURAL[ty]) }}</th>{% endfor %}</tr></thead>
+      <tbody>
+        {% for b in ['Olympus', 'Pentax', 'Fujinon'] %}
+        <tr><th scope="row">{{ b }}</th>
+          {% for ty in types %}{% set n = matrix[(b, ty)] %}
+          <td data-l="{{ tr(C.TYPES_PLURAL[ty]) }}">{% if n %}<a href="{{ url('gebrauchte-endoskope', '?hersteller=' ~ b|lower ~ '&typ=' ~ ty|lower) }}">{{ C.P['gebrauchte-endoskope']['count'][lang]|replace('{n}', n|string) }} {{ icon('chev-r') }}</a>{% else %}<span class="zero">—</span>{% endif %}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+{{ faq_section(faq, alt=True) }}
+{{ contact_block() }}
+{% endblock %}

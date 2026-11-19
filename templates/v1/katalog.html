@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% from '_icons.html' import icon with context %}
+{% from '_parts.html' import pcard, faq_section, contact_block with context %}
+{% block main %}
+{% set G = p %}
+<div class="wrap" style="padding-top:40px" data-catalog>
+  <ol class="crumbs" aria-label="{{ t('breadcrumb') }}"><li><a href="{{ url('index') }}">{{ t('home') }}</a></li><li><span aria-current="page">{{ tr(G.title) }}</span></li></ol>
+  <h1 style="font-size:clamp(30px,4vw,44px);line-height:1.1;margin-top:12px">{{ tr(G.h1) }}</h1>
+  <p class="lead" style="margin-top:12px;max-width:760px">{{ tr(G.lead) }}</p>
+
+  <div class="filters">
+    <svg viewBox="0 0 1200 260" preserveAspectRatio="xMidYMid slice" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%"><circle cx="1260" cy="520" r="420" fill="none" stroke="#fff" stroke-width="1.5" stroke-opacity=".9"/><circle cx="1260" cy="520" r="470" fill="none" stroke="#fff" stroke-width="1" stroke-opacity=".55"/></svg>
+    <div class="filters-in">
+      <div style="display:flex;flex-direction:column;gap:18px">
+        {% set brands = [('olympus','Olympus'),('pentax','Pentax'),('fujinon','Fujinon')] %}
+        <div class="fgroup"><span class="overline">{{ t('f_brand') }}</span><div class="chips" role="group" aria-label="{{ t('f_brand') }}">
+          <button type="button" class="chip-btn" data-filter="brand" data-value="">{{ tr(G.all) }}</button>
+          {% for v, l in brands %}<button type="button" class="chip-btn" data-filter="brand" data-value="{{ v }}">{{ l }} <small></small></button>{% endfor %}
+        </div></div>
+        <div class="fgroup"><span class="overline">{{ t('f_type') }}</span><div class="chips" role="group" aria-label="{{ t('f_type') }}">
+          <button type="button" class="chip-btn" data-filter="type" data-value="">{{ tr(G.all) }}</button>
+          {% for ty in ['Gastroskop','Koloskop','Bronchoskop','Duodenoskop','Zystoskop'] %}<button type="button" class="chip-btn" data-filter="type" data-value="{{ ty|lower }}">{{ tr(C.TYPES_PLURAL[ty]) }} <small></small></button>{% endfor %}
+        </div></div>
+        <div class="fgroup"><span class="overline">{{ tr(G.f_cond) }}</span><div class="chips" role="group" aria-label="{{ tr(G.f_cond) }}">
+          <button type="button" class="chip-btn" data-filter="cond" data-value="">{{ tr(G.all) }}</button>
+          {% for c in ['Generalüberholt','Sehr guter Gebrauchtzustand','Guter Gebrauchtzustand'] %}<button type="button" class="chip-btn" data-filter="cond" data-value="{{ C.slugify(c) }}">{{ tr(C.CONDITIONS[c]) }} <small></small></button>{% endfor %}
+        </div></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="fgroup"><label class="overline" for="cat-q">{{ t('f_model') }}</label>
+          <div class="search">{{ icon('search') }}<input class="input" id="cat-q" type="search" placeholder="{{ tr(G.search_ph) }}" data-search autocomplete="off"></div></div>
+        <button type="button" class="btn btn-text btn-s" data-reset hidden style="align-self:flex-start">{{ icon('x') }} {{ tr(G.reset) }}</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="cat-bar">
+    <span class="cat-count" data-count aria-live="polite"></span>
+    <label style="display:flex;align-items:center;gap:10px"><span class="muted">{{ tr(G.sort) }}</span>
+      <select class="select" data-sort>{% for v, l in G.sort_opts %}<option value="{{ v }}">{{ tr(l) }}</option>{% endfor %}</select></label>
+  </div>
+  <div class="grid3" data-grid>
+    {% for e in endos %}{{ pcard(e) }}{% endfor %}
+  </div>
+  <div class="empty" data-empty hidden>{{ tr(G.empty) }} <button type="button" class="btn btn-text btn-s" data-reset>{{ tr(G.reset) }}</button></div>
+  <div class="more-wrap"><button type="button" class="btn btn-secondary" data-more></button></div>
+
+  <div class="ribbon" style="margin-bottom:24px">
+    <span class="ribbon-ico">{{ icon('swap') }}</span>
+    <div><h3>{{ tr(C.P['index']['tradein_t']) }}</h3><p>{{ tr(C.P['index']['tradein_s']) }}</p></div>
+    <a class="btn btn-primary" href="{{ url('ankauf-anfrage') }}" style="flex:none">{{ tr(C.P['index']['tradein_cta']) }}</a>
+  </div>
+</div>
+
+<section class="sec">
+  <div class="wrap split">
+    <div class="prose rvl"><h2>{{ tr(G.quality_h) }}</h2>
+      <ul class="checks">{% for q in G.quality %}<li>{{ icon('check') }}<span>{{ tr(q) }}</span></li>{% endfor %}<li>{{ icon('check') }}<span>{{ t('warranty_12') }}</span></li></ul></div>
+    <div class="card card-row rvl" style="background:var(--blue-25)">
+      <h3>{{ tr(C.P['endoskopie-anlagen']['title']) }}</h3><p>{{ tr(C.P['endoskopie-anlagen']['lead']) }}</p>
+      <div><a class="btn btn-secondary btn-s" href="{{ url('endoskopie-anlagen') }}">{{ t('cta_more') }} {{ icon('arrow') }}</a></div>
+    </div>
+  </div>
+</section>
+{{ faq_section(faq, alt=True) }}
+{{ contact_block() }}
+{% endblock %}

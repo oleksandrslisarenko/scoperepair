@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% from '_icons.html' import icon with context %}
+{% from '_parts.html' import phero, faq_section, contact_block with context %}
+{% block main %}
+{% set actions %}<a class="btn btn-primary" href="{{ url('ankauf-anfrage') }}">{{ t('cta_sell') }} {{ icon('arrow') }}</a><a class="btn btn-secondary" href="{{ company.phone_href }}">{{ icon('phone') }} {{ company.phone }}</a>{% endset %}
+{{ phero(tr(p.o), tr(p.h1), tr(p.lead), 'banner-buy', [('', tr(p.title))], actions) }}
+
+<section class="sec">
+  <div class="wrap">
+    <div class="grid3">
+      {% for ic, h, s in p.points %}
+      <div class="card card-row rvl" style="transition-delay:{{ loop.index0 * 80 }}ms">
+        <span class="scn-ico">{{ icon(ic) }}</span><h3>{{ tr(h) }}</h3><p>{{ tr(s) }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="sec sec-alt">
+  <div class="wrap">
+    <div class="sec-head rvl"><div><p class="overline">{{ tr(p.o) }}</p><h2 class="h2">{{ tr(p.how_h) }}</h2></div></div>
+    <ol class="mini rvl" style="--n:3">{% for h, s in p.how %}<li><h3>{{ tr(h) }}</h3><p>{{ tr(s) }}</p></li>{% endfor %}</ol>
+    <div class="cta-band card-navy rvl" style="margin-top:40px">
+      <div><h2 style="color:#fff">{{ tr(p.cta_h) }}</h2><p style="color:var(--ink-inverse-muted)">{{ tr(p.cta_s) }}</p></div>
+      <div class="actions"><a class="btn btn-blue" href="{{ url('ankauf-anfrage') }}">{{ t('cta_sell') }} {{ icon('arrow') }}</a></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec-s">
+  <div class="wrap">
+    <div class="ribbon rvl" style="margin:0">
+      <span class="ribbon-ico">{{ icon('cart') }}</span>
+      <div><h3>{{ tr(p.replace_h) }}</h3><p>{{ tr(p.replace_s) }}</p></div>
+      <a class="btn btn-primary" href="{{ url('gebrauchte-endoskope') }}" style="flex:none">{{ t('cta_catalog') }}</a>
+    </div>
+  </div>
+</section>
+{{ faq_section(faq) }}
+{{ contact_block() }}
+{% endblock %}

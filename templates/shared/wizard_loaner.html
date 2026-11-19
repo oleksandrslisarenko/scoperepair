@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% from '_icons.html' import icon with context %}
+{% from '_forms.html' import field, salutation, consent, send_error, calendar with context %}
+{% from '_wizard.html' import wizard, done_panel, device_picker with context %}
+{% block main %}
+{% set P = p %}
+{% set rows = [('@devices', t('f_model')), ('prozessor', tr(P.proc_l)), ('anlass', tr(P.review_reason)), ('datum', tr(P.from_l))] %}
+{% call wizard('wz-loaner', P, rows, C.P['reparatur-auftrag']['side_list'][:0] + [C.L('Kostenlos bei Verfügbarkeit', 'Free of charge subject to availability', 'Gratuit selon disponibilité', 'Бесплатно при наличии'), C.L('Sie tragen nur die Versandkosten', 'You only pay shipping', 'Seuls les frais d’envoi sont à votre charge', 'Вы оплачиваете только доставку')]) %}
+  <section class="wz-step" data-step>
+    {{ device_picker(models_json, ['Gastroskop', 'Koloskop', 'Bronchoskop', 'Duodenoskop', 'Zystoskop'], with_serial=False, model_req=False, with_add=False) }}
+    {{ field('prozessor', tr(P.proc_l), ph=tr(P.proc_ph), cls='', attrs='style="max-width:420px"') }}
+  </section>
+  <section class="wz-step" data-step hidden>
+    <fieldset class="fieldset field" data-field="anlass" data-req-group>
+      <legend>{{ tr(P.heads[1][0]) }}<span class="req" aria-hidden="true">*</span></legend>
+      <div class="tiles">{% for k, l, s in P.reasons %}<label class="tile"><input type="radio" name="anlass" value="{{ k }}" data-label="{{ tr(l) }}"><span class="tile-in"><b>{{ tr(l) }}</b><span>{{ tr(s) }}</span></span></label>{% endfor %}</div>
+      <span class="err" role="alert">{{ icon('info') }}<span></span></span>
+    </fieldset>
+    <div class="notice" data-show-if="anlass=mit" hidden>{{ icon('info') }}<p>{{ tr(C.L('Nach dem Absenden können Sie direkt den Abholauftrag ausfüllen.', 'After sending, you can fill in the pick-up order straight away.', 'Après l’envoi, vous pourrez remplir directement la demande d’enlèvement.', 'После отправки можно сразу оформить заказ забора.')) }}</p></div>
+    {{ calendar('datum') }}
+  </section>
+  <section class="wz-step" data-step hidden>
+    <div class="fgrid-3">
+      {{ field('strasse', t('f_street'), req=True, ac='street-address') }}
+      {{ field('plz', t('f_zip'), 'zip', req=True, ac='postal-code') }}
+      {{ field('ort', t('f_city'), req=True, ac='address-level2') }}
+    </div>
+    {{ field('hinweis', tr(P.note_l), 'textarea') }}
+    <div><button type="button" class="btn btn-text btn-s" data-demo='{"strasse":"Rathausplatz 4","plz":"22767","ort":"Hamburg"}'>{{ t('fill_demo') }}</button></div>
+  </section>
+  <section class="wz-step" data-step hidden>
+    {{ salutation() }}
+    <div class="fgrid">
+      {{ field('firma', t('f_company'), req=True, cls='span2', ac='organization') }}
+      {{ field('vorname', t('f_firstname'), req=True, ac='given-name') }}
+      {{ field('nachname', t('f_lastname'), req=True, ac='family-name') }}
+      {{ field('email', t('f_email'), 'email', req=True, ac='email') }}
+      {{ field('telefon', t('f_phone'), 'phone', req=True, ac='tel') }}
+    </div>
+    <p class="proto-note">{{ t('proto_error_hint') }}</p>
+    <div><button type="button" class="btn btn-text btn-s" data-demo='{"anrede":"{{ tr(T.sal[1]) }}","firma":"Praxis Muster","vorname":"Anna","nachname":"Muster","email":"praxis@beispiel.de","telefon":"040 000000"}'>{{ t('fill_demo') }}</button></div>
+  </section>
+  <section class="wz-step" data-step hidden>
+    <div class="review" data-review-box data-edit="{{ t('edit') }}" data-groups='{{ json.dumps([
+      {"title": t("f_model"), "step": 0, "fields": [{"custom": "devices"}, {"name": "prozessor", "label": tr(P.proc_l)}]},
+      {"title": tr(P.review_reason), "step": 1, "fields": [{"name": "anlass"}, {"name": "datum", "label": tr(P.from_l)}]},
+      {"title": tr(P.review_del), "step": 2, "fields": [{"name": "strasse"}, {"name": "plz"}, {"name": "ort"}, {"name": "hinweis"}]},
+      {"title": tr(C.P["reparatur-auftrag"]["review_contact"]), "step": 3, "fields": [{"name": "firma"}, {"name": "anrede"}, {"name": "vorname"}, {"name": "nachname"}, {"name": "email"}, {"name": "telefon"}]}
+    ], ensure_ascii=False) }}'></div>
+    {{ consent() }}
+    {{ send_error() }}
+    <p class="proto-note">{{ t('proto_note') }}</p>
+  </section>
+{% endcall %}
+{{ done_panel('done', tr(P.done_h), tr(P.done_s)) }}
+{% endblock %}

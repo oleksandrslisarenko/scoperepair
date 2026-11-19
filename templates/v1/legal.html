@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% from '_icons.html' import icon with context %}
+{% block title %}{{ legal_title }}{% endblock %}
+{% block main %}
+{% set heads = [] %}
+{% for tag, txt in legal %}{% if tag == 'h2' %}{% set _ = heads.append(txt) %}{% endif %}{% endfor %}
+<div class="wrap" style="padding:40px var(--gutter) 96px">
+  <ol class="crumbs" aria-label="{{ t('breadcrumb') }}"><li><a href="{{ url('index') }}">{{ t('home') }}</a></li><li><span aria-current="page">{{ legal_title }}</span></li></ol>
+  <h1 style="font-size:clamp(32px,4vw,48px);line-height:1.1;margin:12px 0 8px" {% if lang not in ('de','en') %}lang="en"{% endif %}>{{ legal[0][1]|replace('­','') }}</h1>
+  {% if t('legal_lang_note') and lang in ('fr','ru') %}<p class="notice" style="margin:16px 0 0;max-width:760px">{{ icon('info') }}<span>{{ t('legal_lang_note') }}</span></p>{% endif %}
+  <div class="legal" style="margin-top:40px">
+    {% if heads|length > 2 %}
+    <nav class="toc" aria-label="{{ t('toc') }}" data-toc><h2>{{ t('toc') }}</h2><ol>{% for h in heads %}<li><a href="#s{{ loop.index }}">{{ h|replace('­','') }}</a></li>{% endfor %}</ol></nav>
+    <div class="toc-m"><label class="sr-only" for="toc-m">{{ t('toc') }}</label><select class="select" id="toc-m" data-toc-select><option value="">{{ t('toc') }}</option>{% for h in heads %}<option value="s{{ loop.index }}">{{ h|replace('­','') }}</option>{% endfor %}</select></div>
+    {% else %}<div></div>{% endif %}
+    <div class="legal-body" {% if lang not in ('de','en') %}lang="en"{% endif %}>
+      {% set n = namespace(i=0) %}
+      {% for tag, txt in legal[1:] %}
+      {% if tag == 'h2' %}{% set n.i = n.i + 1 %}<h2 id="s{{ n.i }}">{{ txt }}</h2>
+      {% elif tag in ('h3','h4') %}<h3>{{ txt }}</h3>
+      {% elif tag == 'li' %}<p>• {{ txt }}</p>
+      {% elif loop.first %}<p class="lead" style="margin-bottom:24px">{{ txt }}</p>
+      {% else %}<p>{{ txt }}</p>{% endif %}
+      {% endfor %}
+      {% if page == 'impressum' %}<p style="margin-top:24px"><b>{{ t('f_phone') }}:</b> <a href="{{ company.phone_href }}">{{ company.phone }}</a> · <b>{{ t('fax') }}:</b> {{ company.fax }} · <b>{{ t('f_email') }}:</b> <a href="mailto:{{ company.email }}">{{ company.email }}</a></p>{% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

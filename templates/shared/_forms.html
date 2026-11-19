@@ -1,0 +1,84 @@
+{% from '_icons.html' import icon %}
+{# Generic form controls. Validation: data-req (required), data-type=email|phone|zip.
+   JS shows the right message from window.I18N. #}
+{% macro field(name, label, type='text', req=False, hint='', ph='', cls='', ac='', mono=False, review='', value='', attrs='') -%}
+<div class="field {{ cls }}" data-field="{{ name }}">
+  <label class="label" for="f-{{ name }}">{{ label }}{% if req %}<span class="req" aria-hidden="true">*</span>{% else %} <span class="opt">({{ t('optional') }})</span>{% endif %}</label>
+  {% if type == 'textarea' %}
+  <textarea class="textarea" id="f-{{ name }}" name="{{ name }}" rows="4" placeholder="{{ ph }}" {% if req %}data-req required{% endif %} {% if review %}data-review="{{ review }}"{% endif %} {{ attrs|safe }}>{{ value }}</textarea>
+  {% else %}
+  <input class="input{% if mono %} mono{% endif %}" id="f-{{ name }}" name="{{ name }}" type="{{ 'email' if type == 'email' else ('tel' if type == 'phone' else ('text' if type in ('zip',) else type)) }}" placeholder="{{ ph }}" {% if ac %}autocomplete="{{ ac }}"{% endif %} {% if type in ('email','phone','zip') %}data-type="{{ type }}"{% endif %} {% if req %}data-req required{% endif %} {% if review %}data-review="{{ review }}"{% endif %} value="{{ value }}" {{ attrs|safe }}>
+  {% endif %}
+  {% if hint %}<span class="hint">{{ hint }}</span>{% endif %}
+  <span class="err" role="alert">{{ icon('info') }}<span></span></span>
+</div>
+{%- endmacro %}
+
+{% macro select(name, label, options, req=False, review='', ph='—') -%}
+<div class="field" data-field="{{ name }}">
+  <label class="label" for="f-{{ name }}">{{ label }}{% if req %}<span class="req" aria-hidden="true">*</span>{% else %} <span class="opt">({{ t('optional') }})</span>{% endif %}</label>
+  <select class="select" id="f-{{ name }}" name="{{ name }}" {% if req %}data-req required{% endif %} {% if review %}data-review="{{ review }}"{% endif %}>
+    <option value="">{{ ph }}</option>
+    {% for v, l in options %}<option value="{{ v }}">{{ l }}</option>{% endfor %}
+  </select>
+  <span class="err" role="alert">{{ icon('info') }}<span></span></span>
+</div>
+{%- endmacro %}
+
+{% macro tiles(name, legend, options, type='radio', req=False, cls='', review='', note='') -%}
+<fieldset class="fieldset field" data-field="{{ name }}" {% if req %}data-req-group{% endif %}>
+  <legend>{{ legend }}{% if note %} <span class="opt">– {{ note }}</span>{% endif %}<span class="ai-slot" data-ai-slot="{{ name }}"></span></legend>
+  <div class="tiles {{ cls }}">
+    {% for o in options %}
+    <label class="tile"><input type="{{ type }}" name="{{ name }}" value="{{ o[0] }}" {% if review %}data-review="{{ review }}"{% endif %} data-label="{{ o[1] }}"><span class="tile-in"><b>{{ o[1] }}</b>{% if o|length > 2 and o[2] %}<span>{{ o[2] }}</span>{% endif %}</span></label>
+    {% endfor %}
+  </div>
+  <span class="err" role="alert">{{ icon('info') }}<span></span></span>
+</fieldset>
+{%- endmacro %}
+
+{% macro salutation(name='anrede') -%}
+<fieldset class="fieldset field" data-field="{{ name }}" data-req-group>
+  <legend>{{ t('f_salutation') }}<span class="req" aria-hidden="true">*</span></legend>
+  <div class="chips">
+    {% for s in T.sal %}<label class="chip"><input type="radio" name="{{ name }}" value="{{ tr(s) }}" data-review="contact"><span>{{ tr(s) }}</span></label>{% endfor %}
+  </div>
+  <span class="err" role="alert">{{ icon('info') }}<span></span></span>
+</fieldset>
+{%- endmacro %}
+
+{% macro photos(name='fotos', label='', hint='', review='') -%}
+<div class="field" data-field="{{ name }}">
+  <span class="label">{{ label or t('f_photos') }} <span class="opt">({{ t('optional') }})</span></span>
+  <label class="drop" data-drop>
+    {{ icon('camera') }}
+    <strong>{{ t('photos_drop') }}</strong>
+    <span class="hint">{{ t('photos_hint') }}</span>
+    <input type="file" name="{{ name }}" accept="image/*,.heic,.heif" multiple data-photos {% if review %}data-review="{{ review }}"{% endif %}>
+  </label>
+  <div class="thumbs" data-thumbs></div>
+  {% if hint %}<span class="hint">{{ hint }}</span>{% endif %}
+</div>
+{%- endmacro %}
+
+{% macro consent() -%}
+<div class="field" data-field="consent">
+  <label class="check"><input type="checkbox" name="consent" data-req required><span>{{ t('consent')|replace('{link}', '<a href="' ~ url('datenschutz') ~ '" target="_blank" rel="noopener">' ~ t('privacy_link') ~ '</a>')|safe }}</span></label>
+  <span class="err" role="alert">{{ icon('info') }}<span></span></span>
+</div>
+{%- endmacro %}
+
+{% macro send_error() -%}
+<div class="notice notice-err" data-send-error hidden role="alert">{{ icon('alert') }}<div><b>{{ t('send_error_title') }}</b><p>{{ t('send_error_text') }} <a href="{{ company.phone_href }}">{{ company.phone }}</a></p></div></div>
+{%- endmacro %}
+
+{% macro calendar(name='datum', review='') -%}
+<div class="field" data-field="{{ name }}">
+  <span class="label">{{ t('f_date') }} <span class="opt">({{ t('optional') }})</span></span>
+  <div class="cal" data-cal data-name="{{ name }}" data-lang="{{ lang }}">
+    <div class="cal-head"><button type="button" class="cal-nav" data-cal-prev aria-label="‹">{{ icon('chev-l') }}</button><span data-cal-month></span><button type="button" class="cal-nav" data-cal-next aria-label="›">{{ icon('chev-r') }}</button></div>
+    <div class="cal-grid" data-cal-grid></div>
+  </div>
+  <input type="hidden" name="{{ name }}" {% if review %}data-review="{{ review }}"{% endif %}>
+</div>
+{%- endmacro %}

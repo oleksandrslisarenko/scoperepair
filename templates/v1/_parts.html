@@ -1,0 +1,112 @@
+{% from '_icons.html' import icon with context %}
+
+{% macro pcard(x) -%}
+<article class="pcard" data-p data-brand="{{ x.brand_slug }}" data-type="{{ x.type_slug }}" data-cond="{{ x.cond_slug }}" data-model="{{ x.model|lower }}" data-photo="{{ 1 if x.img else 0 }}">
+  <div class="pcard-media">
+    {% if x.img %}<img src="{{ x.img[480] }}" srcset="{{ x.img[480] }} 480w, {{ x.img[960] }} 960w" sizes="(max-width:640px) 100vw, (max-width:1100px) 50vw, 400px" alt="{{ x.title_l }}" loading="lazy" decoding="async">
+    {% else %}<div class="ph">{{ icon('image') }}<span>{{ t('no_photo') }}</span></div>{% endif %}
+    <div class="pcard-badges">
+      <span class="badge {{ 'badge-refurb' if x.cond == 'Generalüberholt' else 'badge-used' }}">{{ icon('check') }}{{ x.cond_l }}</span>
+      {% if x.kind == 'endoscope' %}<span class="badge badge-warranty">{{ icon('shield') }}{{ t('warranty_12') }}</span>{% endif %}
+    </div>
+  </div>
+  <div class="pcard-body">
+    <span class="overline" style="color:var(--ink-muted)">{{ x.brand }} · {{ x.type_l }}</span>
+    <h3><a href="{{ purl(x.slug) }}">{{ x.model }}</a></h3>
+    {% if x.dia or x.channel %}<span class="pcard-facts">{% if x.dia %}Ø {{ x.dia }}{% endif %}{% if x.dia and x.channel %} · {% endif %}{% if x.channel %}{{ tr(C.SPEC_LABELS['Arbeitskanal']) }} {{ x.channel }}{% endif %}</span>{% endif %}
+    <div class="pcard-foot">
+      <span class="pcard-price">{{ t('price_on_request') }}</span>
+      <a class="btn btn-secondary btn-s" href="{{ purl(x.slug) }}#anfrage">{{ t('cta_inquire') }}</a>
+    </div>
+  </div>
+</article>
+{%- endmacro %}
+
+{% macro faq_section(items, alt=False) -%}
+<section class="sec {{ 'sec-alt' if alt }}" aria-labelledby="faq-h">
+  <div class="wrap faq-grid">
+    <div class="faq-side rvl">
+      <p class="overline">FAQ</p>
+      <h2 class="h2" id="faq-h">{{ t('faq') }}</h2>
+      <p class="muted" style="font-size:17px;line-height:26px">{{ t('faq_more') }} <a href="{{ company.phone_href }}" style="font-weight:600">{{ company.phone }}</a></p>
+      {% if lang in ('fr','ru') %}<p class="proto-note">{{ t('mt_note') }}</p>{% endif %}
+    </div>
+    <div class="faq rvl" data-faq>
+      {% for q, a in items %}
+      <details {% if loop.first %}open{% endif %}><summary>{{ q }}</summary><div class="faq-a"><p>{{ a }}</p></div></details>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{%- endmacro %}
+
+{% macro phero(o, h1, lead, banner='', crumbs=None, actions=None, facts=None) -%}
+<section class="phero">
+  {% if banner and images.get(banner) %}<div class="phero-img" style="background-image:url({{ images[banner][1600] }})" role="presentation"></div>{% endif %}
+  <div class="wrap">
+    <div class="phero-in">
+      <ol class="crumbs" aria-label="{{ t('breadcrumb') }}"><li><a href="{{ url('index') }}">{{ t('home') }}</a></li>{% for href, l in (crumbs or []) %}<li>{% if href %}<a href="{{ href }}">{{ l }}</a>{% else %}<span aria-current="page">{{ l }}</span>{% endif %}</li>{% endfor %}</ol>
+      {% if o %}<p class="overline">{{ o }}</p>{% endif %}
+      <h1>{{ h1 }}</h1>
+      {% if lead %}<p class="lead">{{ lead }}</p>{% endif %}
+      {% if actions %}<div class="phero-actions">{{ actions }}</div>{% endif %}
+    </div>
+    {% if facts %}
+    <div class="facts" style="margin:0 0 48px">
+      {% for ic, b, s in facts %}<div class="fact">{{ icon(ic) }}<div><b>{{ tr(b) }}</b><span>{{ tr(s) }}</span></div></div>{% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</section>
+{%- endmacro %}
+
+{% macro contact_block() -%}
+<section class="sec sky" aria-labelledby="cb-h">
+  <svg viewBox="0 0 1440 560" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><path d="M560 560 C 820 420, 1100 300, 1440 250 L1440 560 Z" fill="#fff" fill-opacity=".28"/><path d="M560 560 C 820 420, 1100 300, 1440 250" fill="none" stroke="#fff" stroke-width="1.5" stroke-opacity=".95"/></svg>
+  <div class="wrap cblock">
+    <div class="rvl">
+      <h2 id="cb-h">{{ tr(C.P['index']['contact_h']) }}</h2>
+      <p style="margin-top:16px"><strong style="font-size:20px">{{ company.ceo }}</strong><span class="muted" style="display:block">{{ tr(company.ceo_role) }}</span></p>
+      <div class="cblock-rows">
+        <a href="{{ company.phone_href }}">{{ icon('phone') }}{{ company.phone }}</a>
+        <a href="mailto:{{ company.email }}">{{ icon('mail') }}{{ company.email }}</a>
+      </div>
+      <div class="cblock-hours">{% for d, h in C.HOURS %}<span class="muted">{{ tr(d) }}</span><span class="num">{{ h }}</span>{% endfor %}</div>
+      <div class="cblock-actions">
+        <a class="btn btn-primary" href="{{ url('reparatur-auftrag') }}">{{ t('cta_repair') }} {{ icon('arrow') }}</a>
+        <a class="btn btn-secondary" href="{{ url('kontakt', '?tab=rueckruf') }}">{{ icon('callback') }} {{ t('cta_callback') }}</a>
+      </div>
+    </div>
+    <div class="cert rvl">
+      <img src="/img/QAS-International-GM3329.webp" alt="QAS International – ISO 9001:2015, Zertifikat GM3329" width="180" height="125" loading="lazy">
+      <p>{{ t('iso_cert') }}. {{ tr(C.L('Klare Prozesse, regelmäßige Überprüfungen, kontinuierliche Verbesserung.', 'Clear processes, regular reviews, continuous improvement.', 'Processus clairs, contrôles réguliers, amélioration continue.', 'Чёткие процессы, регулярные проверки, постоянное улучшение.')) }}</p>
+    </div>
+  </div>
+</section>
+{%- endmacro %}
+
+{% macro help_band() -%}
+<section class="band" aria-label="{{ tr(C.P['index']['band_t']) }}">
+  <div class="wrap band-in">
+    <div><span class="segs" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+      <div><h2>{{ tr(C.P['index']['band_t']) }}</h2><p>{{ tr(C.P['index']['band_s']) }}</p></div></div>
+    <div class="band-actions">
+      <span class="band-hours">{% for d, h in C.HOURS %}{{ tr(d) }} {{ h }}{% if not loop.last %}<br>{% endif %}{% endfor %}</span>
+      <a class="btn btn-blue" href="{{ company.phone_href }}">{{ icon('phone') }} {{ company.phone }}</a>
+    </div>
+  </div>
+</section>
+{%- endmacro %}
+
+{% macro steps7(steps, short=True) -%}
+<ol class="steps7">
+  {% for s in steps %}
+  <li class="rvl {{ 'is-key' if loop.index == 4 }}" style="transition-delay:{{ loop.index0 * 60 }}ms">
+    <div class="st-top"><span class="st-ico">{{ icon(s.icon) }}<b>{{ loop.index }}</b></span><span class="st-line"></span></div>
+    <h3>{{ tr(s.t) }}</h3>
+    <p>{{ tr(s.s) }}</p>
+    {% if s.m %}<span class="tag">{{ icon('check') }}{{ tr(s.m) }}</span>{% endif %}
+  </li>
+  {% endfor %}
+</ol>
+{%- endmacro %}

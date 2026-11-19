@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% from '_icons.html' import icon with context %}
+{% from '_parts.html' import pcard with context %}
+{% from '_forms.html' import field, consent, send_error with context %}
+{% block title %}{{ prod.title_l }}{% endblock %}
+{% block main %}
+{% set G = p %}
+{% set back_id = 'endoskopie-anlagen' if prod.kind == 'system' else 'gebrauchte-endoskope' %}
+<div class="wrap" style="padding:32px var(--gutter) 64px">
+  <ol class="crumbs" aria-label="{{ t('breadcrumb') }}">
+    <li><a href="{{ url('index') }}">{{ t('home') }}</a></li>
+    <li><a href="{{ url(back_id) }}">{{ tr(C.P[back_id]['title']) }}</a></li>
+    {% if prod.kind == 'endoscope' %}<li><a href="{{ url('gebrauchte-endoskope', '?hersteller=' ~ prod.brand_slug ~ '&typ=' ~ prod.type_slug) }}">{{ prod.brand }} · {{ tr(C.TYPES_PLURAL.get(prod.type, C.TYPES.get(prod.type, {}))) or prod.type }}</a></li>{% endif %}
+    <li><span aria-current="page">{{ prod.model }}</span></li>
+  </ol>
+  <div class="pd">
+    <div>
+      {% if prod.imgs %}
+      <div data-gallery tabindex="0" aria-label="{{ prod.title_l }}">
+        <div class="gal-main">
+          <div class="gal-track" data-gal-track>
+            {% for im in prod.imgs %}<figure><img src="{{ im[960] }}" data-full="{{ im[1600] }}" srcset="{{ im[480] }} 480w, {{ im[960] }} 960w, {{ im[1600] }} 1600w" sizes="(max-width:1000px) 100vw, 640px" alt="{{ prod.title_l }} – {{ loop.index }}" {% if not loop.first %}loading="lazy"{% endif %}><button type="button" class="gal-zoom" data-gal-zoom aria-label="{{ tr(G.zoom) }}"></button></figure>{% endfor %}
+          </div>
+          {% if prod.imgs|length > 1 %}
+          <button type="button" class="gal-arrow gal-prev" data-gal-prev aria-label="{{ tr(G.prev) }}">{{ icon('chev-l') }}</button>
+          <button type="button" class="gal-arrow gal-next" data-gal-next aria-label="{{ tr(G.nextp) }}">{{ icon('chev-r') }}</button>
+          <span class="gal-count" data-gal-count></span>
+          {% endif %}
+        </div>
+        {% if prod.imgs|length > 1 %}<div class="gal-thumbs">{% for im in prod.imgs %}<button type="button" data-gal-thumb aria-label="{{ tr(G.photo_n)|replace('{n}', loop.index|string)|replace('{total}', prod.imgs|length|string) }}"><img src="{{ im[480] }}" alt="" loading="lazy"></button>{% endfor %}</div>{% endif %}
+      </div>
+      {% else %}
+      <div class="gal-main"><div class="ph">{{ icon('image') }}<span>{{ t('no_photo') }}</span></div></div>
+      {% endif %}
+    </div>
+
+    <div class="pd-info">
+      <p class="overline" style="color:var(--ink-muted)">{{ prod.brand }} · {{ prod.type_l }}</p>
+      <h1>{{ prod.title_l }}</h1>
+      <div class="pd-badges">
+        <span class="badge {{ 'badge-refurb' if prod.cond == 'Generalüberholt' else 'badge-used' }}">{{ icon('check') }}{{ prod.cond_l }}</span>
+        {% if prod.kind == 'endoscope' %}<span class="badge badge-warranty">{{ icon('shield') }}{{ t('warranty_12') }}</span>{% endif %}
+      </div>
+      <div class="pd-price"><strong>{{ t('price_on_request') }}</strong></div>
+      <div class="pd-ctas" id="anfrage">
+        <button type="button" class="btn btn-primary btn-block" data-inq-open aria-expanded="false" aria-controls="inq">{{ tr(G.inquiry_t) }}</button>
+        <form class="inq" id="inq" hidden data-form data-success="inq-ok" action="#">
+          <div><h2 class="h3">{{ tr(G.inquiry_t) }}: {{ prod.model }}</h2><p class="hint" style="margin-top:4px">{{ tr(G.inquiry_s) }}</p></div>
+          {{ field('firma', t('f_company'), req=True, ac='organization') }}
+          <div class="fgrid">
+            {{ field('name', t('f_name'), req=True, ac='name') }}
+            {{ field('telefon', t('f_phone'), 'phone', ac='tel') }}
+          </div>
+          {{ field('email', t('f_email'), 'email', req=True, ac='email') }}
+          <label class="check"><input type="checkbox" name="inzahlung"><span>{{ tr(G.tradein_cb) }}</span></label>
+          {{ consent() }}
+          {{ send_error() }}
+          <button class="btn btn-primary" type="submit">{{ tr(G.send) }} {{ icon('arrow') }}</button>
+          <p class="proto-note">{{ t('proto_note') }} {{ t('proto_error_hint') }}</p>
+        </form>
+        <div class="notice notice-ok" id="inq-ok" hidden data-success-box>{{ icon('check') }}<div><b>{{ tr(G.sent_t) }}</b><p>{{ tr(G.sent_s) }}</p></div></div>
+        {% if prod.kind == 'endoscope' %}<a class="btn btn-secondary btn-block" href="{{ url('reparatur-auftrag', '?hersteller=' ~ prod.brand ~ '&typ=' ~ prod.type ~ '&modell=' ~ prod.model) }}">{{ icon('wrench') }} {{ tr(G.repair_this) }}</a>{% endif %}
+      </div>
+
+      <div style="margin-top:40px">
+        <h2 class="h3" style="margin-bottom:8px">{{ tr(G.specs) }}</h2>
+        <table class="spec">
+          <tbody>
+            <tr class="grp"><th colspan="2">{{ tr(G.device) }}</th></tr>
+            <tr><th>{{ t('f_brand') }}</th><td>{{ prod.brand }}</td></tr>
+            <tr><th>{{ t('f_model') }}</th><td class="mono">{{ prod.model }}</td></tr>
+            <tr><th>{{ t('f_type') }}</th><td>{{ prod.type_l }}</td></tr>
+            <tr><th>{{ tr(C.P['gebrauchte-endoskope']['f_cond']) }}</th><td>{{ prod.cond_l }}</td></tr>
+            {% if prod.specs_l %}<tr class="grp"><th colspan="2">{{ tr(G.specs) }}</th></tr>{% endif %}
+            {% for s in prod.specs_l %}{% set hp = s.hint.split(' · ') if s.hint else [] %}<tr><th>{{ s.label }}</th><td>{% if hp and s.vals|length > 1 and s.vals|length <= hp|length %}{% for v in s.vals %}<span class="sv"><small>{{ hp[loop.index0] }}</small>{{ v }}</span>{% endfor %}{% else %}{{ s.vals|join(' · ') }}{% endif %}</td></tr>{% endfor %}
+          </tbody>
+        </table>
+        <p class="proto-note" style="margin-top:8px">{{ tr(G.facts_note) }}</p>
+      </div>
+    </div>
+  </div>
+
+  {% if prod.acc_l %}
+  <section style="margin-top:56px" aria-labelledby="acc-h">
+    <h2 class="h3" id="acc-h">{{ tr(G.acc) }}</h2>
+    <ul class="acc" style="padding:0;margin:16px 0 8px">{% for a in prod.acc_l %}<li>{% if a.img %}<img src="{{ a.img[480] }}" alt="" loading="lazy">{% endif %}<b>{{ a.name }}</b>{% if a.desc %}<span>{{ a.desc }}</span>{% endif %}</li>{% endfor %}</ul>
+    <p class="hint">{{ tr(G.acc_more) }}</p>
+  </section>
+  {% endif %}
+
+  {% if prod.desc_l %}
+  <section style="margin-top:56px" aria-labelledby="desc-h" {% if prod.desc_fallback %}lang="en"{% endif %}>
+    <h2 class="h3" id="desc-h">{{ tr(G.desc) }}</h2>
+    {% if prod.desc_fallback %}<p class="proto-note" lang="{{ lang }}" style="margin-top:6px">{{ t('desc_lang_note') }}</p>{% endif %}
+    <div class="prose" style="margin-top:16px">{% for tag, txt in prod.desc_l %}{% if tag == 'h2' %}<h3>{{ txt }}</h3>{% elif tag == 'h3' %}<h3 style="font-size:19px">{{ txt }}</h3>{% elif tag == 'li' %}<p>• {{ txt }}</p>{% else %}<p>{{ txt }}</p>{% endif %}{% endfor %}</div>
+  </section>
+  {% endif %}
+
+  {% if related %}
+  <section style="margin-top:72px" aria-labelledby="rel-h">
+    <div class="sec-head" style="margin-bottom:24px"><div><h2 class="h2" id="rel-h">{{ tr(G.related) }}</h2></div><a class="link-arrow" href="{{ url(back_id) }}">{{ tr(C.P[back_id]['title']) }} {{ icon('arrow') }}</a></div>
+    <div class="grid3">{% for r in related %}{{ pcard(r) }}{% endfor %}</div>
+  </section>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,8 @@
+[
+  {"id": "v1", "num": "01", "tag": "Aktuell", "name": "Klar",
+   "desc": "Der freigegebene Entwurf: hell, ruhig, Navy und Signalblau aus dem Logo, runde Bedienelemente und das Segment-Motiv als Fortschrittsanzeige.",
+   "status": "Fertig zur Durchsicht", "ready": true},
+  {"id": "v2", "num": "02", "tag": "Neu", "name": "Variante 2",
+   "desc": "Alternative Gestaltung mit denselben Seiten und Funktionen.",
+   "status": "In Arbeit", "ready": false}
+]

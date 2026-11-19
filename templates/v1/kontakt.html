@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% from '_icons.html' import icon with context %}
+{% from '_parts.html' import phero with context %}
+{% from '_forms.html' import field, select, salutation, consent, send_error with context %}
+{% block main %}
+{{ phero(tr(p.o), tr(p.h1), tr(p.lead), 'banner-contact', [('', tr(p.title))]) }}
+<section class="sec">
+  <div class="wrap contact-grid">
+    <div class="cinfo rvl">
+      <div class="cinfo-row">{{ icon('pin') }}<div><h3>{{ t('address') }}</h3><p>{{ company.name }}<br>{{ company.street }}<br>{{ company.zip }} {{ company.city }}, {{ tr(company.country) }}</p></div></div>
+      <div class="cinfo-row">{{ icon('phone') }}<div><h3>{{ t('f_phone') }}</h3><a href="{{ company.phone_href }}">{{ company.phone }}</a></div></div>
+      <div class="cinfo-row">{{ icon('fax') }}<div><h3>{{ t('fax') }}</h3><p>{{ company.fax }}</p></div></div>
+      <div class="cinfo-row">{{ icon('mail') }}<div><h3>{{ t('f_email') }}</h3><a href="mailto:{{ company.email }}">{{ company.email }}</a></div></div>
+      <div class="cinfo-row">{{ icon('clock') }}<div><h3>{{ t('opening_hours') }}</h3><p style="font-weight:500;font-size:16px;line-height:26px">{% for d, h in C.HOURS %}{{ tr(d) }}: <span class="num">{{ h }}</span>{% if not loop.last %}<br>{% endif %}{% endfor %}</p></div></div>
+      <div class="map"><div>{{ icon('pin') }}<h3 class="h3" style="margin-top:8px">{{ tr(p.map_h) }}</h3><p>{{ tr(p.map_consent) }}</p><button type="button" class="btn btn-secondary btn-s" data-map>{{ tr(p.map_btn) }}</button></div></div>
+    </div>
+
+    <div class="card rvl" style="padding:32px">
+      <div class="tabs" role="tablist" data-tabs>
+        <button type="button" role="tab" id="tab-msg" aria-controls="panel-msg" aria-selected="true" data-tab="nachricht">{{ icon('mail') }} {{ tr(p.tab_msg) }}</button>
+        <button type="button" role="tab" id="tab-cb" aria-controls="panel-cb" aria-selected="false" tabindex="-1" data-tab="rueckruf">{{ icon('callback') }} {{ tr(p.tab_cb) }}</button>
+      </div>
+      <div class="tabpanel" id="panel-msg" role="tabpanel" aria-labelledby="tab-msg">
+        <form id="msg-form" data-form data-success="msg-ok" action="#" style="display:flex;flex-direction:column;gap:20px">
+          {{ salutation() }}
+          <div class="field" data-field="betreff">
+            <label class="label" for="f-betreff">{{ t('f_subject') }}<span class="req" aria-hidden="true">*</span></label>
+            <select class="select" id="f-betreff" name="betreff" data-req required data-prefill="betreff"><option value="">—</option>{% for v, l in C.CONTACT_SUBJECTS %}<option value="{{ v }}">{{ tr(l) }}</option>{% endfor %}</select>
+            <span class="err" role="alert">{{ icon('info') }}<span></span></span>
+          </div>
+          <div class="fgrid">
+            {{ field('firma', t('f_company'), req=True, cls='span2', ac='organization') }}
+            {{ field('vorname', t('f_firstname'), req=True, ac='given-name') }}
+            {{ field('nachname', t('f_lastname'), req=True, ac='family-name') }}
+            {{ field('email', t('f_email'), 'email', req=True, ac='email') }}
+            {{ field('telefon', t('f_phone'), 'phone', ac='tel') }}
+          </div>
+          {{ field('nachricht', t('f_message'), 'textarea', req=True, attrs='data-prefill="nachricht"') }}
+          {{ consent() }}
+          {{ send_error() }}
+          <div><button class="btn btn-primary" type="submit">{{ tr(p.submit) }} {{ icon('arrow') }}</button></div>
+          <p class="proto-note">{{ t('proto_note') }} {{ t('proto_error_hint') }}</p>
+        </form>
+        <div class="done" id="msg-ok" hidden data-success-box style="padding:16px 0">
+          <div class="done-ico">{{ icon('check') }}</div><h2 class="h2" style="margin-top:16px">{{ tr(p.done_h) }}</h2><p class="lead" style="margin-top:8px">{{ tr(p.done_s) }}</p>
+          <button type="button" class="btn btn-secondary" style="margin-top:20px" data-reopen="msg-form">{{ t('new_request') }}</button>
+        </div>
+      </div>
+      <div class="tabpanel" id="panel-cb" role="tabpanel" aria-labelledby="tab-cb" hidden>
+        <form data-form data-success="cb-ok" action="#" style="display:flex;flex-direction:column;gap:20px">
+          <div class="fgrid">
+            {{ field('cb_name', t('f_name'), req=True, ac='name') }}
+            {{ field('cb_telefon', t('f_phone'), 'phone', req=True, ac='tel') }}
+          </div>
+          <fieldset class="fieldset field" data-field="cb_zeit" data-req-group><legend>{{ tr(p.cb_when) }}<span class="req" aria-hidden="true">*</span></legend>
+            <div class="chips"><label class="chip"><input type="radio" name="cb_zeit" value="vm"><span>{{ t('morning') }}</span></label><label class="chip"><input type="radio" name="cb_zeit" value="nm"><span>{{ t('afternoon') }}</span></label></div>
+            <span class="hint">{% for d, h in C.HOURS %}{{ tr(d) }} {{ h }}{% if not loop.last %} · {% endif %}{% endfor %}</span>
+            <span class="err" role="alert">{{ icon('info') }}<span></span></span>
+          </fieldset>
+          {{ field('cb_thema', tr(p.cb_topic), 'textarea') }}
+          {{ consent() }}
+          <div><button class="btn btn-primary" type="submit">{{ icon('callback') }} {{ tr(p.submit_cb) }}</button></div>
+          <p class="proto-note">{{ t('proto_note') }}</p>
+        </form>
+        <div class="done" id="cb-ok" hidden data-success-box style="padding:16px 0">
+          <div class="done-ico">{{ icon('check') }}</div><h2 class="h2" style="margin-top:16px">{{ tr(p.done_cb_h) }}</h2><p class="lead" style="margin-top:8px">{{ tr(p.done_cb_s) }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

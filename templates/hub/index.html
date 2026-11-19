@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>scopeREPAIR – Prototyp</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/img/Favicon_Scoperepair_neu_2024_transparent.png">
+<link rel="stylesheet" href="/static/css/fonts.css">
+<link rel="stylesheet" href="/static/css/hub.css">
+</head>
+<body>
+<main class="hub">
+  <header class="hub-head">
+    <img src="/img/scopeREPAIR-Logo2025-300small.webp" alt="scopeREPAIR GmbH" width="137" height="52">
+    <span class="hub-segs" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+  </header>
+  <section class="hub-intro">
+    <p class="overline">Website-Prototyp · November 2026</p>
+    <h1>Neue Website für scopeREPAIR</h1>
+    <p class="lead">Klickbarer Prototyp mit allen Seiten und Formularen – Desktop und Mobil, in Deutsch, Englisch, Französisch und Russisch. Formulare senden nichts, zeigen aber Erfolg und Fehler wie im Live-Betrieb.</p>
+  </section>
+
+  <section class="cards" aria-label="Varianten">
+    {% for v in variants %}
+    <article class="vcard {{ 'is-ready' if v.ready }}">
+      <div class="vcard-top"><span class="vnum">{{ v.num }}</span><span class="vtag">{{ v.tag }}</span></div>
+      <h2>{{ v.name }}</h2>
+      <p>{{ v.desc }}</p>
+      <div class="vstatus"><i class="{{ 'ok' if v.ready else 'wip' }}"></i>{{ v.status }}</div>
+      <ul class="vlinks">
+        <li><a href="/{{ v.id }}/de/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4.5" width="18" height="12" rx="1.5"/><path d="M9 20h6M12 16.5V20"/></svg><span>Desktop-Version</span><svg class="ext" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9"/></svg></a></li>
+        <li><a href="/mobile.html?v={{ v.id }}&p=de/index.html" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M10.5 18.5h3"/></svg><span>Mobile-Version</span><svg class="ext" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9"/></svg></a></li>
+      </ul>
+    </article>
+    {% endfor %}
+  </section>
+
+  <section class="hub-screens">
+    <h2>Seiten im Prototyp</h2>
+    <ol>{% for s in screens %}<li><a href="/v1/de/{{ '' if s.path == 'index.html' else s.path }}" target="_blank" rel="noopener">{{ s.label }}</a></li>{% endfor %}</ol>
+  </section>
+
+  <footer class="hub-foot">
+    <span>scopeREPAIR GmbH · Raiffeisenstraße 11 · 21516 Müssen</span>
+    <a href="/downloads/scoperepair-fotos.zip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 19.5h14"/></svg>Fotos von scoperepair.de (ZIP)</a>
+  </footer>
+</main>
+</body>
+</html>
