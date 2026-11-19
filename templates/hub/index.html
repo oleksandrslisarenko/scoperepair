@@ -18,7 +18,7 @@
   <section class="hub-intro">
     <p class="overline">Website-Prototyp · November 2026</p>
     <h1>Neue Website für scopeREPAIR</h1>
-    <p class="lead">Klickbarer Prototyp mit allen Seiten und Formularen – Desktop und Mobil, in Deutsch, Englisch, Französisch und Russisch. Formulare senden nichts, zeigen aber Erfolg und Fehler wie im Live-Betrieb.</p>
+    <p class="lead">Klickbarer Prototyp mit allen Seiten und Formularen – Desktop und Mobil, in Deutsch, Englisch, Französisch und Russisch. Formulare senden die Anfrage per E-Mail.</p>
   </section>
 
   <section class="cards" aria-label="Varianten">
@@ -32,6 +32,7 @@
         <li><a href="/{{ v.id }}/de/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4.5" width="18" height="12" rx="1.5"/><path d="M9 20h6M12 16.5V20"/></svg><span>Desktop-Version</span><svg class="ext" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9"/></svg></a></li>
         <li><a href="/mobile.html?v={{ v.id }}&p=de/index.html" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M10.5 18.5h3"/></svg><span>Mobile-Version</span><svg class="ext" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9"/></svg></a></li>
       </ul>
+      {% if v.extra %}<ul class="vlinks vlinks-extra">{% for e in v.extra %}<li><a href="/{{ v.id }}/de/{{ e.path }}" target="_blank" rel="noopener"><span>{{ e.label }}</span><svg class="ext" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9"/></svg></a></li>{% endfor %}</ul>{% endif %}
     </article>
     {% endfor %}
   </section>

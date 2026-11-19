@@ -33,6 +33,27 @@
     if (!get()) setTimeout(function () { show(true); }, 600);
   })();
 
+  /* ── blueprint hero: magnifier shows the real photo under the cursor ── */
+  (function () {
+    var bp = $('[data-bp]'); if (!bp) return;
+    var lens = $('[data-lens]', bp), li = $('[data-lens-img]', bp), lines = $('img.x-bp-lines', bp);
+    var ZOOM = 1.6, R = 110;
+    li.style.backgroundImage = 'url(/static/img/hero-photo.jpg)';
+    function place(cx, cy) {
+      var br = bp.getBoundingClientRect(), ir = lines.getBoundingClientRect();
+      var x = cx - br.left, y = cy - br.top;
+      lens.style.transform = ''; lens.style.left = x + 'px'; lens.style.top = y + 'px';
+      var w = ir.width * ZOOM, h = ir.height * ZOOM;
+      var px = (cx - ir.left) * ZOOM, py = (cy - ir.top) * ZOOM;
+      li.style.backgroundSize = w + 'px ' + h + 'px';
+      li.style.backgroundPosition = (R - px) + 'px ' + (R - py) + 'px';
+    }
+    bp.addEventListener('pointermove', function (e) { if (e.pointerType === 'touch') return; place(e.clientX, e.clientY); lens.classList.add('is-on'); bp.classList.add('is-used'); });
+    bp.addEventListener('pointerleave', function () { lens.classList.remove('is-on'); });
+    /* touch: tap to drop the lens */
+    bp.addEventListener('pointerdown', function (e) { if (e.pointerType !== 'touch') return; place(e.clientX, e.clientY); lens.classList.add('is-on'); bp.classList.add('is-used'); });
+  })();
+
   /* ── toasts ───────────────────────────── */
   function toast(msg, ms) {
     var box = $('[data-toasts]'); if (!box) return;

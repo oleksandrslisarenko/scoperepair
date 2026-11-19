@@ -19,7 +19,7 @@ import sys
 import zipfile
 from collections import OrderedDict, defaultdict
 
-from jinja2 import ChoiceLoader, Environment, FileSystemLoader, select_autoescape
+from jinja2 import TemplateNotFound, ChoiceLoader, Environment, FileSystemLoader, select_autoescape
 from markupsafe import Markup
 
 import content as C
@@ -32,6 +32,8 @@ VARIANTS = ['v1', 'v2']
 # page id -> (template, faq key or None)
 PAGES = OrderedDict([
     ('index', ('home.html', 'home')),
+    ('index-b', ('home_b.html', 'home')),
+    ('index-c', ('home_c.html', 'home')),
     ('reparatur', ('reparatur.html', 'repair')),
     ('reparatur-auftrag', ('wizard_repair.html', None)),
     ('leihgeraete', ('leihgeraete.html', 'loaner')),
@@ -55,7 +57,7 @@ SCREENS = [
     ('leihgeraete', 'Leihgeräte'), ('leihgeraet-anfragen', 'Leihgerät anfragen (Wizard)'),
     ('gebrauchte-endoskope', 'Gebrauchte Endoskope'), ('produkt', 'Produktseite'),
     ('ankauf', 'Ankauf'), ('ankauf-anfrage', 'Gerät verkaufen (Wizard)'), ('endoskopie-anlagen', 'Endoskopie-Anlagen'),
-    ('rechner', 'Kostenrechner'), ('ueber-uns', 'Über uns'), ('kontakt', 'Kontakt / Rückruf'),
+    ('rechner', 'Kostenrechner'), ('index-b', 'Startseite B (nur 02)'), ('index-c', 'Startseite C (nur 02)'), ('ueber-uns', 'Über uns'), ('kontakt', 'Kontakt / Rückruf'),
     ('impressum', 'Impressum'), ('datenschutz', 'Datenschutz'), ('agb', 'AGB'), ('rechtliches', 'Text- und Bildrechte'),
 ]
 DEMO_PRODUCT = 'gastroskop-pentax-eg-1580k'
@@ -333,7 +335,12 @@ def render_variant(variant, images):
                  Markup=Markup, json=json, heads_json=heads_json, av=AV)
 
         for pid, (tpl, faq_key) in PAGES.items():
-            ctx = dict(g, page=pid, p=C.P.get(pid, {}), faq=C.faq(faq_key, lang) if faq_key else None)
+            try:
+                env.get_template(tpl)
+            except TemplateNotFound:
+                continue  # page exists only in some variants (e.g. v2 home alternatives)
+            ppid = 'index' if pid.startswith('index-') else pid
+            ctx = dict(g, page=ppid, p=C.P.get(ppid, {}), faq=C.faq(faq_key, lang) if faq_key else None)
             if tpl == 'legal.html':
                 ctx['legal'] = C.LEGAL[pid]['de' if lang == 'de' else 'en']
                 ctx['legal_title'] = tr(C.LEGAL_TITLES[pid])
