@@ -1,0 +1,116 @@
+{% from '_icons.html' import icon, flag with context %}
+{% macro self_url(l) %}{% if page == 'produkt' %}{{ purl(prod.slug, l) }}{% else %}{{ url(page, '', l) }}{% endif %}{% endmacro %}
+<!doctype html>
+<html lang="{{ lang }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{% block title %}{{ tr(p.title) if p.title else '' }}{% endblock %} – scopeREPAIR</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/img/Favicon_Scoperepair_neu_2024_transparent.png">
+<link rel="preload" href="/static/fonts/barlow-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/static/css/fonts.css">
+<link rel="stylesheet" href="/static/css/v2.css">
+{% for l in langs %}<link rel="alternate" hreflang="{{ l }}" href="{{ self_url(l) }}">
+{% endfor %}
+<script>document.documentElement.classList.add('js');</script>
+</head>
+<body data-page="{{ page }}" data-variant="{{ variant }}" class="v2">
+<a class="skip" href="#main">{{ t('skip') }}</a>
+
+<div class="util">
+  <div class="wrap util-in">
+    <span class="util-l"><a href="{{ company.phone_href }}">{{ icon('phone') }}{{ company.phone }}</a><span class="util-hours">{% for d, h in C.HOURS %}{{ tr(d) }} {{ h }}{% if not loop.last %} · {% endif %}{% endfor %}</span></span>
+    <span class="util-r">
+      <a href="mailto:{{ company.email }}">{{ company.email }}</a>
+      <div class="lang" data-dd>
+        <button type="button" class="lang-btn" aria-haspopup="true" aria-expanded="false" aria-label="{{ t('language') }}: {{ lang_names[lang] }}" data-dd-btn>{{ flag(lang) }}<span>{{ lang|upper }}</span>{{ icon('chev', 'chev') }}</button>
+        <div class="dd" data-dd-menu>
+          {% for l in langs %}<a href="{{ self_url(l) }}" hreflang="{{ l }}" lang="{{ l }}" {% if l == lang %}aria-current="true"{% endif %}>{{ flag(l) }}<b>{{ l|upper }}</b>{{ lang_names[l] }}{% if l == lang %}{{ icon('check', 'check') }}{% endif %}</a>{% endfor %}
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+<header class="hdr" data-hdr>
+  <div class="wrap hdr-in">
+    <a class="hdr-logo" href="{{ url('index') }}" aria-label="scopeREPAIR – {{ t('home') }}"><img src="/img/scopeREPAIR-Logo2025-300small.webp" alt="scopeREPAIR GmbH" width="126" height="48"></a>
+    <nav class="nav" aria-label="{{ t('menu') }}">
+      {% for item in nav %}
+      {% set active = page == item.id or (item.children and page in item.children|map(attribute='id')|list) or (page == 'produkt' and item.id == 'gebrauchte-endoskope') or (page in ('reparatur-auftrag','leihgeraet-anfragen','leihgeraete','rechner') and item.id == 'reparatur') or (page == 'ankauf-anfrage' and item.id == 'ankauf') %}
+      <div class="nav-item" {% if item.children %}data-dd data-dd-hover{% endif %}>
+        {% if item.children %}
+        <button type="button" class="nav-link" aria-haspopup="true" aria-expanded="false" data-dd-btn {% if active %}aria-current="page"{% endif %}>{{ tr(item.label) }}{{ icon('chev', 'chev') }}</button>
+        <div class="dd" data-dd-menu>
+          {% for c in item.children %}<a href="{{ url(c.id, c.query or '') }}" {% if page == c.id and not c.query %}aria-current="page"{% endif %}>{{ tr(c.label) }}{% if c.sub %}<span>{{ tr(c.sub) }}</span>{% endif %}</a>{% endfor %}
+        </div>
+        {% else %}
+        <a class="nav-link" href="{{ url(item.id) }}" {% if active %}aria-current="page"{% endif %}>{{ tr(item.label) }}</a>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </nav>
+    <a class="btn btn-primary hdr-cta" href="{{ url('reparatur-auftrag') }}">{{ t('cta_repair') }}{{ icon('arrow') }}</a>
+    <div class="hdr-m">
+      <a class="icon-btn" href="{{ company.phone_href }}" aria-label="{{ t('cta_call') }}: {{ company.phone }}">{{ icon('phone') }}</a>
+      <button type="button" class="burger" aria-expanded="false" aria-controls="mnav" aria-label="{{ t('menu') }}" data-burger>{{ icon('menu') }}</button>
+    </div>
+  </div>
+</header>
+
+<div class="mnav" id="mnav" data-mnav aria-label="{{ t('menu') }}" hidden>
+  {% for item in nav %}
+  <div class="mnav-group">
+    {% if item.children %}
+    <button type="button" class="mnav-row" aria-expanded="false" data-mnav-toggle>{{ tr(item.label) }}{{ icon('chev', 'chev') }}</button>
+    <div class="mnav-sub"><div>{% for c in item.children %}<a href="{{ url(c.id, c.query or '') }}">{{ tr(c.label) }}</a>{% endfor %}</div></div>
+    {% else %}
+    <a class="mnav-row" href="{{ url(item.id) }}">{{ tr(item.label) }}{{ icon('chev-r', 'chev') }}</a>
+    {% endif %}
+  </div>
+  {% endfor %}
+  <div class="mnav-cta">
+    <a class="btn btn-primary btn-block" href="{{ url('reparatur-auftrag') }}">{{ t('cta_repair') }}</a>
+    <a class="btn btn-secondary btn-block" href="{{ company.phone_href }}">{{ icon('phone') }} {{ company.phone }}</a>
+  </div>
+  <div class="mnav-langs">{% for l in langs %}<a href="{{ self_url(l) }}" lang="{{ l }}" {% if l == lang %}aria-current="true"{% endif %}>{{ flag(l) }}{{ l|upper }}</a>{% endfor %}</div>
+</div>
+
+<main id="main">
+{% block main %}{% endblock %}
+</main>
+
+<footer class="ftr">
+  <div class="wrap ftr-in">
+    <div class="ftr-brand">
+      <img class="ftr-logo" src="/img/scopeREPAIR-Logo2025-300small.webp" alt="scopeREPAIR GmbH" width="116" height="44" loading="lazy">
+      <p>{{ tr(C.L('Unabhängiger Service für Reparatur, Verkauf und Ankauf flexibler Endoskope.', 'Independent service for repair, sale and buy-back of flexible endoscopes.', 'Service indépendant de réparation, vente et rachat d’endoscopes souples.', 'Независимый сервис по ремонту, продаже и выкупу гибких эндоскопов.')) }}</p>
+      <div class="ftr-iso">{{ icon('award') }}{{ t('iso_cert') }}</div>
+    </div>
+    {% for title, links in C.FOOTER_COLS %}
+    <div><h4>{{ tr(title) }}</h4><ul>{% for id, l in links %}<li><a href="{{ url(id) }}">{{ tr(l) }}</a></li>{% endfor %}</ul></div>
+    {% endfor %}
+    <div><h4>{{ tr(C.NAV[-1].label) }}</h4><ul>
+      <li><a href="{{ company.phone_href }}">{{ company.phone }}</a></li>
+      <li><a href="mailto:{{ company.email }}">{{ company.email }}</a></li>
+      <li>{{ company.street }}<br>{{ company.zip }} {{ company.city }}</li>
+    </ul></div>
+  </div>
+  <div class="ftr-legal"><div class="wrap">
+    <span>© 2026 scopeREPAIR GmbH</span>
+    <nav aria-label="Legal">{% for id, l in C.LEGAL_LINKS %}<a href="{{ url(id) }}">{{ tr(l) }}</a>{% endfor %}<a href="#" data-todo>{{ t('cookie_title') }}</a></nav>
+  </div></div>
+</footer>
+
+<div class="toasts" data-toasts aria-live="polite"></div>
+<script>window.I18N={{ json.dumps({
+  'required': t('err_required'), 'choose': t('err_choose'), 'email': t('err_email'), 'phone': t('err_phone'), 'zip': t('err_zip'),
+  'consent': t('err_consent'), 'summary': t('err_summary'), 'todo': t('not_built'), 'sending': t('sending'),
+  'photo_remove': t('photo_remove'), 'step_of': t('step_of'), 'lang': lang, 'show': C.P['gebrauchte-endoskope']['show_results'][lang],
+  'count': C.P['gebrauchte-endoskope']['count'][lang], 'more': C.P['gebrauchte-endoskope']['more'][lang],
+  'photo_n': C.P['produkt']['photo_n'][lang], 'morning': t('morning'), 'afternoon': t('afternoon'),
+}, ensure_ascii=False)|safe }};</script>
+{% block scripts %}{% endblock %}
+<script src="/static/js/proto.js" defer></script>
+</body>
+</html>

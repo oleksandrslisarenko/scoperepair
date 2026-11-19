@@ -193,9 +193,9 @@ def model_index():
 # Rendering
 # ──────────────────────────────────────────────────────────────────────────
 def make_env(variant):
+    dirs = [variant] + (['v1'] if variant != 'v1' else []) + ['shared']
     env = Environment(
-        loader=ChoiceLoader([FileSystemLoader(os.path.join(ROOT, 'templates', variant)),
-                             FileSystemLoader(os.path.join(ROOT, 'templates', 'shared'))]),
+        loader=ChoiceLoader([FileSystemLoader(os.path.join(ROOT, 'templates', d)) for d in dirs]),
         autoescape=select_autoescape(['html']), trim_blocks=True, lstrip_blocks=True)
     return env
 
@@ -290,6 +290,13 @@ def copy_static():
     if os.path.exists(dst):
         shutil.rmtree(dst)
     shutil.copytree(os.path.join(ROOT, 'static'), dst)
+    # v2 = v1 component layer + v2 visual layer
+    over = os.path.join(ROOT, 'static', 'css', 'v2.over.css')
+    if os.path.exists(over):
+        with open(os.path.join(dst, 'css', 'v2.css'), 'w', encoding='utf-8') as f:
+            f.write(open(os.path.join(ROOT, 'static', 'css', 'v1.css'), encoding='utf-8').read())
+            f.write('\n/* ===== v2 layer ===== */\n')
+            f.write(open(over, encoding='utf-8').read())
 
 
 def main():

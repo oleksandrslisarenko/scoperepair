@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% from '_icons.html' import icon with context %}
+{% from '_parts.html' import pcard, faq_section, contact_block, steps7 with context %}
+{% block main %}
+{% set P = p %}
+{% set hp = by_slug.get('gastroskop-pentax-eg-1580k') %}
+<section class="x-hero">
+  <div class="wrap x-hero-in">
+    <div class="x-hero-copy">
+      <p class="x-label"><span>01</span>{{ tr(C.L('Service für flexible Endoskope', 'Service for flexible endoscopes', 'Service pour endoscopes souples', 'Сервис гибких эндоскопов')) }}</p>
+      <h1>{{ tr(P.h1) }}</h1>
+      <p class="lead">{{ tr(P.lead) }}</p>
+      <div class="x-hero-actions">
+        <a class="btn btn-primary" href="{{ url('reparatur-auftrag') }}">{{ t('cta_repair') }} {{ icon('arrow') }}</a>
+        <a class="btn btn-secondary" href="{{ company.phone_href }}">{{ icon('phone') }} {{ company.phone }}</a>
+      </div>
+    </div>
+    <figure class="x-sheet">
+      <figcaption class="x-sheet-head"><span>{{ hp.brand }} {{ hp.model }}</span><span>{{ hp.type_l }}</span></figcaption>
+      {% if hp.img %}<img src="{{ hp.imgs[0][960] }}" alt="{{ hp.title_l }}" width="960" height="720">{% endif %}
+      <dl class="x-sheet-specs">
+        {% for s in hp.specs_l[:3] %}<div><dt>{{ s.label }}</dt><dd>{{ s.vals|join(' · ') }}</dd></div>{% endfor %}
+        <div><dt>{{ tr(C.P['gebrauchte-endoskope']['f_cond']) }}</dt><dd>{{ hp.cond_l }}</dd></div>
+      </dl>
+      <a class="x-sheet-link" href="{{ purl(hp.slug) }}">{{ t('cta_more') }} {{ icon('arrow') }}</a>
+    </figure>
+  </div>
+  <div class="wrap">
+    <nav class="x-scn" aria-label="{{ t('menu') }}">
+      {% for s in P.scenarios %}
+      <a href="{{ url(s.id) }}" class="{{ 'is-primary' if s.primary }}">
+        <span class="x-n">0{{ loop.index }}</span>
+        <span class="x-scn-t">{{ tr(s.t) }}</span>
+        <span class="x-scn-s">{{ tr(s.s) }}</span>
+        <span class="x-go">{{ icon('arrow') }}</span>
+      </a>
+      {% endfor %}
+    </nav>
+  </div>
+</section>
+
+<section class="x-trust" aria-label="{{ t('iso_cert') }}">
+  <div class="wrap x-trust-in">{% for ic, l in C.TRUST %}<span>{{ icon(ic) }}{{ tr(l) }}</span>{% endfor %}</div>
+</section>
+
+<section class="sec" aria-labelledby="proc-h">
+  <div class="wrap">
+    <div class="sec-head rvl">
+      <div><p class="x-label"><span>02</span>{{ tr(P.process_o) }}</p><h2 class="h2" id="proc-h">{{ tr(P.process_h) }}</h2><p class="lead">{{ tr(P.process_s) }}</p></div>
+    </div>
+    <ol class="x-steps rvl">
+      {% for s in C.REPAIR_STEPS %}
+      <li class="{{ 'is-key' if loop.index == 4 }}">
+        <span class="x-n">{{ '%02d' % loop.index }}</span>
+        <span class="x-steps-ico">{{ icon(s.icon) }}</span>
+        <h3>{{ tr(s.t) }}</h3>
+        <p>{{ tr(s.s) }}</p>
+        {% if s.m %}<span class="x-tag">{{ tr(s.m) }}</span>{% endif %}
+      </li>
+      {% endfor %}
+    </ol>
+    <div class="x-row-end rvl"><a class="btn btn-primary" href="{{ url('reparatur-auftrag') }}">{{ t('cta_repair') }} {{ icon('arrow') }}</a><a class="link-arrow" href="{{ url('reparatur') }}">{{ tr(C.P['reparatur']['process_h']) }} {{ icon('arrow') }}</a></div>
+  </div>
+</section>
+
+<section class="sec x-dark" aria-labelledby="pr-h">
+  <div class="wrap">
+    <div class="x-principle">
+      <div class="rvl">
+        <p class="x-label x-label-inv"><span>03</span>{{ tr(P.principle_o) }}</p>
+        <h2 class="h2-xl" id="pr-h">{{ tr(P.principle_h1) }} <span>{{ tr(P.principle_h2) }}</span></h2>
+        <a class="btn btn-blue" href="{{ url('rechner') }}" style="margin-top:32px">{{ icon('calc') }} {{ tr(P.principle_cta) }}</a>
+      </div>
+      <table class="x-cmp rvl">
+        <thead><tr><th></th><th scope="col">{{ tr(P.principle_a_t) }}</th><th scope="col">scopeREPAIR</th></tr></thead>
+        <tbody>
+          {% for a in P.principle_a %}{% set b = P.principle_b[loop.index0] %}
+          <tr><th scope="row">0{{ loop.index }}</th><td>{{ icon('minus') }}{{ tr(a) }}</td><td>{{ icon('check') }}{{ tr(b) }}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="used-h">
+  <div class="wrap">
+    <div class="sec-head rvl">
+      <div><p class="x-label"><span>04</span>{{ tr(P.used_o) }}</p><h2 class="h2" id="used-h">{{ tr(P.used_h) }}</h2></div>
+      <a class="link-arrow" href="{{ url('gebrauchte-endoskope') }}">{{ t('cta_all_endoscopes') }} ({{ endos|length }}) {{ icon('arrow') }}</a>
+    </div>
+    {% set shown = [] %}
+    {% for e in endos if e.img and shown|length < 4 and (e.type not in shown|map(attribute='type')|list) %}{% set _ = shown.append(e) %}{% endfor %}
+    <div class="x-grid4 rvl">{% for e in shown %}{{ pcard(e) }}{% endfor %}</div>
+    <div class="x-matrix rvl">
+      <div class="x-matrix-head"><h3>{{ tr(P.brands_h) }}</h3><p>{{ tr(P.brands_s) }}</p></div>
+      {% set types = ['Gastroskop', 'Koloskop', 'Bronchoskop', 'Duodenoskop', 'Zystoskop'] %}
+      <table class="matrix">
+        <thead><tr><th scope="col"><span class="sr-only">{{ t('f_brand') }}</span></th>{% for ty in types %}<th scope="col">{{ tr(C.TYPES_PLURAL[ty]) }}</th>{% endfor %}</tr></thead>
+        <tbody>{% for b in ['Olympus', 'Pentax', 'Fujinon'] %}<tr><th scope="row">{{ b }}</th>{% for ty in types %}{% set n = matrix[(b, ty)] %}<td data-l="{{ tr(C.TYPES_PLURAL[ty]) }}">{% if n %}<a href="{{ url('gebrauchte-endoskope', '?hersteller=' ~ b|lower ~ '&typ=' ~ ty|lower) }}">{{ n }}</a>{% else %}<span class="zero">—</span>{% endif %}</td>{% endfor %}</tr>{% endfor %}</tbody>
+      </table>
+    </div>
+    <div class="ribbon rvl">
+      <span class="ribbon-ico">{{ icon('swap') }}</span>
+      <div><h3>{{ tr(P.tradein_t) }}</h3><p>{{ tr(P.tradein_s) }}</p></div>
+      <a class="btn btn-primary" href="{{ url('ankauf-anfrage') }}" style="flex:none">{{ tr(P.tradein_cta) }}</a>
+    </div>
+  </div>
+</section>
+
+<section class="sec x-figs-sec" aria-labelledby="ws-h">
+  <div class="wrap">
+    <div class="sec-head rvl"><div><p class="x-label"><span>05</span>{{ tr(P.workshop_o) }}</p><h2 class="h2" id="ws-h">{{ tr(P.workshop_h) }}</h2></div><a class="link-arrow" href="{{ url('ueber-uns') }}">{{ tr(C.P['ueber-uns']['title']) }} {{ icon('arrow') }}</a></div>
+    <div class="x-figs rvl">
+      {% for f in C.FIGURES %}<div><span class="x-fig-num">{% if f.pre %}<small>{{ tr(f.pre) }}</small>{% endif %}{{ f.num }}{% if f.unit %}<em>{{ tr(f.unit) if f.unit is mapping else f.unit }}</em>{% endif %}</span><span class="x-fig-l">{{ tr(f.label) }}</span></div>{% endfor %}
+    </div>
+    <div class="x-photo rvl"><img src="{{ images['banner-repair'][1600] }}" alt="" loading="lazy"><span>{{ tr(P.workshop_cap1) }}</span></div>
+  </div>
+</section>
+
+{{ faq_section(faq, alt=True) }}
+{{ contact_block() }}
+{% endblock %}
