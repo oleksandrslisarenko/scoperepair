@@ -1,0 +1,90 @@
+{% from '_icons.html' import icon with context %}
+
+{% macro pcard(x) -%}
+<article class="pcard" data-p data-brand="{{ x.brand_slug }}" data-type="{{ x.type_slug }}" data-cond="{{ x.cond_slug }}" data-model="{{ x.model|lower }}" data-photo="{{ 1 if x.img else 0 }}">
+  <div class="pcard-media">
+    {% if x.img %}<img src="{{ x.img[480] }}" srcset="{{ x.img[480] }} 480w, {{ x.img[960] }} 960w" sizes="(max-width:640px) 100vw, (max-width:1100px) 50vw, 400px" alt="{{ x.title_l }}" loading="lazy" decoding="async">
+    {% else %}<div class="ph">{{ icon('image') }}<span>{{ t('no_photo') }}</span></div>{% endif %}
+    <div class="pcard-badges">
+      {% if x.kind == 'endoscope' %}<span class="badge badge-warranty">{{ icon('shield') }}{{ t('warranty_12') }}</span>{% endif %}
+      <span class="badge {{ 'badge-refurb' if x.cond == 'Generalüberholt' else 'badge-used' }}">{{ icon('check') }}{{ x.cond_l }}</span>
+    </div>
+  </div>
+  <div class="pcard-body">
+    <span class="overline" style="color:var(--ink-muted)">{{ x.brand }} · {{ x.type_l }}</span>
+    <h3><a href="{{ purl(x.slug) }}">{{ x.model }}</a></h3>
+    {% if x.dia or x.channel %}<span class="pcard-facts">{% if x.dia %}Ø {{ x.dia }}{% endif %}{% if x.dia and x.channel %} · {% endif %}{% if x.channel %}{{ tr(C.SPEC_LABELS['Arbeitskanal']) }} {{ x.channel }}{% endif %}</span>{% endif %}
+    <div class="pcard-foot">
+      {% if x.price %}<span class="pcard-price">{{ x.price }}<small>{{ t('price_note') }}</small></span>{% else %}<span class="pcard-price">{{ t('price_on_request') }}</span>{% endif %}
+      <a class="btn btn-secondary btn-s" href="{{ purl(x.slug) }}#anfrage">{{ t('cta_inquire') }}</a>
+    </div>
+  </div>
+</article>
+{%- endmacro %}
+
+{% macro faq_section(items, alt=False) -%}
+<section class="x-sec {{ 'x-sec-soft' if alt }}" aria-labelledby="faq-h">
+  <div class="wrap x-faq-wrap">
+    <div class="x-head rvl"><p class="x-over">FAQ</p><h2 id="faq-h">{{ t('faq') }}</h2></div>
+    <div class="x-faq-grid">
+      <div class="x-askcard rvl">
+        <p>{{ t('faq_more') }}</p>
+        <a class="x-link" href="{{ company.phone_href }}">{{ icon('phone') }} {{ company.phone }}</a>
+        <a class="x-link" href="mailto:{{ company.email }}">{{ icon('mail') }} {{ company.email }}</a>
+      </div>
+      <div class="x-faq rvl" data-faq>
+        {% for q, a in items %}<details><summary>{{ q }}<span aria-hidden="true">{{ icon('plus') }}</span></summary><div class="x-faq-a"><p>{{ a }}</p></div></details>{% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+{%- endmacro %}
+
+{% macro phero(o, h1, lead, banner='', crumbs=None, actions=None, facts=None) -%}
+<section class="x-ph-hero">
+  <div class="wrap">
+    <ol class="crumbs" aria-label="{{ t('breadcrumb') }}"><li><a href="{{ url('index') }}">{{ t('home') }}</a></li>{% for href, l in (crumbs or []) %}<li>{% if href %}<a href="{{ href }}">{{ l }}</a>{% else %}<span aria-current="page">{{ l }}</span>{% endif %}</li>{% endfor %}</ol>
+    <div class="x-ph-panel">
+      <svg class="x-ph-arcs" viewBox="0 0 1440 520" preserveAspectRatio="xMaxYMid slice" aria-hidden="true"><circle cx="1500" cy="760" r="620" fill="none" stroke="#fff" stroke-width="1.5" stroke-opacity=".95"/><circle cx="1500" cy="760" r="700" fill="none" stroke="#fff" stroke-width="1" stroke-opacity=".55"/></svg>
+      <div class="x-ph-copy">
+        {% if o %}<p class="x-over">{{ o }}</p>{% endif %}
+        <h1>{{ h1 }}</h1>
+        {% if lead %}<p class="x-lead">{{ lead }}</p>{% endif %}
+        {% if actions %}<div class="x-actions">{{ actions }}</div>{% endif %}
+      </div>
+      {% if facts %}
+      <div class="x-ph-facts">
+        {% for ic, b, s in facts %}<div class="x-ph-fact"><span class="x-ico x-ico-sm">{{ icon(ic) }}</span><div><b>{{ tr(b) }}</b><span>{{ tr(s) }}</span></div></div>{% endfor %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{%- endmacro %}
+
+{% macro contact_block() -%}
+{% from '_x.html' import x_contact with context %}{{ x_contact() }}
+{%- endmacro %}
+
+{% macro help_band() -%}
+<section class="x-sec x-sec-tight" aria-label="{{ tr(C.P['index']['band_t']) }}">
+  <div class="wrap"><div class="x-help rvl">
+    <span class="x-ico x-ico-lg">{{ icon('phone') }}</span>
+    <div><h2>{{ tr(C.P['index']['band_t']) }}</h2><p>{{ tr(C.P['index']['band_s']) }} · {% for d, h in C.HOURS %}{{ tr(d) }} {{ h }}{% if not loop.last %}, {% endif %}{% endfor %}</p></div>
+    <a class="btn btn-primary btn-lg" href="{{ company.phone_href }}">{{ icon('phone') }} {{ company.phone }}</a>
+  </div></div>
+</section>
+{%- endmacro %}
+
+{% macro steps7(steps, short=True) -%}
+<ol class="steps7">
+  {% for s in steps %}
+  <li class="rvl {{ 'is-key' if loop.index == 4 }}" style="transition-delay:{{ loop.index0 * 60 }}ms">
+    <div class="st-top"><span class="st-ico">{{ icon(s.icon) }}<b>{{ loop.index }}</b></span><span class="st-line"></span></div>
+    <h3>{{ tr(s.t) }}</h3>
+    <p>{{ tr(s.s) }}</p>
+    {% if s.m %}<span class="tag">{{ icon('check') }}{{ tr(s.m) }}</span>{% endif %}
+  </li>
+  {% endfor %}
+</ol>
+{%- endmacro %}

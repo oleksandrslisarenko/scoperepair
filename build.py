@@ -352,7 +352,7 @@ def render_variant(variant, images):
         for p in prods:
             related = [x for x in prods if x['kind'] == p['kind'] and x['type'] == p['type'] and x['slug'] != p['slug']]
             related.sort(key=lambda x: (x['brand'] != p['brand'], not x['img']))
-            html = tpl.render(**dict(g, page='produkt', p=C.P['produkt'], prod=p, related=related[:3], faq=None))
+            html = tpl.render(**dict(g, page='produkt', pid='produkt', p=C.P['produkt'], prod=p, related=related[:3], faq=None))
             write(os.path.join(SITE, variant, lang, 'endoskop', f"{p['slug']}.html"), html)
     print('built', variant)
 

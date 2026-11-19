@@ -13,16 +13,9 @@
   "num": "02",
   "tag": "Neu",
   "name": "Praxis",
-  "desc": "Hell, leicht und medizinisch-klar: weiche Flächen statt Linien, große Rundungen, sanfte Schatten und die Schrift Manrope. Konzept mit Startseite, Über uns und Produktseite.",
-  "status": "Konzept: Startseite A/B/C, Über uns, Produkt",
+  "desc": "Hell, leicht und medizinisch-klar: weiche Flächen statt Linien, große Rundungen, sanfte Schatten, Schrift Manrope und Produktfotos im Blau-Duoton. Alle Seiten und Formulare.",
+  "status": "Alle Seiten · Startseite in 3 Varianten",
   "ready": true,
-  "screens": [
-   "index",
-   "index-b",
-   "index-c",
-   "ueber-uns",
-   "produkt"
-  ],
   "extra": [
    {
     "label": "Startseite B · Fakten-Cluster",

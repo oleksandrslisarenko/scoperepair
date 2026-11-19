@@ -18,7 +18,7 @@
 <body data-page="{{ page }}" data-variant="{{ variant }}" class="v2">
 <a class="skip" href="#main">{{ t('skip') }}</a>
 
-{% set compact = pid in ('index-b', 'index-c') %}
+{% set compact = pid != 'index' %}
 <header class="hdr {{ 'hdr-compact' if compact }}" data-hdr>
   {% if not compact %}<div class="hdr-util"><div class="wrap hdr-util-in">
     <span class="hdr-hours">{% for d, h in C.HOURS %}{{ tr(d) }} {{ h }}{% if not loop.last %} · {% endif %}{% endfor %}</span>
