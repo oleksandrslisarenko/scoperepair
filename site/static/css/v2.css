@@ -1228,7 +1228,8 @@ body.is-locked{overflow:hidden}
 .x-bp-grid{position:absolute;inset:0;width:100%;height:100%;-webkit-mask-image:linear-gradient(to right,transparent 30%,#000 60%);mask-image:linear-gradient(to right,transparent 30%,#000 60%)}
 .x-bp-lines{position:absolute;right:0;top:0;height:100%;width:auto;max-width:none;aspect-ratio:16/9;pointer-events:none}
 img.x-bp-lines{-webkit-mask-image:linear-gradient(to right,transparent 0%,#000 30%);mask-image:linear-gradient(to right,transparent 0%,#000 30%)}
-.x-bp-call{overflow:visible}
+.x-bp-call{overflow:visible;z-index:1}
+.x-bp-call text{paint-order:stroke;stroke:#eef5fc;stroke-width:6px;stroke-linejoin:round}
 .x-lens{position:absolute;left:0;top:0;width:220px;height:220px;margin:-110px 0 0 -110px;border-radius:50%;overflow:hidden;pointer-events:none;opacity:0;transform:scale(.6);transition:opacity .25s,transform .35s var(--ease);
   box-shadow:0 0 0 6px rgba(255,255,255,.9),0 0 0 7px rgba(22,121,180,.35),0 24px 48px -12px rgba(15,42,68,.45)}
 .x-lens.is-on{opacity:1;transform:scale(1)}

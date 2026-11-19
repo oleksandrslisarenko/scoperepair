@@ -2,6 +2,7 @@
 {% block x_hero_cls %}x-hero-c{% endblock %}
 {% block x_media %}
 <div class="x-bp" data-bp aria-hidden="true">
+  <img class="x-bp-lines" src="/static/img/hero-blueprint.jpg?v={{ av }}" alt="" width="1600" height="900">
   <svg class="x-bp-lines x-bp-call" viewBox="0 0 1600 900">
     <g fill="none" stroke="#1679b4" stroke-width="1.6" stroke-opacity=".6" font-family="Manrope,Arial" font-size="20" font-weight="600">
       <path d="M1010 250 L920 150 H740"/><circle cx="1010" cy="250" r="5" fill="#1679b4"/>
@@ -12,8 +13,7 @@
       <text x="1330" y="48" fill="#1679b4" stroke="none">C · Versorgungskabel</text>
     </g>
   </svg>
-  <img class="x-bp-lines" src="/static/img/hero-blueprint.jpg?v={{ av }}" alt="" width="1600" height="900">
   <div class="x-lens" data-lens><div class="x-lens-img" data-lens-img></div><span class="x-lens-ring"></span></div>
-  <span class="x-chip x-bp-hint" style="top:150px;right:auto;left:57%;bottom:auto">{{ icon('search') }}{{ {'de':'Mit der Maus über das Gerät fahren','en':'Move the cursor over the device','fr':'Survolez l’appareil','ru':'Наведите курсор на аппарат'}[lang] }}</span>
+  <span class="x-chip x-bp-hint" style="top:auto;right:auto;left:57%;bottom:110px">{{ icon('search') }}{{ {'de':'Mit der Maus über das Gerät fahren','en':'Move the cursor over the device','fr':'Survolez l’appareil','ru':'Наведите курсор на аппарат'}[lang] }}</span>
 </div>
 {% endblock %}
