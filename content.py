@@ -210,6 +210,14 @@ T = {
                          'Юридический текст показан в английской версии с scoperepair.de. Юридическую силу имеет только немецкая версия.'),
     'mt_note': L('', '', 'Traduction automatique, à relire.', 'Машинный перевод, требует вычитки.'),
     'desc_lang_note': L('', '', 'Description disponible en anglais.', 'Описание доступно на английском.'),
+    'cookie_h': L('Cookies auf dieser Website', 'Cookies on this website', 'Cookies sur ce site', 'Cookies на этом сайте'),
+    'cookie_t': L('Wir verwenden technisch notwendige Cookies, damit die Seite funktioniert. Mit Ihrer Zustimmung nutzen wir zusätzlich Statistik-Cookies, um das Angebot zu verbessern.',
+                  'We use technically necessary cookies so the site works. With your consent we also use statistics cookies to improve our service.',
+                  'Nous utilisons des cookies techniquement nécessaires au fonctionnement du site. Avec votre accord, nous utilisons aussi des cookies statistiques pour améliorer notre offre.',
+                  'Мы используем технически необходимые cookies для работы сайта. С вашего согласия — также статистические cookies, чтобы улучшать сервис.'),
+    'cookie_all': L('Alle akzeptieren', 'Accept all', 'Tout accepter', 'Принять все'),
+    'cookie_min': L('Nur notwendige', 'Necessary only', 'Uniquement nécessaires', 'Только необходимые'),
+    'cookie_more': L('Datenschutzerklärung', 'Privacy policy', 'Politique de confidentialité', 'Политика конфиденциальности'),
     'cookie_title': L('Cookie-Einstellungen', 'Cookie settings', 'Paramètres des cookies', 'Настройки cookies'),
 }
 

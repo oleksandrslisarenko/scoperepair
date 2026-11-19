@@ -30,6 +30,7 @@ CHECK_JS = r"""
     if (!hit) continue;
     if (hit === el || el.contains(hit) || hit.contains(el) || (el.labels && [...el.labels].some(l => l.contains(hit)))) continue;
     if (hit.closest('.hdr') && !el.closest('.hdr')) continue; // sticky header overlaps content while scrolling: expected
+    if (hit.closest('.wz-foot') && !el.closest('.wz-foot')) continue; // sticky wizard footer on mobile: expected while scrolling
     if (el.closest('label') && el.closest('label').contains(hit)) continue;
     out.blocked.push((el.tagName + ' ' + (el.textContent || el.name || el.className || '').trim().slice(0, 40)) + ' <- ' + hit.tagName + '.' + (hit.className && hit.className.baseVal === undefined ? hit.className : '').toString().slice(0, 40));
   }
@@ -50,6 +51,7 @@ def run(variant, lang, pages, widths=(1440, 390), full=True):
         b = pw.chromium.launch(executable_path='/usr/bin/google-chrome', args=['--no-sandbox'])
         for w in widths:
             ctx = b.new_context(viewport={'width': w, 'height': 900 if w > 500 else 844}, device_scale_factor=1)
+            ctx.add_init_script("try{localStorage.setItem('sr-cookie','all')}catch(e){}")
             page = ctx.new_page()
             errs = []
             page.on('console', lambda m: errs.append(m.text) if m.type == 'error' else None)

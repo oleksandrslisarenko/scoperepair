@@ -21,6 +21,18 @@
     hero.addEventListener('mouseleave', function () { img.style.setProperty('--mx', '0px'); img.style.setProperty('--my', '0px'); });
   })();
 
+  /* ── cookie banner (choice stored per browser) ── */
+  (function () {
+    var ck = $('[data-cookie]'); if (!ck) return;
+    function get() { try { return localStorage.getItem('sr-cookie'); } catch (e) { return null; } }
+    function show(v) { ck.hidden = !v; if (v) requestAnimationFrame(function () { ck.classList.add('is-in'); }); else ck.classList.remove('is-in'); }
+    $$('[data-cookie-set]', ck).forEach(function (b) {
+      b.addEventListener('click', function () { try { localStorage.setItem('sr-cookie', b.dataset.cookieSet); } catch (e) {} show(false); });
+    });
+    $$('[data-cookie-open]').forEach(function (a) { a.addEventListener('click', function (e) { e.preventDefault(); show(true); var f = $('[data-cookie-set=all]', ck); if (f) f.focus(); }); });
+    if (!get()) setTimeout(function () { show(true); }, 600);
+  })();
+
   /* ── toasts ───────────────────────────── */
   function toast(msg, ms) {
     var box = $('[data-toasts]'); if (!box) return;

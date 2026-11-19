@@ -3,7 +3,7 @@
    soft shadows instead of lines, tinted surfaces instead of borders. Sits on top of v1.css. */
 .v2{
   --font:"Manrope","Helvetica Neue",Arial,sans-serif;
-  --ink:#3b5266; --ink-strong:#0f2a44; --ink-muted:#647a8c;
+  --ink:#3b5266; --ink-strong:#0f2a44; --ink-muted:#3b5266;
   --navy-900:#123150; --navy-950:#0b2340; --blue-700:#1679b4; --blue-600:#2391cf; --blue:#47b2e6;
   --line:#e3ebf2; --surface-subtle:#f4f8fb; --surface-sunken:#eaf1f7; --blue-50:#eaf4fb; --blue-25:#f5f9fd;
   --tint:#f3f7fb; --tint-2:#eaf2f9;
@@ -332,3 +332,5 @@
   .v2 .pd-lower{margin-top:56px}
 }
 @media (prefers-reduced-motion:reduce){.x-chip-a,.x-chip-b{animation:none}.x-hero-media img{transition:none}}
+
+.v2 .ck-in{border:0;border-radius:24px;box-shadow:0 0 0 1px rgba(15,42,68,.06),0 24px 48px -16px rgba(15,42,68,.3)}

@@ -18,6 +18,7 @@ with sync_playwright() as pw:
     errors = []
     for w, h in ((1440, 900), (390, 844)):
         ctx = b.new_context(viewport={'width': w, 'height': h})
+        ctx.add_init_script("try{localStorage.setItem('sr-cookie','all')}catch(e){}")
         pg = ctx.new_page()
         pg.on('pageerror', lambda e: errors.append(str(e)))
         tag = f'@{w}'
