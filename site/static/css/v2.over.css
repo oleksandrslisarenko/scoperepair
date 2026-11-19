@@ -51,7 +51,7 @@
 .v2 .nav{margin:0 auto;gap:4px}
 .v2 .nav-link{height:40px;padding:0 16px;border-radius:999px;font-size:15px;font-weight:600;color:var(--ink-strong)}
 .v2 .nav-link::after{display:none}
-.v2 .nav-link:hover,.v2 .nav-link[aria-expanded="true"]{background:var(--tint);color:var(--ink-strong)}
+.v2 .nav-link:hover,.v2 .nav-link[aria-expanded="true"]{background:var(--tint-2);color:var(--blue-700)}
 .v2 .nav-link[aria-current="page"]{background:var(--tint-2);color:var(--blue-700)}
 .v2 .dd{top:calc(100% + 10px);left:0;border:0;border-radius:18px;padding:8px;box-shadow:0 0 0 1px rgba(15,42,68,.05),0 24px 48px -16px rgba(15,42,68,.25)}
 .v2 .dd a{border-radius:12px}
@@ -441,3 +441,35 @@ body.v2:has(.hdr-compact){--hdr:84px}
 .x-faq-grid .x-askcard{margin:0;position:sticky;top:calc(var(--hdr) + 32px)}
 @media (max-width:1100px){.x-faq-grid{grid-template-columns:1fr;gap:24px}.x-faq-grid .x-askcard{position:static}}
 .x-cards4 .pcard-badges{left:auto;right:10px;top:10px;bottom:auto;flex-direction:column;align-items:flex-end;flex-wrap:nowrap}
+
+/* C: floating 'hover me' dot on the blueprint, hides once the lens is used */
+.x-hero-c .x-hero-copy{padding-bottom:140px}
+.x-bp-dot{position:absolute;z-index:2;width:0;height:0;pointer-events:none;transition:opacity .4s,transform .4s var(--ease)}
+.x-bp-dot>i{position:absolute;left:-14px;top:-14px;width:28px;height:28px;border-radius:50%;background:var(--blue-600);box-shadow:0 0 0 6px rgba(35,145,207,.25)}
+.x-bp-dot>i::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:2px solid rgba(35,145,207,.55);animation:bpPing 1.8s ease-out infinite}
+.x-bp-dot>span{position:absolute;left:24px;top:-58px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;width:118px;height:118px;padding:14px;border-radius:50%;text-align:center;
+  background:rgba(255,255,255,.92);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:0 0 0 1px rgba(15,42,68,.06),0 20px 40px -18px rgba(15,42,68,.4);animation:xFloat 4.5s ease-in-out infinite}
+.x-bp-dot .icon{width:22px;height:22px;color:var(--blue-700)}
+.x-bp-dot b{font-size:13px;line-height:16px;font-weight:700;color:var(--ink-strong)}
+.x-bp.is-used .x-bp-dot{opacity:0;transform:scale(.6)}
+@keyframes bpPing{0%{transform:scale(.6);opacity:1}100%{transform:scale(2.2);opacity:0}}
+/* C: blueprint comes alive while a service card is hovered */
+.x-hero-c:has(.x-scn-card:hover) img.x-bp-lines{animation:bpAlive 2.4s ease-in-out infinite;transform-origin:72% 45%}
+.x-hero-c:has(.x-scn-card:hover) .x-bp-call circle{animation:bpPulse 1s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.x-hero-c:has(.x-scn-card:hover) .x-bp-call path{stroke-dasharray:6 6;animation:bpDash 1s linear infinite}
+@keyframes bpAlive{0%,100%{transform:rotate(0) translate(0,0) scale(1)}25%{transform:rotate(-1.6deg) translate(-6px,4px) scale(1.015)}50%{transform:rotate(.8deg) translate(4px,-6px) scale(1.03)}75%{transform:rotate(-.6deg) translate(-2px,2px) scale(1.01)}}
+@keyframes bpPulse{50%{transform:scale(1.8)}}
+@keyframes bpDash{to{stroke-dashoffset:-12}}
+@media (max-width:1100px){.x-hero-c .x-hero-copy{padding-bottom:24px}}
+@media (prefers-reduced-motion:reduce){.x-bp-dot>i::after,.x-bp-dot>span{animation:none}.x-hero-c:has(.x-scn-card:hover) img.x-bp-lines,.x-hero-c:has(.x-scn-card:hover) .x-bp-call *{animation:none}}
+
+/* figures: editorial row instead of a card, so it doesn't read as buttons */
+.x-figs{background:none;border:0;box-shadow:none;border-radius:0;gap:40px}
+.x-fig{padding:28px 0 0;position:relative}
+.x-fig+.x-fig{border-left:0}
+.x-fig::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,var(--blue-600) 0 56px,var(--line) 56px)}
+.x-fig-n{font-size:64px;line-height:68px}
+.x-fig-n em{font-size:30px}
+.x-fig-l{font-size:16px;line-height:24px;max-width:24ch}
+@media (max-width:1100px){.x-figs{gap:32px 24px}.x-fig:nth-child(n+3){border-top:0}}
+@media (max-width:900px){.x-fig{padding-top:20px}.x-fig-n{font-size:40px;line-height:44px}.x-fig-n em{font-size:20px}}

@@ -13,10 +13,12 @@
         {% block x_eyebrow %}<span class="x-eyebrow">{{ icon('award') }}{{ tr(C.TRUST[0][1]) }}</span>{% endblock %}
         <h1>{{ tr(p.h1) }}</h1>
         <p class="x-lead">{{ tr(p.lead) }}</p>
+        {% block x_actions %}
         <div class="x-actions">
           <a class="btn btn-primary btn-lg" href="{{ url('reparatur-auftrag') }}">{{ t('cta_repair') }} {{ icon('arrow') }}</a>
           <a class="btn btn-quiet btn-lg" href="{{ company.phone_href }}">{{ icon('phone') }} {{ company.phone }}</a>
         </div>
+        {% endblock %}
       </div>
       {% block x_media %}
       <div class="x-hero-media" aria-hidden="true">

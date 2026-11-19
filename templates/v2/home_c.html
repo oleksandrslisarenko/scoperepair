@@ -1,5 +1,6 @@
 {% extends 'home.html' %}
 {% block x_hero_cls %}x-hero-c{% endblock %}
+{% block x_actions %}{% endblock %}
 {% block x_media %}
 <div class="x-bp" data-bp aria-hidden="true">
   <img class="x-bp-lines" src="/static/img/hero-blueprint.jpg?v={{ av }}" alt="" width="1600" height="900">
@@ -14,6 +15,6 @@
     </g>
   </svg>
   <div class="x-lens" data-lens><div class="x-lens-img" data-lens-img></div><span class="x-lens-ring"></span></div>
-  <span class="x-chip x-bp-hint" style="top:auto;right:auto;left:57%;bottom:110px">{{ icon('search') }}{{ {'de':'Mit der Maus über das Gerät fahren','en':'Move the cursor over the device','fr':'Survolez l’appareil','ru':'Наведите курсор на аппарат'}[lang] }}</span>
+  <span class="x-bp-dot" data-bp-dot><i></i><span>{{ icon('search') }}<b>{{ {'de':'Fahr über mich','en':'Hover over me','fr':'Survolez-moi','ru':'Наведи на меня'}[lang] }}</b></span></span>
 </div>
 {% endblock %}

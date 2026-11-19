@@ -39,6 +39,9 @@
     var lens = $('[data-lens]', bp), li = $('[data-lens-img]', bp), lines = $('img.x-bp-lines', bp);
     var ZOOM = 1.6, R = 110;
     li.style.backgroundImage = 'url(/static/img/hero-photo.jpg)';
+    var dot = $('[data-bp-dot]', bp);
+    function placeDot() { if (!dot) return; var br = bp.getBoundingClientRect(), ir = lines.getBoundingClientRect(); dot.style.left = (ir.left - br.left + ir.width * 0.76) + 'px'; dot.style.top = (ir.top - br.top + ir.height * 0.55) + 'px'; }
+    placeDot(); window.addEventListener('resize', placeDot); if (!lines.complete) lines.addEventListener('load', placeDot);
     function place(cx, cy) {
       var br = bp.getBoundingClientRect(), ir = lines.getBoundingClientRect();
       var x = cx - br.left, y = cy - br.top;
