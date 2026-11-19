@@ -9,8 +9,8 @@
 <meta name="robots" content="noindex">
 <link rel="icon" href="/img/Favicon_Scoperepair_neu_2024_transparent.png">
 <link rel="preload" href="/static/fonts/barlow-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/static/css/fonts.css">
-<link rel="stylesheet" href="/static/css/v2.css">
+<link rel="stylesheet" href="/static/css/fonts.css?v={{ av }}">
+<link rel="stylesheet" href="/static/css/v2.css?v={{ av }}">
 {% for l in langs %}<link rel="alternate" hreflang="{{ l }}" href="{{ self_url(l) }}">
 {% endfor %}
 <script>document.documentElement.classList.add('js');</script>
@@ -111,6 +111,6 @@
   'photo_n': C.P['produkt']['photo_n'][lang], 'morning': t('morning'), 'afternoon': t('afternoon'),
 }, ensure_ascii=False)|safe }};</script>
 {% block scripts %}{% endblock %}
-<script src="/static/js/proto.js" defer></script>
+<script src="/static/js/proto.js?v={{ av }}" defer></script>
 </body>
 </html>

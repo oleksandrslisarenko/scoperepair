@@ -192,6 +192,19 @@ def model_index():
 # ──────────────────────────────────────────────────────────────────────────
 # Rendering
 # ──────────────────────────────────────────────────────────────────────────
+def asset_version():
+    import hashlib
+    h = hashlib.md5()
+    for base, _, files in os.walk(os.path.join(ROOT, 'static')):
+        for fn in sorted(files):
+            if fn.endswith(('.css', '.js')):
+                h.update(open(os.path.join(base, fn), 'rb').read())
+    return h.hexdigest()[:8]
+
+
+AV = asset_version()
+
+
 def make_env(variant):
     dirs = [variant] + (['v1'] if variant != 'v1' else []) + ['shared']
     env = Environment(
@@ -250,7 +263,7 @@ def render_variant(variant, images):
         g = dict(lang=lang, langs=C.LANGS, lang_names=C.LANG_NAMES, variant=variant, C=C, T=C.T, tr=tr, t=t, url=url, purl=purl,
                  img=img, srcset=srcset, company=C.COMPANY, nav=C.NAV, endos=endos, systems=systems, by_slug=by_slug,
                  matrix=matrix, models_json=Markup(json.dumps(models, ensure_ascii=False)), images=images,
-                 Markup=Markup, json=json, heads_json=heads_json)
+                 Markup=Markup, json=json, heads_json=heads_json, av=AV)
 
         for pid, (tpl, faq_key) in PAGES.items():
             ctx = dict(g, page=pid, p=C.P.get(pid, {}), faq=C.faq(faq_key, lang) if faq_key else None)
@@ -275,7 +288,7 @@ def render_hub():
     screens = [{'id': s, 'label': l, 'path': ('endoskop/' + DEMO_PRODUCT + '.html') if s == 'produkt' else ('index.html' if s == 'index' else s + '.html')} for s, l in SCREENS]
     for name in ('index.html', 'mobile.html'):
         html = env.get_template(name).render(variants=variants, screens=screens, screens_json=Markup(json.dumps(screens, ensure_ascii=False)),
-                                             variants_json=Markup(json.dumps(variants, ensure_ascii=False)), langs=C.LANGS)
+                                             variants_json=Markup(json.dumps(variants, ensure_ascii=False)), langs=C.LANGS, av=AV)
         write(os.path.join(SITE, name), html)
 
 
