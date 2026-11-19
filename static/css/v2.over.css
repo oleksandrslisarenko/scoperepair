@@ -21,8 +21,8 @@
 .v2 .lead{font-size:18px;line-height:28px}
 
 /* buttons: rectangular, arrow nudges */
-.v2 .btn{border-radius:3px;height:40px;padding:0 18px;letter-spacing:.01em}
-.v2 .btn-s{height:32px;padding:0 12px}
+.v2 .btn{border-radius:3px;height:44px;padding:0 20px;letter-spacing:.01em}
+.v2 .btn-s{height:36px;padding:0 14px}
 .v2 .btn-xs{height:32px;padding:0 12px}
 .v2 .btn .icon{transition:transform .25s var(--ease)}
 .v2 .btn:hover .icon:last-child{transform:translateX(3px)}
@@ -53,7 +53,7 @@
 .v2 .nav-link{height:auto;padding:0 12px;font-size:15px;font-weight:500;color:var(--ink-strong)}
 .v2 .nav-link::after{left:12px;right:12px;bottom:-1px;height:3px;border-radius:0}
 .v2 .nav-link:hover{background:var(--blue-25)}
-.v2 .hdr-cta{height:38px;flex:none}
+.v2 .hdr-cta{height:40px;flex:none}
 .v2 .dd{border-radius:3px;border-color:var(--navy-900);box-shadow:4px 4px 0 rgba(25,56,84,.12);top:100%;left:0}
 .v2 .dd a{border-radius:2px}
 @media (max-width:1180px){.v2 .nav-link{padding:0 8px;font-size:14px}.v2 .hdr-in{gap:20px}}
