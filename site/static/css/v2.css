@@ -1247,3 +1247,18 @@ img.x-bp-lines{-webkit-mask-image:linear-gradient(to right,transparent 0%,#000 3
 .v2 .pcard-media img,.v2 .gal-track img,.v2 .gal-thumbs img{filter:grayscale(1) contrast(.85) brightness(1.15);mix-blend-mode:multiply;opacity:.92}
 .v2 .pcard-media::after,.v2 .gal-main::after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background:linear-gradient(160deg,rgba(35,145,207,0) 0%,rgba(22,121,180,.22) 100%);mix-blend-mode:screen}
 .v2 .pcard-badges,.v2 .gal-arrow,.v2 .gal-count,.v2 .gal-zoom{z-index:2}
+
+/* B/C: compact one-row header */
+.v2 .hdr-compact .hdr-in{height:84px}
+.v2 .hdr-compact .hdr-logo img{height:58px}
+.v2 .hdr-compact .nav{margin:0 0 0 auto}
+.v2 .hdr-compact .nav-link .chev{display:none}
+.v2 .hdr-compact .hdr-tools{gap:10px}
+.v2 .hdr-compact .lang .dd{left:auto;right:0}
+body.v2:has(.hdr-compact){--hdr:84px}
+@media (max-width:1240px){body.v2:has(.hdr-compact){--hdr:64px}.v2 .hdr-compact .hdr-in{height:64px}.v2 .hdr-compact .hdr-logo img{height:38px}}
+/* B: cards right under the hero, a bit more contrast */
+.x-below{padding-top:28px}
+.x-below .x-scn-card:not(.is-primary){box-shadow:0 0 0 1px #d5e2ee,0 10px 24px -14px rgba(15,42,68,.22)}
+@media (max-width:1400px){.v2 .hdr-compact .nav-link{padding:0 10px}.v2 .hdr-compact .hdr-in{gap:16px}.v2 .hdr-compact .hdr-logo img{height:50px}}
+@media (max-width:1320px){.v2 .hdr-compact .nav-link{padding:0 8px;font-size:14px}.v2 .hdr-compact .hdr-cta{padding:0 14px}}

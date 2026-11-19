@@ -18,8 +18,9 @@
 <body data-page="{{ page }}" data-variant="{{ variant }}" class="v2">
 <a class="skip" href="#main">{{ t('skip') }}</a>
 
-<header class="hdr" data-hdr>
-  <div class="hdr-util"><div class="wrap hdr-util-in">
+{% set compact = pid in ('index-b', 'index-c') %}
+<header class="hdr {{ 'hdr-compact' if compact }}" data-hdr>
+  {% if not compact %}<div class="hdr-util"><div class="wrap hdr-util-in">
     <span class="hdr-hours">{% for d, h in C.HOURS %}{{ tr(d) }} {{ h }}{% if not loop.last %} · {% endif %}{% endfor %}</span>
     <nav class="hdr-util-nav" aria-label="{{ t('menu') }} 2">
       {% for item in nav if item.id in ('ueber-uns', 'kontakt') %}<a href="{{ url(item.id) }}" {% if page == item.id %}aria-current="page"{% endif %}>{{ tr(item.label) }}</a>{% endfor %}
@@ -31,11 +32,11 @@
           </div>
         </div>
     </nav>
-  </div></div>
+  </div></div>{% endif %}
   <div class="wrap hdr-in">
     <a class="hdr-logo" href="{{ url('index') }}" aria-label="scopeREPAIR – {{ t('home') }}"><img src="/img/scopeREPAIR-Logo2025-300small.webp" alt="scopeREPAIR GmbH" width="132" height="50"></a>
     <nav class="nav" aria-label="{{ t('menu') }}">
-    {% for item in nav if item.id not in ('ueber-uns', 'kontakt') %}
+    {% for item in nav if compact or item.id not in ('ueber-uns', 'kontakt') %}
     {% set active = page == item.id or (item.children and page in item.children|map(attribute='id')|list) or (page == 'produkt' and item.id == 'gebrauchte-endoskope') or (page in ('reparatur-auftrag','leihgeraet-anfragen','leihgeraete','rechner') and item.id == 'reparatur') or (page == 'ankauf-anfrage' and item.id == 'ankauf') %}
     <div class="nav-item" {% if item.children %}data-dd data-dd-hover{% endif %}>
       {% if item.children %}
@@ -50,6 +51,14 @@
     {% endfor %}
     </nav>
     <div class="hdr-tools">
+      {% if compact %}
+      <div class="lang" data-dd>
+          <button type="button" class="lang-btn" aria-haspopup="true" aria-expanded="false" aria-label="{{ t('language') }}: {{ lang_names[lang] }}" data-dd-btn><span>{{ lang|upper }}</span>{{ icon('chev', 'chev') }}</button>
+          <div class="dd" data-dd-menu>
+            {% for l in langs %}<a href="{{ self_url(l) }}" hreflang="{{ l }}" lang="{{ l }}" {% if l == lang %}aria-current="true"{% endif %}><b>{{ l|upper }}</b>{{ lang_names[l] }}{% if l == lang %}{{ icon('check', 'check') }}{% endif %}</a>{% endfor %}
+          </div>
+        </div>
+      {% endif %}
       <a class="btn btn-primary hdr-cta" href="{{ url('reparatur-auftrag') }}">{{ t('cta_repair') }}</a>
     </div>
     <div class="hdr-m">

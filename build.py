@@ -340,7 +340,7 @@ def render_variant(variant, images):
             except TemplateNotFound:
                 continue  # page exists only in some variants (e.g. v2 home alternatives)
             ppid = 'index' if pid.startswith('index-') else pid
-            ctx = dict(g, page=ppid, p=C.P.get(ppid, {}), faq=C.faq(faq_key, lang) if faq_key else None)
+            ctx = dict(g, page=ppid, pid=pid, p=C.P.get(ppid, {}), faq=C.faq(faq_key, lang) if faq_key else None)
             if tpl == 'legal.html':
                 ctx['legal'] = C.LEGAL[pid]['de' if lang == 'de' else 'en']
                 ctx['legal_title'] = tr(C.LEGAL_TITLES[pid])
