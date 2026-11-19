@@ -63,7 +63,8 @@
 {% macro contact_block() -%}
 <section class="sec sky" aria-labelledby="cb-h">
   <svg viewBox="0 0 1440 560" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><path d="M560 560 C 820 420, 1100 300, 1440 250 L1440 560 Z" fill="#fff" fill-opacity=".28"/><path d="M560 560 C 820 420, 1100 300, 1440 250" fill="none" stroke="#fff" stroke-width="1.5" stroke-opacity=".95"/></svg>
-  <div class="wrap cblock">
+  <div class="wrap cblock{{ ' has-photo' if images.get('team-maik-nissen') }}">
+    {% if images.get('team-maik-nissen') %}<figure class="cblock-photo rvl"><img src="{{ images['team-maik-nissen'][960] }}" srcset="{{ images['team-maik-nissen'][480] }} 480w, {{ images['team-maik-nissen'][960] }} 960w" sizes="(max-width:900px) 100vw, 340px" alt="{{ company.ceo }}, {{ tr(company.ceo_role) }}" loading="lazy"></figure>{% endif %}
     <div class="rvl">
       <h2 id="cb-h">{{ tr(C.P['index']['contact_h']) }}</h2>
       <p style="margin-top:16px"><strong style="font-size:20px">{{ company.ceo }}</strong><span class="muted" style="display:block">{{ tr(company.ceo_role) }}</span></p>

@@ -92,7 +92,7 @@
     </div>
     {% set gp = by_slug.get('gastroskop-pentax-eg-1580k') %}
     <div class="photos2 rvl">
-      <figure class="photo"><img src="{{ images['banner-repair'][1600] }}" alt="" loading="lazy"><figcaption>{{ tr(P.workshop_cap1) }}</figcaption></figure>
+      <figure class="photo">{% set ws = images.get('team-werkstatt-reparatur') or images['banner-repair'] %}<img src="{{ ws[1600] }}" alt="{{ tr(P.workshop_cap1) }}" loading="lazy"><figcaption>{{ tr(P.workshop_cap1) }}</figcaption></figure>
       <figure class="photo">{% if gp and gp.img %}<img src="{{ gp.img[960] }}" alt="{{ gp.title_l }}" loading="lazy">{% endif %}<figcaption>{{ tr(P.workshop_cap2) }}</figcaption></figure>
     </div>
   </div>

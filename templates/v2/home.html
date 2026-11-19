@@ -114,7 +114,7 @@
     <div class="x-figs rvl">
       {% for f in C.FIGURES %}<div><span class="x-fig-num">{% if f.pre %}<small>{{ tr(f.pre) }}</small>{% endif %}{{ f.num }}{% if f.unit %}<em>{{ tr(f.unit) if f.unit is mapping else f.unit }}</em>{% endif %}</span><span class="x-fig-l">{{ tr(f.label) }}</span></div>{% endfor %}
     </div>
-    <div class="x-photo rvl"><img src="{{ images['banner-repair'][1600] }}" alt="" loading="lazy"><span>{{ tr(P.workshop_cap1) }}</span></div>
+    <div class="x-photo rvl">{% set ws = images.get('team-werkstatt-reparatur') or images['banner-repair'] %}<img src="{{ ws[1600] }}" alt="{{ tr(P.workshop_cap1) }}" loading="lazy"><span>{{ tr(P.workshop_cap1) }}</span></div>
   </div>
 </section>
 

@@ -150,6 +150,26 @@ def build_images():
             res[w] = f'/img/{key}-{w}.webp'
         res['ratio'] = c.width / c.height
         lookup[key] = res
+    # team / workshop photos (assets/photos/team/<name>.png|jpg) -> images['team-<name>']
+    team_dir = os.path.join(PHOTOS, 'team')
+    for fn in sorted(os.listdir(team_dir)) if os.path.isdir(team_dir) else []:
+        stem, ext = os.path.splitext(fn)
+        if ext.lower() not in ('.png', '.jpg', '.jpeg', '.webp'):
+            continue
+        src = os.path.join(team_dir, fn)
+        sig = f'{os.path.getmtime(src):.0f}-{os.path.getsize(src)}'
+        im = None
+        res = {}
+        for w in (480, 960, 1600):
+            dst = os.path.join(out, f'team-{stem}-{w}.webp')
+            stamp = dst + '.src'
+            if not os.path.exists(dst) or not os.path.exists(stamp) or open(stamp).read() != sig:
+                im = im or Image.open(src).convert('RGB')
+                w2 = min(w, im.width)
+                im.resize((w2, round(im.height * w2 / im.width)), Image.LANCZOS).save(dst, 'WEBP', quality=82, method=5)
+                open(stamp, 'w').write(sig)
+            res[w] = f'/img/team-{stem}-{w}.webp'
+        lookup[f'team-{stem}'] = res
     # brand assets
     for name in ('scopeREPAIR-Logo2025-300small.webp', 'QAS-International-GM3329.webp', 'Favicon_Scoperepair_neu_2024_transparent.png'):
         shutil.copy(os.path.join(PHOTOS, 'pages', 'brand', name), os.path.join(out, name))
