@@ -12,7 +12,7 @@
 
   /* ── hero parallax: endoscope follows the pointer (desktop, motion allowed) ── */
   (function () {
-    var hero = $('.hero'), img = hero && $('.hero-img', hero);
+    var hero = $('.hero') || $('.x-hero-panel'), img = hero && $('.hero-img, .x-hero-media img', hero);
     if (!img || reduce || !window.matchMedia('(hover:hover) and (pointer:fine)').matches) return;
     hero.addEventListener('mousemove', function (e) {
       var r = hero.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;

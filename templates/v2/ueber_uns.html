@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% from '_icons.html' import icon with context %}
+{% from '_x.html' import x_contact with context %}
+{% block main %}
+<section class="x-phero">
+  <div class="wrap">
+    <ol class="crumbs" aria-label="{{ t('breadcrumb') }}"><li><a href="{{ url('index') }}">{{ t('home') }}</a></li><li><span aria-current="page">{{ tr(p.title) }}</span></li></ol>
+    <div class="x-phero-grid">
+      <div class="x-phero-copy">
+        <p class="x-over">{{ tr(p.o) }}</p>
+        <h1>{{ tr(p.h1) }}</h1>
+        <p class="x-lead">{{ tr(p.lead) }}</p>
+        <div class="x-badges">{% for ic, l in C.TRUST[:2] %}<span class="x-chip x-chip-flat">{{ icon(ic) }}{{ tr(l) }}</span>{% endfor %}</div>
+      </div>
+      {% set ab = images.get('team-werkstatt-reparatur') or images.get('banner-about') %}
+      <figure class="x-phero-media">
+        <img src="{{ ab[1600] }}" alt="{{ tr(C.P['index'].workshop_cap1) }}">
+        <figcaption>{{ tr(C.P['index'].workshop_cap1) }}</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="x-sec" aria-labelledby="story-h">
+  <div class="wrap x-split">
+    <div class="x-head rvl">
+      <p class="x-over">{{ tr(p.mission_h) }}</p>
+      <h2 id="story-h" class="x-h2-quote">{{ tr(p.mission) }}</h2>
+    </div>
+    <div class="x-prose rvl">
+      {% for s in p.story %}<p>{{ tr(s) }}</p>{% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="x-sec x-sec-tight">
+  <div class="wrap">
+    <div class="x-figs rvl">
+      {% for f in C.FIGURES %}
+      <div class="x-fig">
+        <span class="x-fig-n">{% if f.pre %}<small>{{ tr(f.pre) }}</small> {% endif %}{{ f.num }}{% if f.unit %}<em>{{ ' ' if f.unit is mapping }}{{ tr(f.unit) if f.unit is mapping else f.unit }}</em>{% endif %}</span>
+        <span class="x-fig-l">{{ tr(f.label) }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="x-sec x-sec-soft" aria-labelledby="svc-h">
+  <div class="wrap">
+    <div class="x-head rvl"><p class="x-over">scopeREPAIR</p><h2 id="svc-h">{{ tr(p.services_h) }}</h2></div>
+    {% set svc_icons = ['wrench', 'check-doc', 'sparkle', 'cart'] %}
+    <div class="x-grid4">
+      {% for s in p.services %}<div class="x-card rvl" style="transition-delay:{{ loop.index0 * 70 }}ms"><span class="x-ico">{{ icon(svc_icons[loop.index0 % 4]) }}</span><p class="x-card-t">{{ tr(s) }}</p></div>{% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="x-sec" aria-labelledby="qm-h">
+  <div class="wrap x-grid2">
+    <div class="x-card x-card-lg rvl">
+      <img src="/img/QAS-International-GM3329.webp" alt="QAS International – ISO 9001:2015" width="140" height="98" loading="lazy" class="x-cert">
+      <h3 id="qm-h">{{ tr(p.qm_h) }}</h3><p>{{ tr(p.qm) }}</p>
+    </div>
+    <div class="x-card x-card-lg rvl">
+      <span class="x-ico x-ico-lg">{{ icon('globe') }}</span>
+      <h3>{{ tr(p.intl_h) }}</h3><p>{{ tr(p.intl) }}</p>
+    </div>
+  </div>
+</section>
+
+<section class="x-sec x-sec-soft" aria-labelledby="why-h">
+  <div class="wrap x-split">
+    <div class="x-head rvl"><p class="x-over">scopeREPAIR</p><h2 id="why-h">{{ tr(p.why_h) }}</h2></div>
+    <ul class="x-why rvl">{% for w in p.why %}<li><span class="x-dot">{{ icon('check') }}</span>{{ tr(w) }}</li>{% endfor %}</ul>
+  </div>
+</section>
+
+{{ x_contact() }}
+{% endblock %}

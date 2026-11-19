@@ -1,0 +1,19 @@
+{% from '_icons.html' import icon with context %}
+{% macro x_contact() -%}
+<section class="x-sec x-sec-tight" aria-labelledby="cb-h">
+  <div class="wrap">
+    <div class="x-cta rvl">
+      {% set mk = images.get('team-maik-nissen') %}
+      {% if mk %}<img class="x-cta-avatar" src="{{ mk[480] }}" alt="{{ company.ceo }}" loading="lazy">{% endif %}
+      <div class="x-cta-copy">
+        <h2 id="cb-h">{{ tr(C.P['index'].contact_h) }}</h2>
+        <p><b>{{ company.ceo }}</b> · {{ tr(company.ceo_role) }}</p>
+      </div>
+      <div class="x-cta-actions">
+        <a class="btn btn-primary btn-lg" href="{{ company.phone_href }}">{{ icon('phone') }} {{ company.phone }}</a>
+        <a class="btn btn-quiet btn-lg" href="{{ url('kontakt', '?tab=rueckruf') }}">{{ icon('callback') }} {{ t('cta_callback') }}</a>
+      </div>
+    </div>
+  </div>
+</section>
+{%- endmacro %}

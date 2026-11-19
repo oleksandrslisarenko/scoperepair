@@ -1,8 +1,25 @@
 [
-  {"id": "v1", "num": "01", "tag": "Aktuell", "name": "Klar",
-   "desc": "Der freigegebene Entwurf: hell und ruhig, Navy und Signalblau aus dem Logo, runde Bedienelemente, weiche Verläufe und das Segment-Motiv als Fortschrittsanzeige.",
-   "status": "Fertig zur Durchsicht", "ready": true},
-  {"id": "v2", "num": "02", "tag": "Neu", "name": "Datenblatt",
-   "desc": "Technisch und sachlich wie ein Datenblatt: schmale Headlines, Mono-Beschriftungen, feine Linien, Raster im Hintergrund und flaches Navy. Gleiche Seiten und Funktionen.",
-   "status": "Fertig zur Durchsicht", "ready": true}
+ {
+  "id": "v1",
+  "num": "01",
+  "tag": "Aktuell",
+  "name": "Klar",
+  "desc": "Der freigegebene Entwurf: hell und ruhig, Navy und Signalblau aus dem Logo, runde Bedienelemente, weiche Verläufe und das Segment-Motiv als Fortschrittsanzeige.",
+  "status": "Fertig zur Durchsicht",
+  "ready": true
+ },
+ {
+  "id": "v2",
+  "num": "02",
+  "tag": "Neu",
+  "name": "Praxis",
+  "desc": "Hell, leicht und medizinisch-klar: weiche Flächen statt Linien, große Rundungen, sanfte Schatten und die Schrift Manrope. Konzept mit Startseite, Über uns und Produktseite.",
+  "status": "Konzept: 3 Seiten",
+  "ready": true,
+  "screens": [
+   "index",
+   "ueber-uns",
+   "produkt"
+  ]
+ }
 ]

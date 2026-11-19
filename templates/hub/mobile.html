@@ -38,7 +38,14 @@
   function lang() { return p.split('/')[0]; }
   function rest() { return p.split('/').slice(1).join('/'); }
   function src() { var r = rest(); return '/' + v + '/' + lang() + '/' + (r === 'index.html' ? '' : r); }
+  function allowed() { var vv = variants.filter(function (x) { return x.id === v; })[0]; return vv && vv.screens; }
   function sync(push) {
+    var ok = allowed();
+    document.querySelectorAll('[data-p]').forEach(function (b) {
+      var id = b.dataset.p.indexOf('endoskop/') === 0 ? 'produkt' : b.dataset.p.replace('.html', '');
+      b.parentNode.hidden = !!ok && ok.indexOf(id) < 0;
+    });
+    if (ok) { var cur = rest().indexOf('endoskop/') === 0 ? 'produkt' : rest().replace('.html', ''); if (ok.indexOf(cur) < 0) p = lang() + '/index.html'; }
     var s = src(); if (frame.getAttribute('src') !== s) frame.setAttribute('src', s);
     document.querySelectorAll('[data-v]').forEach(function (b) { b.setAttribute('aria-selected', b.dataset.v === v); });
     document.querySelectorAll('[data-p]').forEach(function (b) { b.setAttribute('aria-current', b.dataset.p === rest() ? 'true' : 'false'); });

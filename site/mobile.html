@@ -6,15 +6,15 @@
 <title>scopeREPAIR – Mobil-Ansicht</title>
 <meta name="robots" content="noindex">
 <link rel="icon" href="/img/Favicon_Scoperepair_neu_2024_transparent.png">
-<link rel="stylesheet" href="/static/css/fonts.css?v=a15cab1f">
-<link rel="stylesheet" href="/static/css/hub.css?v=a15cab1f">
+<link rel="stylesheet" href="/static/css/fonts.css?v=d6746c5c">
+<link rel="stylesheet" href="/static/css/hub.css?v=d6746c5c">
 </head>
 <body class="mv">
 <div class="mv-app">
   <aside class="mv-side">
     <a class="mv-back" href="/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>Übersicht</a>
     <div class="mv-tabs" role="tablist" aria-label="Variante">
-      <button type="button" role="tab" data-v="v1"><b>01</b> Klar</button><button type="button" role="tab" data-v="v2"><b>02</b> Datenblatt</button>
+      <button type="button" role="tab" data-v="v1"><b>01</b> Klar</button><button type="button" role="tab" data-v="v2"><b>02</b> Praxis</button>
     </div>
     <label class="mv-lang"><span>Sprache</span>
       <select data-lang><option value="de">DE</option><option value="en">EN</option><option value="fr">FR</option><option value="ru">RU</option></select></label>
@@ -31,14 +31,21 @@
 </div>
 <script>
 (function () {
-  var screens = [{"id": "index", "label": "Startseite", "path": "index.html"}, {"id": "reparatur", "label": "Reparatur", "path": "reparatur.html"}, {"id": "reparatur-auftrag", "label": "Abholauftrag (Wizard)", "path": "reparatur-auftrag.html"}, {"id": "leihgeraete", "label": "Leihgeräte", "path": "leihgeraete.html"}, {"id": "leihgeraet-anfragen", "label": "Leihgerät anfragen (Wizard)", "path": "leihgeraet-anfragen.html"}, {"id": "gebrauchte-endoskope", "label": "Gebrauchte Endoskope", "path": "gebrauchte-endoskope.html"}, {"id": "produkt", "label": "Produktseite", "path": "endoskop/gastroskop-pentax-eg-1580k.html"}, {"id": "ankauf", "label": "Ankauf", "path": "ankauf.html"}, {"id": "ankauf-anfrage", "label": "Gerät verkaufen (Wizard)", "path": "ankauf-anfrage.html"}, {"id": "endoskopie-anlagen", "label": "Endoskopie-Anlagen", "path": "endoskopie-anlagen.html"}, {"id": "rechner", "label": "Kostenrechner", "path": "rechner.html"}, {"id": "ueber-uns", "label": "Über uns", "path": "ueber-uns.html"}, {"id": "kontakt", "label": "Kontakt / Rückruf", "path": "kontakt.html"}, {"id": "impressum", "label": "Impressum", "path": "impressum.html"}, {"id": "datenschutz", "label": "Datenschutz", "path": "datenschutz.html"}, {"id": "agb", "label": "AGB", "path": "agb.html"}, {"id": "rechtliches", "label": "Text- und Bildrechte", "path": "rechtliches.html"}], variants = [{"id": "v1", "num": "01", "tag": "Aktuell", "name": "Klar", "desc": "Der freigegebene Entwurf: hell und ruhig, Navy und Signalblau aus dem Logo, runde Bedienelemente, weiche Verläufe und das Segment-Motiv als Fortschrittsanzeige.", "status": "Fertig zur Durchsicht", "ready": true}, {"id": "v2", "num": "02", "tag": "Neu", "name": "Datenblatt", "desc": "Technisch und sachlich wie ein Datenblatt: schmale Headlines, Mono-Beschriftungen, feine Linien, Raster im Hintergrund und flaches Navy. Gleiche Seiten und Funktionen.", "status": "Fertig zur Durchsicht", "ready": true}];
+  var screens = [{"id": "index", "label": "Startseite", "path": "index.html"}, {"id": "reparatur", "label": "Reparatur", "path": "reparatur.html"}, {"id": "reparatur-auftrag", "label": "Abholauftrag (Wizard)", "path": "reparatur-auftrag.html"}, {"id": "leihgeraete", "label": "Leihgeräte", "path": "leihgeraete.html"}, {"id": "leihgeraet-anfragen", "label": "Leihgerät anfragen (Wizard)", "path": "leihgeraet-anfragen.html"}, {"id": "gebrauchte-endoskope", "label": "Gebrauchte Endoskope", "path": "gebrauchte-endoskope.html"}, {"id": "produkt", "label": "Produktseite", "path": "endoskop/gastroskop-pentax-eg-1580k.html"}, {"id": "ankauf", "label": "Ankauf", "path": "ankauf.html"}, {"id": "ankauf-anfrage", "label": "Gerät verkaufen (Wizard)", "path": "ankauf-anfrage.html"}, {"id": "endoskopie-anlagen", "label": "Endoskopie-Anlagen", "path": "endoskopie-anlagen.html"}, {"id": "rechner", "label": "Kostenrechner", "path": "rechner.html"}, {"id": "ueber-uns", "label": "Über uns", "path": "ueber-uns.html"}, {"id": "kontakt", "label": "Kontakt / Rückruf", "path": "kontakt.html"}, {"id": "impressum", "label": "Impressum", "path": "impressum.html"}, {"id": "datenschutz", "label": "Datenschutz", "path": "datenschutz.html"}, {"id": "agb", "label": "AGB", "path": "agb.html"}, {"id": "rechtliches", "label": "Text- und Bildrechte", "path": "rechtliches.html"}], variants = [{"id": "v1", "num": "01", "tag": "Aktuell", "name": "Klar", "desc": "Der freigegebene Entwurf: hell und ruhig, Navy und Signalblau aus dem Logo, runde Bedienelemente, weiche Verläufe und das Segment-Motiv als Fortschrittsanzeige.", "status": "Fertig zur Durchsicht", "ready": true}, {"id": "v2", "num": "02", "tag": "Neu", "name": "Praxis", "desc": "Hell, leicht und medizinisch-klar: weiche Flächen statt Linien, große Rundungen, sanfte Schatten und die Schrift Manrope. Konzept mit Startseite, Über uns und Produktseite.", "status": "Konzept: 3 Seiten", "ready": true, "screens": ["index", "ueber-uns", "produkt"]}];
   var q = new URLSearchParams(location.search);
   var v = q.get('v') || 'v1', p = q.get('p') || 'de/index.html';
   var frame = document.querySelector('[data-frame]'), langSel = document.querySelector('[data-lang]');
   function lang() { return p.split('/')[0]; }
   function rest() { return p.split('/').slice(1).join('/'); }
   function src() { var r = rest(); return '/' + v + '/' + lang() + '/' + (r === 'index.html' ? '' : r); }
+  function allowed() { var vv = variants.filter(function (x) { return x.id === v; })[0]; return vv && vv.screens; }
   function sync(push) {
+    var ok = allowed();
+    document.querySelectorAll('[data-p]').forEach(function (b) {
+      var id = b.dataset.p.indexOf('endoskop/') === 0 ? 'produkt' : b.dataset.p.replace('.html', '');
+      b.parentNode.hidden = !!ok && ok.indexOf(id) < 0;
+    });
+    if (ok) { var cur = rest().indexOf('endoskop/') === 0 ? 'produkt' : rest().replace('.html', ''); if (ok.indexOf(cur) < 0) p = lang() + '/index.html'; }
     var s = src(); if (frame.getAttribute('src') !== s) frame.setAttribute('src', s);
     document.querySelectorAll('[data-v]').forEach(function (b) { b.setAttribute('aria-selected', b.dataset.v === v); });
     document.querySelectorAll('[data-p]').forEach(function (b) { b.setAttribute('aria-current', b.dataset.p === rest() ? 'true' : 'false'); });
