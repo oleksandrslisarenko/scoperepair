@@ -41,7 +41,7 @@
         <span class="badge {{ 'badge-refurb' if prod.cond == 'Generalüberholt' else 'badge-used' }}">{{ icon('check') }}{{ prod.cond_l }}</span>
         {% if prod.kind == 'endoscope' %}<span class="badge badge-warranty">{{ icon('shield') }}{{ t('warranty_12') }}</span>{% endif %}
       </div>
-      <div class="pd-price"><strong>{{ t('price_on_request') }}</strong></div>
+      <div class="pd-price">{% if prod.price %}<strong>{{ prod.price }}</strong><span class="hint">{{ t('price_note') }}</span>{% else %}<strong>{{ t('price_on_request') }}</strong>{% endif %}</div>
       <div class="pd-ctas" id="anfrage">
         <button type="button" class="btn btn-primary btn-block" data-inq-open aria-expanded="false" aria-controls="inq">{{ tr(G.inquiry_t) }}</button>
         <form class="inq" id="inq" hidden data-form data-success="inq-ok" action="#">

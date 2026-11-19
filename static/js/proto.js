@@ -10,6 +10,17 @@
   var params = new URLSearchParams(location.search);
   var fmt = function (s, o) { return String(s).replace(/\{(\w+)\}/g, function (_, k) { return o[k] != null ? o[k] : ''; }); };
 
+  /* ── hero parallax: endoscope follows the pointer (desktop, motion allowed) ── */
+  (function () {
+    var hero = $('.hero'), img = hero && $('.hero-img', hero);
+    if (!img || reduce || !window.matchMedia('(hover:hover) and (pointer:fine)').matches) return;
+    hero.addEventListener('mousemove', function (e) {
+      var r = hero.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+      img.style.setProperty('--mx', (-x * 48).toFixed(1) + 'px'); img.style.setProperty('--my', (-y * 48).toFixed(1) + 'px');
+    });
+    hero.addEventListener('mouseleave', function () { img.style.setProperty('--mx', '0px'); img.style.setProperty('--my', '0px'); });
+  })();
+
   /* ── toasts ───────────────────────────── */
   function toast(msg, ms) {
     var box = $('[data-toasts]'); if (!box) return;

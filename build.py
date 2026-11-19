@@ -176,6 +176,7 @@ def product_view(p, lang, images):
     dlang = 'de' if lang == 'de' else 'en'
     return {
         **p, 'title_l': title, 'type_l': t_type, 'cond_l': C.CONDITIONS.get(p['cond'], {}).get(lang, p['cond']),
+        'price': (C.fmt_eur(C.price_eur(p), lang) if C.price_eur(p) else None),
         'imgs': gal, 'img': gal[0] if gal else None, 'specs_l': specs, 'acc_l': acc,
         'desc_l': p['desc'][dlang] or p['desc']['de'], 'desc_fallback': lang in ('fr', 'ru') and bool(p['desc']['en']),
     }

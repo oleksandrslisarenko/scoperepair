@@ -50,6 +50,7 @@ HOURS = [
 # Navigation. Keys map to page ids (see PAGES in build.py)
 # ──────────────────────────────────────────────────────────────────────────
 NAV = [
+    {'id': 'index', 'label': L('Startseite', 'Home', 'Accueil', 'Главная')},
     {'id': 'reparatur', 'label': L('Reparatur', 'Repair', 'Réparation', 'Ремонт'), 'children': [
         {'id': 'reparatur', 'label': L('Endoskop-Reparatur', 'Endoscope repair', 'Réparation d’endoscopes', 'Ремонт эндоскопов'),
          'sub': L('Ablauf, Gewährleistung, FAQ', 'Process, warranty, FAQ', 'Déroulement, garantie, FAQ', 'Процесс, гарантия, FAQ')},
@@ -197,6 +198,7 @@ T = {
     'breadcrumb': L('Brotkrumen', 'Breadcrumb', 'Fil d’Ariane', 'Навигационная цепочка'),
     'home': L('Startseite', 'Home', 'Accueil', 'Главная'),
     'price_on_request': L('Preis auf Anfrage', 'Price on request', 'Prix sur demande', 'Цена по запросу'),
+    'price_note': L('Richtpreis zzgl. MwSt.', 'Guide price excl. VAT', 'Prix indicatif HT', 'Ориентир. цена без НДС'),
     'warranty_12': L('12 Monate Gewährleistung', '12-month warranty', 'Garantie 12 mois', 'Гарантия 12 месяцев'),
     'no_photo': L('Foto folgt', 'Photo to follow', 'Photo à venir', 'Фото скоро'),
     'iso_cert': L('Zertifiziert nach DIN EN ISO 9001:2015', 'Certified to DIN EN ISO 9001:2015', 'Certifié DIN EN ISO 9001:2015', 'Сертифицировано по DIN EN ISO 9001:2015'),
@@ -1054,3 +1056,41 @@ def load_products():
 
 
 PRODUCTS = load_products()
+
+
+# ── Richtpreise (Platzhalter für den Prototyp, von Alex gewünscht) ─────────
+_BASE = {'Gastroskop': 6900, 'Koloskop': 7900, 'Bronchoskop': 5900, 'Duodenoskop': 11900, 'Zystoskop': 3900}
+_TIER = {1: .45, 2: .65, 3: 1.0, 4: 1.55}
+_SYSTEMS = [('CV-190', 18900), ('CV-180', 9900), ('CV-165', 4900), ('CV-160', 3900), ('CV-145', 2900),
+            ('VP-7000', 19900), ('EP-6000', 12900), ('EPX-4450', 6900), ('EPX-4400', 4900), ('EPX-3500', 3900),
+            ('i7010', 16900), ('i7000', 13900), ('i5000', 8900), ('EPK-i HD', 5900), ('EPK-1000', 3900), ('EPK-100', 2490),
+            ('VIO 200', 6900)]
+
+
+def _tier(brand, m):
+    if brand == 'Olympus':
+        return 4 if '190' in m else 3 if ('180' in m or '185' in m) else 2 if ('160' in m or '165' in m) else 1
+    if brand == 'Fujinon':
+        return 4 if re.search(r'-7\d\d', m) else 3 if re.search(r'-(5|6)9?0\d?', m) and ('590' in m or '600' in m) else 2
+    if brand == 'Pentax':
+        return 4 if re.search(r'[ijK]10', m) else 3 if '90' in m else 2 if ('80' in m or '70' in m) else 1
+    return 2
+
+
+def price_eur(p):
+    if p['kind'] != 'endoscope':
+        for k, v in _SYSTEMS:
+            if k in p['model']:
+                return v
+        return None
+    base = _BASE.get(p['type'])
+    if not base:
+        return None
+    v = base * _TIER[_tier(p['brand'], p['model'])]
+    return int(round(v / 500.0) * 500) - 10
+
+
+def fmt_eur(v, lang):
+    if lang == 'en':
+        return '€{:,}'.format(v)
+    return '{:,}'.format(v).replace(',', '\u202f') + '\u00a0€'
