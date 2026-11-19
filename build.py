@@ -63,6 +63,12 @@ DEMO_PRODUCT = 'gastroskop-pentax-eg-1580k'
 # ──────────────────────────────────────────────────────────────────────────
 # Images
 # ──────────────────────────────────────────────────────────────────────────
+HERO_DIR = os.path.join(ROOT, 'assets', 'hero')
+HERO_NAMES = {'hero-endoscopes': '01-startseite', 'banner-repair': '02-reparatur', 'banner-pickup': '03-leihgeraete',
+              'banner-buy': '04-ankauf', 'banner-systems': '05-endoskopie-anlagen', 'banner-about': '06-ueber-uns',
+              'banner-contact': '07-kontakt'}
+
+
 def build_images():
     """Resize live photos to web sizes once (cached) and return a lookup."""
     from PIL import Image
@@ -114,15 +120,31 @@ def build_images():
         'banner-about': ('pages/ueber-uns/scopeREPAIR-Ueber-uns_2.webp', (0, 0, 2400, 760)),
         'banner-contact': ('pages/kontakt/scopeREPAIR-GmbH-Kontakt.webp', (0, 0, 2400, 760)),
     }
+    # assets/hero/<page>.(jpg|png|webp) is the editable source of every hero image;
+    # if a file is missing there, it is re-created from the live-site crop above.
+    os.makedirs(HERO_DIR, exist_ok=True)
     for key, (rel, box) in crops.items():
-        p = os.path.join(PHOTOS, rel)
+        hero_src = None
+        for ext in ('jpg', 'jpeg', 'png', 'webp'):
+            cand = os.path.join(HERO_DIR, f'{HERO_NAMES[key]}.{ext}')
+            if os.path.exists(cand):
+                hero_src = cand
+                break
+        if hero_src:
+            c = Image.open(hero_src).convert('RGB')
+        else:
+            im = Image.open(os.path.join(PHOTOS, rel)).convert('RGB')
+            box = (box[0], box[1], min(box[2], im.width), min(box[3], im.height))
+            c = im.crop(box)
+            hero_src = os.path.join(HERO_DIR, f'{HERO_NAMES[key]}.jpg')
+            c.save(hero_src, 'JPEG', quality=92)
+        sig = f'{os.path.getmtime(hero_src):.0f}-{os.path.getsize(hero_src)}'
         res = {}
-        im = Image.open(p).convert('RGB')
-        box = (box[0], box[1], min(box[2], im.width), min(box[3], im.height))
-        c = im.crop(box)
         for w in (800, 1600, 2400):
             dst = os.path.join(out, f'{key}-{w}.webp')
-            if not os.path.exists(dst):
+            stamp = dst + '.src'
+            if not os.path.exists(dst) or not os.path.exists(stamp) or open(stamp).read() != sig:
+                open(stamp, 'w').write(sig)
                 w2 = min(w, c.width)
                 c.resize((w2, round(c.height * w2 / c.width)), Image.LANCZOS).save(dst, 'WEBP', quality=80, method=5)
             res[w] = f'/img/{key}-{w}.webp'
@@ -144,6 +166,14 @@ def zip_photos():
             for fn in files:
                 p = os.path.join(base, fn)
                 z.write(p, os.path.join('scoperepair-fotos', os.path.relpath(p, PHOTOS)))
+
+
+def zip_hero():
+    dst = os.path.join(SITE, 'downloads', 'scoperepair-hero.zip')
+    os.makedirs(os.path.dirname(dst), exist_ok=True)
+    with zipfile.ZipFile(dst, 'w', zipfile.ZIP_STORED) as z:
+        for fn in sorted(os.listdir(HERO_DIR)):
+            z.write(os.path.join(HERO_DIR, fn), os.path.join('scoperepair-hero', fn))
 
 
 # ──────────────────────────────────────────────────────────────────────────
@@ -319,6 +349,7 @@ def main():
     copy_static()
     images = build_images()
     zip_photos()
+    zip_hero()
     for v in only:
         if os.path.isdir(os.path.join(ROOT, 'templates', v)):
             render_variant(v, images)

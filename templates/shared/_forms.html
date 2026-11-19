@@ -72,12 +72,19 @@
 <div class="notice notice-err" data-send-error hidden role="alert">{{ icon('alert') }}<div><b>{{ t('send_error_title') }}</b><p>{{ t('send_error_text') }} <a href="{{ company.phone_href }}">{{ company.phone }}</a></p></div></div>
 {%- endmacro %}
 
-{% macro calendar(name='datum', review='') -%}
-<div class="field" data-field="{{ name }}">
-  <span class="label">{{ t('f_date') }} <span class="opt">({{ t('optional') }})</span></span>
-  <div class="cal" data-cal data-name="{{ name }}" data-lang="{{ lang }}">
-    <div class="cal-head"><button type="button" class="cal-nav" data-cal-prev aria-label="‹">{{ icon('chev-l') }}</button><span data-cal-month></span><button type="button" class="cal-nav" data-cal-next aria-label="›">{{ icon('chev-r') }}</button></div>
-    <div class="cal-grid" data-cal-grid></div>
+{% macro calendar(name='datum', review='', label='') -%}
+<div class="field dp" data-field="{{ name }}" data-dp>
+  <label class="label" for="dp-{{ name }}">{{ label or t('f_date') }} <span class="opt">({{ t('optional') }})</span></label>
+  <div class="dp-wrap">
+    <button type="button" class="input dp-btn" id="dp-{{ name }}" aria-haspopup="dialog" aria-expanded="false" data-dp-btn>
+      {{ icon('cal') }}<span data-dp-val data-ph="{{ t('f_date_ph') }}">{{ t('f_date_ph') }}</span>{{ icon('chev', 'chev') }}
+    </button>
+    <div class="dp-pop" role="dialog" aria-label="{{ label or t('f_date') }}" data-dp-pop hidden>
+      <div class="cal" data-cal data-name="{{ name }}" data-lang="{{ lang }}">
+        <div class="cal-head"><button type="button" class="cal-nav" data-cal-prev aria-label="‹">{{ icon('chev-l') }}</button><span data-cal-month></span><button type="button" class="cal-nav" data-cal-next aria-label="›">{{ icon('chev-r') }}</button></div>
+        <div class="cal-grid" data-cal-grid></div>
+      </div>
+    </div>
   </div>
   <input type="hidden" name="{{ name }}" {% if review %}data-review="{{ review }}"{% endif %}>
 </div>

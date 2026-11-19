@@ -8,7 +8,7 @@
 <section class="sec">
   <div class="wrap">
     <div class="sec-head rvl"><div><p class="overline">{{ tr(p.o) }}</p><h2 class="h2">{{ tr(p.how_h) }}</h2></div></div>
-    <ol class="mini rvl" style="--n:4">{% for h, s in p.how %}<li><h3>{{ tr(h) }}</h3><p>{{ tr(s) }}</p></li>{% endfor %}</ol>
+    <ol class="mini rvl" style="--n:4">{% set mi = ['doc','box','truck','swap'] %}{% for h, s in p.how %}<li><span class="st-ico">{{ icon(mi[loop.index0]) }}<b>{{ loop.index }}</b></span><h3>{{ tr(h) }}</h3><p>{{ tr(s) }}</p></li>{% endfor %}</ol>
   </div>
 </section>
 

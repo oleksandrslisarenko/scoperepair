@@ -56,13 +56,32 @@
           {{ consent() }}
           {{ send_error() }}
           <button class="btn btn-primary" type="submit">{{ tr(G.send) }} {{ icon('arrow') }}</button>
-          <p class="proto-note">{{ t('proto_note') }} {{ t('proto_error_hint') }}</p>
         </form>
         <div class="notice notice-ok" id="inq-ok" hidden data-success-box>{{ icon('check') }}<div><b>{{ tr(G.sent_t) }}</b><p>{{ tr(G.sent_s) }}</p></div></div>
         {% if prod.kind == 'endoscope' %}<a class="btn btn-secondary btn-block" href="{{ url('reparatur-auftrag', '?hersteller=' ~ prod.brand ~ '&typ=' ~ prod.type ~ '&modell=' ~ prod.model) }}">{{ icon('wrench') }} {{ tr(G.repair_this) }}</a>{% endif %}
       </div>
 
-      <div style="margin-top:40px">
+    </div>
+  </div>
+
+  <div class="pd-lower">
+  {% if prod.desc_l %}
+  <section class="pd-desc" aria-labelledby="desc-h" {% if prod.desc_fallback %}lang="en"{% endif %}>
+    <h2 class="h3" id="desc-h">{{ tr(G.desc) }}</h2>
+    {% if prod.desc_fallback %}<p class="proto-note" lang="{{ lang }}" style="margin-top:6px">{{ t('desc_lang_note') }}</p>{% endif %}
+    <div class="prose" style="margin-top:16px">{% for tag, txt in prod.desc_l %}{% if tag == 'h2' %}<h3>{{ txt }}</h3>{% elif tag == 'h3' %}<h3 style="font-size:19px">{{ txt }}</h3>{% elif tag == 'li' %}<p>• {{ txt }}</p>{% else %}<p>{{ txt }}</p>{% endif %}{% endfor %}</div>
+  </section>
+  {% endif %}
+
+  {% if prod.acc_l %}
+  <section class="pd-acc" aria-labelledby="acc-h">
+    <h2 class="h3" id="acc-h">{{ tr(G.acc) }}</h2>
+    <ul class="acc" style="padding:0;margin:16px 0 8px">{% for a in prod.acc_l %}<li>{% if a.img %}<img src="{{ a.img[480] }}" alt="" loading="lazy">{% endif %}<b>{{ a.name }}</b>{% if a.desc %}<span>{{ a.desc }}</span>{% endif %}</li>{% endfor %}</ul>
+    <p class="hint">{{ tr(G.acc_more) }}</p>
+  </section>
+  {% endif %}
+
+    <div class="pd-specs">
         <h2 class="h3" style="margin-bottom:8px">{{ tr(G.specs) }}</h2>
         <table class="spec">
           <tbody>
@@ -76,25 +95,8 @@
           </tbody>
         </table>
         <p class="proto-note" style="margin-top:8px">{{ tr(G.facts_note) }}</p>
-      </div>
     </div>
   </div>
-
-  {% if prod.acc_l %}
-  <section style="margin-top:56px" aria-labelledby="acc-h">
-    <h2 class="h3" id="acc-h">{{ tr(G.acc) }}</h2>
-    <ul class="acc" style="padding:0;margin:16px 0 8px">{% for a in prod.acc_l %}<li>{% if a.img %}<img src="{{ a.img[480] }}" alt="" loading="lazy">{% endif %}<b>{{ a.name }}</b>{% if a.desc %}<span>{{ a.desc }}</span>{% endif %}</li>{% endfor %}</ul>
-    <p class="hint">{{ tr(G.acc_more) }}</p>
-  </section>
-  {% endif %}
-
-  {% if prod.desc_l %}
-  <section style="margin-top:56px" aria-labelledby="desc-h" {% if prod.desc_fallback %}lang="en"{% endif %}>
-    <h2 class="h3" id="desc-h">{{ tr(G.desc) }}</h2>
-    {% if prod.desc_fallback %}<p class="proto-note" lang="{{ lang }}" style="margin-top:6px">{{ t('desc_lang_note') }}</p>{% endif %}
-    <div class="prose" style="margin-top:16px">{% for tag, txt in prod.desc_l %}{% if tag == 'h2' %}<h3>{{ txt }}</h3>{% elif tag == 'h3' %}<h3 style="font-size:19px">{{ txt }}</h3>{% elif tag == 'li' %}<p>• {{ txt }}</p>{% else %}<p>{{ txt }}</p>{% endif %}{% endfor %}</div>
-  </section>
-  {% endif %}
 
   {% if related %}
   <section style="margin-top:72px" aria-labelledby="rel-h">

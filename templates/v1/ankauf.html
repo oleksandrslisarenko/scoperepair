@@ -20,7 +20,7 @@
 <section class="sec sec-alt">
   <div class="wrap">
     <div class="sec-head rvl"><div><p class="overline">{{ tr(p.o) }}</p><h2 class="h2">{{ tr(p.how_h) }}</h2></div></div>
-    <ol class="mini rvl" style="--n:3">{% for h, s in p.how %}<li><h3>{{ tr(h) }}</h3><p>{{ tr(s) }}</p></li>{% endfor %}</ol>
+    <ol class="mini rvl" style="--n:3">{% set mi = ['camera','check-doc','truck'] %}{% for h, s in p.how %}<li><span class="st-ico">{{ icon(mi[loop.index0]) }}<b>{{ loop.index }}</b></span><h3>{{ tr(h) }}</h3><p>{{ tr(s) }}</p></li>{% endfor %}</ol>
     <div class="cta-band card-navy rvl" style="margin-top:40px">
       <div><h2 style="color:#fff">{{ tr(p.cta_h) }}</h2><p style="color:var(--ink-inverse-muted)">{{ tr(p.cta_s) }}</p></div>
       <div class="actions"><a class="btn btn-blue" href="{{ url('ankauf-anfrage') }}">{{ t('cta_sell') }} {{ icon('arrow') }}</a></div>

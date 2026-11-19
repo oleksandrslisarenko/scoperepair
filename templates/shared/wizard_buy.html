@@ -37,7 +37,6 @@
       {{ field('email', t('f_email'), 'email', req=True, ac='email') }}
       {{ field('telefon', t('f_phone'), 'phone', ac='tel') }}
     </div>
-    <p class="proto-note">{{ t('proto_error_hint') }}</p>
     <div><button type="button" class="btn btn-text btn-s" data-demo='{"anrede":"{{ tr(T.sal[1]) }}","firma":"Praxis Muster","vorname":"Anna","nachname":"Muster","email":"praxis@beispiel.de","telefon":"040 000000"}'>{{ t('fill_demo') }}</button></div>
   </section>
   <section class="wz-step" data-step hidden>
@@ -49,7 +48,6 @@
     ], ensure_ascii=False) }}'></div>
     {{ consent() }}
     {{ send_error() }}
-    <p class="proto-note">{{ t('proto_note') }}</p>
   </section>
 {% endcall %}
 {{ done_panel('done', tr(P.done_h), tr(P.done_s)) }}

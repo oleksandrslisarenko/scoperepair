@@ -197,6 +197,7 @@ T = {
     'faq_more': L('Ihre Frage ist nicht dabei? Rufen Sie uns an:', 'Your question isn’t listed? Call us:', 'Votre question n’y figure pas ? Appelez-nous :', 'Не нашли ответ? Позвоните нам:'),
     'breadcrumb': L('Brotkrumen', 'Breadcrumb', 'Fil d’Ariane', 'Навигационная цепочка'),
     'home': L('Startseite', 'Home', 'Accueil', 'Главная'),
+    'f_date_ph': L('Datum wählen', 'Choose a date', 'Choisir une date', 'Выберите дату'),
     'price_on_request': L('Preis auf Anfrage', 'Price on request', 'Prix sur demande', 'Цена по запросу'),
     'price_note': L('Richtpreis zzgl. MwSt.', 'Guide price excl. VAT', 'Prix indicatif HT', 'Ориентир. цена без НДС'),
     'warranty_12': L('12 Monate Gewährleistung', '12-month warranty', 'Garantie 12 mois', 'Гарантия 12 месяцев'),

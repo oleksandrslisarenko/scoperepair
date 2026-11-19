@@ -7,8 +7,8 @@
 <meta name="robots" content="noindex">
 <link rel="icon" href="/img/Favicon_Scoperepair_neu_2024_transparent.png">
 <link rel="preload" href="/static/fonts/barlow-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/static/css/fonts.css?v=8d04c272">
-<link rel="stylesheet" href="/static/css/v1.css?v=8d04c272">
+<link rel="stylesheet" href="/static/css/fonts.css?v=1b328d1b">
+<link rel="stylesheet" href="/static/css/v1.css?v=1b328d1b">
 <link rel="alternate" hreflang="de" href="/v1/de/leihgeraet-anfragen.html">
 <link rel="alternate" hreflang="en" href="/v1/en/leihgeraet-anfragen.html">
 <link rel="alternate" hreflang="fr" href="/v1/fr/leihgeraet-anfragen.html">
@@ -160,11 +160,18 @@ FR</a><a href="/v1/ru/leihgeraet-anfragen.html" lang="ru" aria-current="true"><s
       <span class="err" role="alert"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.8v.2"/></svg><span></span></span>
     </fieldset>
     <div class="notice" data-show-if="anlass=mit" hidden><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.8v.2"/></svg><p>После отправки можно сразу оформить заказ забора.</p></div>
-    <div class="field" data-field="datum">
-  <span class="label">Желаемая дата <span class="opt">(необязательно)</span></span>
-  <div class="cal" data-cal data-name="datum" data-lang="ru">
-    <div class="cal-head"><button type="button" class="cal-nav" data-cal-prev aria-label="‹"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button><span data-cal-month></span><button type="button" class="cal-nav" data-cal-next aria-label="›"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div>
-    <div class="cal-grid" data-cal-grid></div>
+    <div class="field dp" data-field="datum" data-dp>
+  <label class="label" for="dp-datum">Желаемая дата <span class="opt">(необязательно)</span></label>
+  <div class="dp-wrap">
+    <button type="button" class="input dp-btn" id="dp-datum" aria-haspopup="dialog" aria-expanded="false" data-dp-btn>
+      <svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg><span data-dp-val data-ph="Выберите дату">Выберите дату</span><svg class="icon chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="dp-pop" role="dialog" aria-label="Желаемая дата" data-dp-pop hidden>
+      <div class="cal" data-cal data-name="datum" data-lang="ru">
+        <div class="cal-head"><button type="button" class="cal-nav" data-cal-prev aria-label="‹"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button><span data-cal-month></span><button type="button" class="cal-nav" data-cal-next aria-label="›"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div>
+        <div class="cal-grid" data-cal-grid></div>
+      </div>
+    </div>
   </div>
   <input type="hidden" name="datum" >
 </div>
@@ -228,7 +235,6 @@ FR</a><a href="/v1/ru/leihgeraet-anfragen.html" lang="ru" aria-current="true"><s
   <span class="err" role="alert"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.8v.2"/></svg><span></span></span>
 </div>
     </div>
-    <p class="proto-note">Чтобы проверить ошибку, введите e-mail со словом «error».</p>
     <div><button type="button" class="btn btn-text btn-s" data-demo='{"anrede":"Г-жа","firma":"Praxis Muster","vorname":"Anna","nachname":"Muster","email":"praxis@beispiel.de","telefon":"040 000000"}'>Заполнить тестовыми данными</button></div>
   </section>
   <section class="wz-step" data-step hidden>
@@ -238,7 +244,6 @@ FR</a><a href="/v1/ru/leihgeraet-anfragen.html" lang="ru" aria-current="true"><s
   <span class="err" role="alert"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.8v.2"/></svg><span></span></span>
 </div>
     <div class="notice notice-err" data-send-error hidden role="alert"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V13M12 16.2v.2"/></svg><div><b>Не удалось отправить</b><p>Попробуйте ещё раз или позвоните нам: <a href="tel:+4941558237331">+49 4155 8237-331</a></p></div></div>
-    <p class="proto-note">Прототип: ничего не отправляется. В рабочей версии запрос уходит в scopeREPAIR по e-mail.</p>
   </section>
 
       <div class="wz-foot">
@@ -293,6 +298,6 @@ FR</a><a href="/v1/ru/leihgeraet-anfragen.html" lang="ru" aria-current="true"><s
 
 <div class="toasts" data-toasts aria-live="polite"></div>
 <script>window.I18N={"required": "Заполните это поле.", "choose": "Выберите вариант.", "email": "Введите корректный e-mail.", "phone": "Укажите номер телефона.", "zip": "Укажите корректный индекс.", "consent": "Подтвердите согласие с политикой конфиденциальности.", "summary": "Проверьте отмеченные поля.", "todo": "Эта функция в прототипе не реализована.", "sending": "Отправка…", "photo_remove": "Удалить фото", "step_of": "Шаг {n} из {total}", "lang": "ru", "show": "Показать: {n}", "count": "Аппаратов: {n}", "more": "Показать ещё {n}", "photo_n": "Фото {n} из {total}", "morning": "Первая половина дня", "afternoon": "Вторая половина дня"};</script>
-<script src="/static/js/proto.js?v=8d04c272" defer></script>
+<script src="/static/js/proto.js?v=1b328d1b" defer></script>
 </body>
 </html>

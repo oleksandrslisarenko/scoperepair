@@ -7,8 +7,8 @@
 <meta name="robots" content="noindex">
 <link rel="icon" href="/img/Favicon_Scoperepair_neu_2024_transparent.png">
 <link rel="preload" href="/static/fonts/barlow-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/static/css/fonts.css?v=8d04c272">
-<link rel="stylesheet" href="/static/css/v1.css?v=8d04c272">
+<link rel="stylesheet" href="/static/css/fonts.css?v=1b328d1b">
+<link rel="stylesheet" href="/static/css/v1.css?v=1b328d1b">
 <link rel="alternate" hreflang="de" href="/v1/de/reparatur-auftrag.html">
 <link rel="alternate" hreflang="en" href="/v1/en/reparatur-auftrag.html">
 <link rel="alternate" hreflang="fr" href="/v1/fr/reparatur-auftrag.html">
@@ -228,11 +228,18 @@ FR</a><a href="/v1/ru/reparatur-auftrag.html" lang="ru" ><svg class="flag" viewB
 </div>
     </div>
     <div style="display:flex;gap:32px;flex-wrap:wrap;align-items:flex-start">
-      <div class="field" data-field="datum">
-  <span class="label">Date souhaitée <span class="opt">(facultatif)</span></span>
-  <div class="cal" data-cal data-name="datum" data-lang="fr">
-    <div class="cal-head"><button type="button" class="cal-nav" data-cal-prev aria-label="‹"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button><span data-cal-month></span><button type="button" class="cal-nav" data-cal-next aria-label="›"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div>
-    <div class="cal-grid" data-cal-grid></div>
+      <div class="field dp" data-field="datum" data-dp>
+  <label class="label" for="dp-datum">Date souhaitée <span class="opt">(facultatif)</span></label>
+  <div class="dp-wrap">
+    <button type="button" class="input dp-btn" id="dp-datum" aria-haspopup="dialog" aria-expanded="false" data-dp-btn>
+      <svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg><span data-dp-val data-ph="Choisir une date">Choisir une date</span><svg class="icon chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="dp-pop" role="dialog" aria-label="Date souhaitée" data-dp-pop hidden>
+      <div class="cal" data-cal data-name="datum" data-lang="fr">
+        <div class="cal-head"><button type="button" class="cal-nav" data-cal-prev aria-label="‹"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button><span data-cal-month></span><button type="button" class="cal-nav" data-cal-next aria-label="›"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div>
+        <div class="cal-grid" data-cal-grid></div>
+      </div>
+    </div>
   </div>
   <input type="hidden" name="datum" >
 </div>
@@ -292,7 +299,6 @@ FR</a><a href="/v1/ru/reparatur-auftrag.html" lang="ru" ><svg class="flag" viewB
   <span class="err" role="alert"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.8v.2"/></svg><span></span></span>
 </div>
     </div>
-    <p class="proto-note">Pour tester l’erreur, saisissez un e-mail contenant « erreur ».</p>
     <div><button type="button" class="btn btn-text btn-s" data-demo='{"anrede":"Madame","firma":"Praxis Muster","vorname":"Anna","nachname":"Muster","email":"praxis@beispiel.de","telefon":"040 000000"}'>Remplir avec des données de test</button></div>
   </section>
 
@@ -304,7 +310,6 @@ FR</a><a href="/v1/ru/reparatur-auftrag.html" lang="ru" ><svg class="flag" viewB
   <span class="err" role="alert"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.8v.2"/></svg><span></span></span>
 </div>
     <div class="notice notice-err" data-send-error hidden role="alert"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V13M12 16.2v.2"/></svg><div><b>Échec de l’envoi</b><p>Veuillez réessayer ou nous appeler : <a href="tel:+4941558237331">+49 4155 8237-331</a></p></div></div>
-    <p class="proto-note">Prototype : rien n’est envoyé. Dans la version en ligne, la demande est envoyée par e-mail à scopeREPAIR.</p>
   </section>
 
       <div class="wz-foot">
@@ -361,6 +366,6 @@ FR</a><a href="/v1/ru/reparatur-auftrag.html" lang="ru" ><svg class="flag" viewB
 
 <div class="toasts" data-toasts aria-live="polite"></div>
 <script>window.I18N={"required": "Veuillez remplir ce champ.", "choose": "Veuillez choisir une option.", "email": "Veuillez saisir une adresse e-mail valide.", "phone": "Veuillez indiquer un numéro de téléphone.", "zip": "Veuillez saisir un code postal valide.", "consent": "Veuillez accepter la politique de confidentialité.", "summary": "Veuillez vérifier les champs signalés.", "todo": "Cette fonction n’est pas réalisée dans le prototype.", "sending": "Envoi…", "photo_remove": "Supprimer la photo", "step_of": "Étape {n} sur {total}", "lang": "fr", "show": "Afficher {n} appareils", "count": "{n} appareils", "more": "Afficher {n} de plus", "photo_n": "Photo {n} sur {total}", "morning": "Matin", "afternoon": "Après-midi"};</script>
-<script src="/static/js/proto.js?v=8d04c272" defer></script>
+<script src="/static/js/proto.js?v=1b328d1b" defer></script>
 </body>
 </html>

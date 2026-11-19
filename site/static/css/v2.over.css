@@ -199,7 +199,7 @@
 .v2 .card-navy{background:var(--navy-950);border-color:var(--navy-950)}
 .v2 .scn-ico{border-radius:2px}
 .v2 .mini li{border-radius:2px;border-color:var(--rule)}
-.v2 .mini li::before{border-radius:2px;background:var(--navy-900);color:#fff;font-family:var(--mono);font-size:15px;font-weight:500;content:"0" counter(mini)}
+.v2 .mini .st-ico{border-radius:2px}
 .v2 .cta-band{border-radius:3px}
 .v2 .st-ico{border-radius:2px;border-width:1px;border-color:var(--navy-900);color:var(--navy-900)}
 .v2 .steps7 li.is-key .st-ico{background:var(--navy-900)}

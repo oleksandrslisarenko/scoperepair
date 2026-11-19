@@ -39,7 +39,6 @@
           {{ consent() }}
           {{ send_error() }}
           <div><button class="btn btn-primary" type="submit">{{ tr(p.submit) }} {{ icon('arrow') }}</button></div>
-          <p class="proto-note">{{ t('proto_note') }} {{ t('proto_error_hint') }}</p>
         </form>
         <div class="done" id="msg-ok" hidden data-success-box style="padding:16px 0">
           <div class="done-ico">{{ icon('check') }}</div><h2 class="h2" style="margin-top:16px">{{ tr(p.done_h) }}</h2><p class="lead" style="margin-top:8px">{{ tr(p.done_s) }}</p>
@@ -60,7 +59,6 @@
           {{ field('cb_thema', tr(p.cb_topic), 'textarea') }}
           {{ consent() }}
           <div><button class="btn btn-primary" type="submit">{{ icon('callback') }} {{ tr(p.submit_cb) }}</button></div>
-          <p class="proto-note">{{ t('proto_note') }}</p>
         </form>
         <div class="done" id="cb-ok" hidden data-success-box style="padding:16px 0">
           <div class="done-ico">{{ icon('check') }}</div><h2 class="h2" style="margin-top:16px">{{ tr(p.done_cb_h) }}</h2><p class="lead" style="margin-top:8px">{{ tr(p.done_cb_s) }}</p>

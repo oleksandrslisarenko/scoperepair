@@ -11,7 +11,8 @@
   <div class="filters">
     <svg viewBox="0 0 1200 260" preserveAspectRatio="xMidYMid slice" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%"><circle cx="1260" cy="520" r="420" fill="none" stroke="#fff" stroke-width="1.5" stroke-opacity=".9"/><circle cx="1260" cy="520" r="470" fill="none" stroke="#fff" stroke-width="1" stroke-opacity=".55"/></svg>
     <div class="filters-in">
-      <div style="display:flex;flex-direction:column;gap:18px">
+        <div class="fgroup"><label class="overline" for="cat-q">{{ t('f_model') }}</label>
+          <div class="search search-s">{{ icon('search') }}<input class="input" id="cat-q" type="search" placeholder="{{ tr(G.search_ph) }}" data-search autocomplete="off"></div></div>
         {% set brands = [('olympus','Olympus'),('pentax','Pentax'),('fujinon','Fujinon')] %}
         <div class="fgroup"><span class="overline">{{ t('f_brand') }}</span><div class="chips" role="group" aria-label="{{ t('f_brand') }}">
           <button type="button" class="chip-btn" data-filter="brand" data-value="">{{ tr(G.all) }}</button>
@@ -25,12 +26,7 @@
           <button type="button" class="chip-btn" data-filter="cond" data-value="">{{ tr(G.all) }}</button>
           {% for c in ['Generalüberholt','Sehr guter Gebrauchtzustand','Guter Gebrauchtzustand'] %}<button type="button" class="chip-btn" data-filter="cond" data-value="{{ C.slugify(c) }}">{{ tr(C.CONDITIONS[c]) }} <small></small></button>{% endfor %}
         </div></div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:12px">
-        <div class="fgroup"><label class="overline" for="cat-q">{{ t('f_model') }}</label>
-          <div class="search">{{ icon('search') }}<input class="input" id="cat-q" type="search" placeholder="{{ tr(G.search_ph) }}" data-search autocomplete="off"></div></div>
-        <button type="button" class="btn btn-text btn-s" data-reset hidden style="align-self:flex-start">{{ icon('x') }} {{ tr(G.reset) }}</button>
-      </div>
+        <button type="button" class="btn btn-text btn-s" data-reset hidden style="align-self:flex-start;margin-left:-12px">{{ icon('x') }} {{ tr(G.reset) }}</button>
     </div>
   </div>
 
