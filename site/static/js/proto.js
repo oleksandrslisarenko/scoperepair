@@ -40,7 +40,7 @@
     var ZOOM = 1.6, R = 110;
     li.style.backgroundImage = 'url(/static/img/hero-photo.jpg)';
     var dot = $('[data-bp-dot]', bp);
-    function placeDot() { if (!dot) return; var br = bp.getBoundingClientRect(), ir = lines.getBoundingClientRect(); dot.style.left = (ir.left - br.left + ir.width * 0.76) + 'px'; dot.style.top = (ir.top - br.top + ir.height * 0.55) + 'px'; }
+    function placeDot() { if (!dot) return; var br = bp.getBoundingClientRect(), ir = lines.getBoundingClientRect(); dot.style.left = (ir.left - br.left + ir.width * 0.71) + 'px'; dot.style.top = (ir.top - br.top + ir.height * 0.47) + 'px'; }
     placeDot(); window.addEventListener('resize', placeDot); if (!lines.complete) lines.addEventListener('load', placeDot);
     function place(cx, cy) {
       var br = bp.getBoundingClientRect(), ir = lines.getBoundingClientRect();

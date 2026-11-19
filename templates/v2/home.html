@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% from '_icons.html' import icon with context %}
 {% from '_parts.html' import pcard with context %}
-{% from '_x.html' import x_contact with context %}
+{% from '_x.html' import x_contact, x_figs with context %}
 {% block main %}
 
 
@@ -46,14 +46,7 @@
 {% block x_figs %}
 <section class="x-sec x-sec-tight" aria-label="{{ tr(p.workshop_o) }}">
   <div class="wrap">
-    <div class="x-figs rvl">
-      {% for f in C.FIGURES %}
-      <div class="x-fig">
-        <span class="x-fig-n">{% if f.pre %}<small>{{ tr(f.pre) }}</small> {% endif %}{{ f.num }}{% if f.unit %}<em>{{ ' ' if f.unit is mapping }}{{ tr(f.unit) if f.unit is mapping else f.unit }}</em>{% endif %}</span>
-        <span class="x-fig-l">{{ tr(f.label) }}</span>
-      </div>
-      {% endfor %}
-    </div>
+    {{ x_figs() }}
   </div>
 </section>
 

@@ -12,6 +12,7 @@ Output:
     site/static/…               css, js, fonts
 """
 import json
+import datetime
 import hashlib
 import os
 import shutil
@@ -332,7 +333,7 @@ def render_variant(variant, images):
         g = dict(lang=lang, langs=C.LANGS, lang_names=C.LANG_NAMES, variant=variant, C=C, T=C.T, tr=tr, t=t, url=url, purl=purl,
                  img=img, srcset=srcset, company=C.COMPANY, nav=C.NAV, endos=endos, systems=systems, by_slug=by_slug,
                  matrix=matrix, models_json=Markup(json.dumps(models, ensure_ascii=False)), images=images,
-                 Markup=Markup, json=json, heads_json=heads_json, av=AV)
+                 Markup=Markup, json=json, now_year=datetime.date.today().year, heads_json=heads_json, av=AV)
 
         for pid, (tpl, faq_key) in PAGES.items():
             try:

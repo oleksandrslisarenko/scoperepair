@@ -17,3 +17,18 @@
   </div>
 </section>
 {%- endmacro %}
+
+
+{% macro x_figs() -%}
+{% set F = C.FIGURES %}
+{% set yrs = now_year - 2010 %}
+{% set items = [
+  (F[0].num, '%+', tr(F[0].label)),
+  (yrs, {'de':'Jahre','en':'years','fr':'ans','ru':'лет'}[lang], tr(F[1].label) ~ ', ' ~ tr(F[1].pre) ~ ' ' ~ F[1].num),
+  (F[2].num, tr(F[2].unit), tr(F[2].label)),
+  (F[3].num, tr(F[3].unit), tr(F[3].label)),
+] %}
+<div class="x-figs rvl">
+  {% for n, u, l in items %}<div class="x-fig"><span class="x-fig-n">{{ n }}<em>{{ "" if u.startswith("%") else " " }}{{ u }}</em></span><span class="x-fig-l">{{ l }}</span></div>{% endfor %}
+</div>
+{%- endmacro %}
