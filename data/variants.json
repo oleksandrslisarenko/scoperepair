@@ -14,17 +14,7 @@
   "tag": "Neu",
   "name": "Praxis",
   "desc": "Hell, leicht und medizinisch-klar: weiche Flächen statt Linien, große Rundungen, sanfte Schatten, Schrift Manrope und Produktfotos im Blau-Duoton. Alle Seiten und Formulare.",
-  "status": "Alle Seiten · Startseite in 3 Varianten",
-  "ready": true,
-  "extra": [
-   {
-    "label": "Startseite B · Fakten-Cluster",
-    "path": "index-b.html"
-   },
-   {
-    "label": "Startseite C · Blueprint mit Lupe",
-    "path": "index-c.html"
-   }
-  ]
+  "status": "Fertig zur Durchsicht",
+  "ready": true
  }
 ]

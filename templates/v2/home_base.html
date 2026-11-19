@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% from '_icons.html' import icon with context %}
+{% from '_parts.html' import pcard with context %}
+{% from '_x.html' import x_contact, x_figs with context %}
+{% block main %}
+
+
+{# ── Hero: light panel, copy left, device right, scenarios below ── #}
+<section class="x-hero {% block x_hero_cls %}{% endblock %}">
+  <div class="wrap">
+    <div class="x-hero-panel">
+      <div class="x-hero-copy">
+        {% block x_eyebrow %}<span class="x-eyebrow">{{ icon('award') }}{{ tr(C.TRUST[0][1]) }}</span>{% endblock %}
+        <h1>{{ tr(p.h1) }}</h1>
+        <p class="x-lead">{{ tr(p.lead) }}</p>
+        {% block x_actions %}
+        <div class="x-actions">
+          <a class="btn btn-primary btn-lg" href="{{ url('reparatur-auftrag') }}">{{ t('cta_repair') }} {{ icon('arrow') }}</a>
+          <a class="btn btn-quiet btn-lg" href="{{ company.phone_href }}">{{ icon('phone') }} {{ company.phone }}</a>
+        </div>
+        {% endblock %}
+      </div>
+      {% block x_media %}
+      <div class="x-hero-media" aria-hidden="true">
+        {% if images.get('hero-endoscopes') %}<img src="{{ images['hero-endoscopes'][1600] }}" alt="" width="1600" height="900">{% endif %}
+        <span class="x-chip x-chip-a">{{ icon('shield') }}{{ tr(C.TRUST[2][1]) }}</span>
+        <span class="x-chip x-chip-b">{{ icon('box') }}{{ tr(C.TRUST[3][1]) }}</span>
+      </div>
+      {% endblock %}
+    </div>
+    {% block x_scn_hero %}
+    <div class="x-scn">
+      {% for s in p.scenarios %}
+      <a class="x-scn-card {{ 'is-primary' if s.primary }}" href="{{ url(s.id) }}">
+        <span class="x-ico">{{ icon(s.icon) }}</span>
+        <span class="x-scn-t">{{ tr(s.t) }}</span>
+        <span class="x-scn-s">{{ tr(s.s) }}</span>
+      </a>
+      {% endfor %}
+    </div>
+    {% endblock %}
+  </div>
+</section>
+
+{# ── Figures strip ── #}
+{% block x_figs %}
+<section class="x-sec x-sec-tight" aria-label="{{ tr(p.workshop_o) }}">
+  <div class="wrap">
+    {{ x_figs() }}
+  </div>
+</section>
+
+{% endblock %}
+
+{# ── Principle: contract vs. as-needed ── #}
+<section class="x-sec" aria-labelledby="pr-h">
+  <div class="wrap x-split">
+    <div class="x-head rvl">
+      <p class="x-over">{{ tr(p.principle_o) }}</p>
+      <h2 id="pr-h">{{ tr(p.principle_h1) }} <span>{{ tr(p.principle_h2) }}</span></h2>
+      <a class="x-link" href="{{ url('rechner') }}">{{ icon('calc') }} {{ tr(p.principle_cta) }} {{ icon('arrow') }}</a>
+    </div>
+    <div class="x-cmp">
+      <div class="x-cmp-card rvl">
+        <p class="x-over x-muted">{{ tr(p.principle_a_o) }}</p>
+        <h3>{{ tr(p.principle_a_t) }}</h3>
+        <ul>{% for l in p.principle_a %}<li><span class="x-dot x-dot-off">{{ icon('minus') }}</span>{{ tr(l) }}</li>{% endfor %}</ul>
+      </div>
+      <div class="x-cmp-card is-on rvl">
+        <p class="x-over">{{ tr(p.principle_b_o) }}</p>
+        <h3>scopeREPAIR</h3>
+        <ul>{% for l in p.principle_b %}<li><span class="x-dot">{{ icon('check') }}</span>{{ tr(l) }}</li>{% endfor %}</ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+{# ── Process: 7 steps as soft cards ── #}
+<section class="x-sec x-sec-soft" aria-labelledby="proc-h">
+  <div class="wrap">
+    <div class="x-head x-head-row rvl">
+      <div><p class="x-over">{{ tr(p.process_o) }}</p><h2 id="proc-h">{{ tr(p.process_h) }}</h2><p class="x-lead">{{ tr(p.process_s) }}</p></div>
+      <a class="btn btn-primary" href="{{ url('reparatur-auftrag') }}">{{ t('cta_repair') }} {{ icon('arrow') }}</a>
+    </div>
+    <ol class="x-steps">
+      {% for s in C.REPAIR_STEPS %}
+      <li class="x-step rvl" style="transition-delay:{{ (loop.index0 % 4) * 70 }}ms">
+        <div class="x-step-top"><span class="x-ico">{{ icon(s.icon) }}</span><span class="x-step-n">{{ '%02d' % loop.index }}</span></div>
+        <h3>{{ tr(s.t) }}</h3>
+        <p>{{ tr(s.s) }}</p>
+      </li>
+      {% endfor %}
+      <li class="x-step x-step-cta rvl">
+        <h3>{{ tr(p.band_t) }}</h3>
+        <p>{{ tr(p.band_s) }}</p>
+        <a class="x-link" href="{{ company.phone_href }}">{{ icon('phone') }} {{ company.phone }}</a>
+      </li>
+    </ol>
+  </div>
+</section>
+
+{# ── Used endoscopes ── #}
+<section class="x-sec" aria-labelledby="used-h">
+  <div class="wrap">
+    <div class="x-head x-head-row rvl">
+      <div><p class="x-over">{{ tr(p.used_o) }}</p><h2 id="used-h">{{ tr(p.used_h) }}</h2></div>
+      <a class="x-link" href="{{ url('gebrauchte-endoskope') }}">{{ t('cta_all_endoscopes') }} ({{ endos|length }}) {{ icon('arrow') }}</a>
+    </div>
+    {% set four = true %}
+    {% set shown = [] %}{% set keys = [] %}
+    {% for e in endos if e.img and shown|length < (4 if four else 3) and ((e.brand ~ e.type) if four else e.brand) not in keys %}{% set _ = shown.append(e) %}{% set _ = keys.append((e.brand ~ e.type) if four else e.brand) %}{% endfor %}
+    <div class="{{ 'x-cards4' if four else 'grid3' }} rvl">{% for e in shown %}{{ pcard(e) }}{% endfor %}</div>
+    <div class="x-trade rvl">
+      <span class="x-ico x-ico-lg">{{ icon('swap') }}</span>
+      <div><h3>{{ tr(p.tradein_t) }}</h3><p>{{ tr(p.tradein_s) }}</p></div>
+      <a class="btn btn-secondary" href="{{ url('ankauf-anfrage') }}">{{ tr(p.tradein_cta) }}</a>
+    </div>
+  </div>
+</section>
+
+{# ── People & workshop ── #}
+<section class="x-sec x-sec-soft" aria-labelledby="ws-h">
+  <div class="wrap x-people">
+    <div class="x-people-copy rvl">
+      <p class="x-over">{{ tr(p.workshop_o) }}</p>
+      <h2 id="ws-h">{{ tr(p.workshop_h) }}</h2>
+      <ul class="x-checks">{% for ic, l in C.TRUST %}<li><span class="x-ico x-ico-sm">{{ icon(ic) }}</span>{{ tr(l) }}</li>{% endfor %}</ul>
+      <a class="btn btn-secondary" href="{{ url('ueber-uns') }}">{{ tr(C.NAV[-2].label) }} {{ icon('arrow') }}</a>
+    </div>
+    <div class="x-people-media rvl">
+      {% set mk = images.get('team-maik-nissen') %}{% set ws = images.get('team-werkstatt-reparatur') %}
+      {% if mk %}<figure class="x-ph x-ph-tall"><img src="{{ mk[960] }}" alt="{{ company.ceo }}, {{ tr(company.ceo_role) }}" loading="lazy"><figcaption><b>{{ company.ceo }}</b>{{ tr(company.ceo_role) }}</figcaption></figure>{% endif %}
+      {% if ws %}<figure class="x-ph"><img src="{{ ws[960] }}" alt="{{ tr(p.workshop_cap1) }}" loading="lazy"><figcaption>{{ tr(p.workshop_cap1) }}</figcaption></figure>{% endif %}
+    </div>
+  </div>
+</section>
+
+{# ── FAQ ── #}
+{% if faq %}
+<section class="x-sec" aria-labelledby="faq-h">
+  <div class="wrap x-faq-wrap">
+    <div class="x-head rvl"><p class="x-over">FAQ</p><h2 id="faq-h">{{ t('faq') }}</h2></div>
+    <div class="x-faq-grid">
+      <div class="x-askcard rvl">
+        <p>{{ t('faq_more') }}</p>
+        <a class="x-link" href="{{ company.phone_href }}">{{ icon('phone') }} {{ company.phone }}</a>
+        <a class="x-link" href="mailto:{{ company.email }}">{{ icon('mail') }} {{ company.email }}</a>
+      </div>
+      <div class="x-faq rvl" data-faq>
+        {% for q, a in faq %}<details><summary>{{ q }}<span aria-hidden="true">{{ icon('plus') }}</span></summary><div class="x-faq-a"><p>{{ a }}</p></div></details>{% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{{ x_contact() }}
+{% endblock %}

@@ -33,8 +33,6 @@ VARIANTS = ['v1', 'v2']
 # page id -> (template, faq key or None)
 PAGES = OrderedDict([
     ('index', ('home.html', 'home')),
-    ('index-b', ('home_b.html', 'home')),
-    ('index-c', ('home_c.html', 'home')),
     ('reparatur', ('reparatur.html', 'repair')),
     ('reparatur-auftrag', ('wizard_repair.html', None)),
     ('leihgeraete', ('leihgeraete.html', 'loaner')),
@@ -58,7 +56,7 @@ SCREENS = [
     ('leihgeraete', 'Leihgeräte'), ('leihgeraet-anfragen', 'Leihgerät anfragen (Wizard)'),
     ('gebrauchte-endoskope', 'Gebrauchte Endoskope'), ('produkt', 'Produktseite'),
     ('ankauf', 'Ankauf'), ('ankauf-anfrage', 'Gerät verkaufen (Wizard)'), ('endoskopie-anlagen', 'Endoskopie-Anlagen'),
-    ('rechner', 'Kostenrechner'), ('index-b', 'Startseite B (nur 02)'), ('index-c', 'Startseite C (nur 02)'), ('ueber-uns', 'Über uns'), ('kontakt', 'Kontakt / Rückruf'),
+    ('rechner', 'Kostenrechner'), ('ueber-uns', 'Über uns'), ('kontakt', 'Kontakt / Rückruf'),
     ('impressum', 'Impressum'), ('datenschutz', 'Datenschutz'), ('agb', 'AGB'), ('rechtliches', 'Text- und Bildrechte'),
 ]
 DEMO_PRODUCT = 'gastroskop-pentax-eg-1580k'
