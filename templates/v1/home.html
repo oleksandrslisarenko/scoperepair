@@ -92,8 +92,8 @@
     </div>
     {% set gp = by_slug.get('gastroskop-pentax-eg-1580k') %}
     <div class="photos2 rvl">
-      <figure class="photo">{% set ws = images.get('team-werkstatt-reparatur') or images['banner-repair'] %}<img src="{{ ws[1600] }}" alt="{{ tr(P.workshop_cap1) }}" loading="lazy"><figcaption>{{ tr(P.workshop_cap1) }}</figcaption></figure>
-      <figure class="photo">{% if gp and gp.img %}<img src="{{ gp.img[960] }}" alt="{{ gp.title_l }}" loading="lazy">{% endif %}<figcaption>{{ tr(P.workshop_cap2) }}</figcaption></figure>
+      <figure class="photo">{% set mk = images.get('team-maik-nissen') or images['banner-repair'] %}<img src="{{ mk[1600] }}" alt="{{ company.ceo }}, {{ tr(company.ceo_role) }}" loading="lazy" style="object-position:center 25%"><figcaption>{{ company.ceo }}, {{ tr(company.ceo_role) }}</figcaption></figure>
+      <figure class="photo">{% set ws = images.get('team-werkstatt-reparatur') %}{% if ws %}<img src="{{ ws[1600] }}" alt="{{ tr(P.workshop_cap1) }}" loading="lazy">{% elif gp and gp.img %}<img src="{{ gp.img[960] }}" alt="{{ gp.title_l }}" loading="lazy">{% endif %}<figcaption>{{ tr(P.workshop_cap1) }}</figcaption></figure>
     </div>
   </div>
 </section>

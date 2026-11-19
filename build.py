@@ -12,6 +12,7 @@ Output:
     site/static/…               css, js, fonts
 """
 import json
+import hashlib
 import os
 import shutil
 import sys
@@ -86,6 +87,11 @@ def build_images():
     def make(rel, sizes=(480, 960, 1600)):
         src_path = os.path.join(PHOTOS, rel)
         base = os.path.splitext(rel)[0].replace('/', '__')
+        # product photos on the glass backdrop (tools/glass_batch.py) replace the originals when present
+        if rel.startswith('products/'):
+            g = os.path.join(PHOTOS, 'products-glass', rel[len('products/'):])
+            if os.path.exists(g):
+                src_path, base = g, base + '__g'
         res = {}
         try:
             im = None
@@ -147,7 +153,7 @@ def build_images():
                 open(stamp, 'w').write(sig)
                 w2 = min(w, c.width)
                 c.resize((w2, round(c.height * w2 / c.width)), Image.LANCZOS).save(dst, 'WEBP', quality=80, method=5)
-            res[w] = f'/img/{key}-{w}.webp'
+            res[w] = f'/img/{key}-{w}.webp?v=' + hashlib.md5(sig.encode()).hexdigest()[:8]
         res['ratio'] = c.width / c.height
         lookup[key] = res
     # team / workshop photos (assets/photos/team/<name>.png|jpg) -> images['team-<name>']
@@ -168,7 +174,7 @@ def build_images():
                 w2 = min(w, im.width)
                 im.resize((w2, round(im.height * w2 / im.width)), Image.LANCZOS).save(dst, 'WEBP', quality=82, method=5)
                 open(stamp, 'w').write(sig)
-            res[w] = f'/img/team-{stem}-{w}.webp'
+            res[w] = f'/img/team-{stem}-{w}.webp?v=' + hashlib.md5(sig.encode()).hexdigest()[:8]
         lookup[f'team-{stem}'] = res
     # brand assets
     for name in ('scopeREPAIR-Logo2025-300small.webp', 'QAS-International-GM3329.webp', 'Favicon_Scoperepair_neu_2024_transparent.png'):
@@ -202,6 +208,11 @@ def zip_hero():
 def product_view(p, lang, images):
     gal = [images.get(u) for u in p['gallery']]
     gal = [g for g in gal if g]
+    # lead with a glass-backdrop shot so catalog cards look consistent
+    if gal and '__g-' not in str(gal[0]):
+        gi = next((i for i, g in enumerate(gal) if '__g-' in str(g)), None)
+        if gi:
+            gal.insert(0, gal.pop(gi))
     t_type = C.TYPES.get(p['type'], {}).get(lang, p['type'])
     if lang in ('de', 'en'):
         title = p['title'][lang]
