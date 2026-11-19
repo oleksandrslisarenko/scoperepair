@@ -1283,3 +1283,4 @@ body.v2:has(.hdr-compact){--hdr:84px}
 .x-faq-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:64px;align-items:start}
 .x-faq-grid .x-askcard{margin:0;position:sticky;top:calc(var(--hdr) + 32px)}
 @media (max-width:1100px){.x-faq-grid{grid-template-columns:1fr;gap:24px}.x-faq-grid .x-askcard{position:static}}
+.x-cards4 .pcard-badges{left:auto;right:10px;top:10px;bottom:auto;flex-direction:column;align-items:flex-end;flex-wrap:nowrap}
