@@ -1461,3 +1461,6 @@ body.v2:has(.hdr-compact){--hdr:84px}
 /* simpler, flatter light-blue cards */
 .x-cmp-card.is-on,.x-card-blue{background:linear-gradient(160deg,#f1f7fd 0%,#dcebf8 100%);box-shadow:0 0 0 1px rgba(22,121,180,.08),0 16px 32px -20px rgba(22,90,150,.25)}
 .x-cmp-card.is-on::after,.x-card-blue::after{display:none}
+/* comparison: white 'Üblich' with hairline, blue 'Mit uns'; no shadows */
+.x-cmp-card:not(.is-on){background:#fff;box-shadow:0 0 0 1px var(--line)}
+.x-cmp-card.is-on,.x-card-blue,.x-card-blue:hover{box-shadow:none}
