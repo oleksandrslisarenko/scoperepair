@@ -1458,3 +1458,6 @@ body.v2:has(.hdr-compact){--hdr:84px}
 .x-card-blue .x-ico{background:#fff;box-shadow:0 8px 20px -10px rgba(15,42,68,.3)}
 .x-card-blue .x-cert{box-shadow:0 8px 20px -10px rgba(15,42,68,.35)}
 .x-card-blue p{color:var(--ink-strong)}
+/* simpler, flatter light-blue cards */
+.x-cmp-card.is-on,.x-card-blue{background:linear-gradient(160deg,#f1f7fd 0%,#dcebf8 100%);box-shadow:0 0 0 1px rgba(22,121,180,.08),0 16px 32px -20px rgba(22,90,150,.25)}
+.x-cmp-card.is-on::after,.x-card-blue::after{display:none}
