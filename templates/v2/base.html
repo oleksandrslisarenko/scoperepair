@@ -84,7 +84,7 @@
     <a class="btn btn-primary btn-block" href="{{ url('reparatur-auftrag') }}">{{ t('cta_repair') }}</a>
     <a class="btn btn-secondary btn-block" href="{{ company.phone_href }}">{{ icon('phone') }} {{ company.phone }}</a>
   </div>
-  <div class="mnav-langs">{% for l in langs %}<a href="{{ self_url(l) }}" lang="{{ l }}" {% if l == lang %}aria-current="true"{% endif %}>{{ flag(l) }}{{ l|upper }}</a>{% endfor %}</div>
+  <div class="mnav-langs">{% for l in langs %}<a href="{{ self_url(l) }}" lang="{{ l }}" {% if l == lang %}aria-current="true"{% endif %}>{{ l|upper }}</a>{% endfor %}</div>
 </div>
 
 <main id="main">
