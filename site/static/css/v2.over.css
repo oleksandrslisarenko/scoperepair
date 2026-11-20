@@ -626,3 +626,4 @@ body.v2:has(.hdr-compact){--hdr:84px}
 /* mobile/tablet home: no blueprint illustration */
 @media (max-width:1100px){.x-hero-c .x-bp{display:none}.x-hero-c .x-hero-copy{padding-bottom:88px}}
 @media (max-width:900px){.x-hero-c .x-hero-copy{padding-bottom:72px}}
+.v2 .mnav-langs{justify-content:center}
