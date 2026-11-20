@@ -19,7 +19,7 @@
 {%- endmacro %}
 
 
-{% macro x_figs() -%}
+{% macro x_figs(cls='') -%}
 {% set F = C.FIGURES %}
 {% set yrs = now_year - 2010 %}
 {% set items = [
@@ -28,7 +28,7 @@
   (F[2].num, tr(F[2].unit), tr(F[2].label)),
   (F[3].num, tr(F[3].unit), tr(F[3].label)),
 ] %}
-<div class="x-figs rvl">
+<div class="x-figs {{ cls }} rvl">
   {% for n, u, l in items %}<div class="x-fig"><span class="x-fig-n">{{ n }}<em>{{ "" if u.startswith("%") else " " }}{{ u }}</em></span><span class="x-fig-l">{{ l }}</span></div>{% endfor %}
 </div>
 {%- endmacro %}

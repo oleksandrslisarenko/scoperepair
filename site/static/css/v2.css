@@ -1446,3 +1446,15 @@ body.v2:has(.hdr-compact){--hdr:84px}
   box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 0 0 1px rgba(22,121,180,.10),0 28px 56px -24px rgba(22,90,150,.35)}
 .x-cmp-card.is-on::after{content:"";position:absolute;right:-18%;bottom:-70%;width:90%;height:150%;border-radius:50%;border:1.5px solid rgba(255,255,255,.9);box-shadow:0 0 0 40px rgba(255,255,255,.12);pointer-events:none}
 .x-cmp-card.is-on>*{position:relative;z-index:1}
+
+.x-figs.x-figs-flush{margin:0}
+.x-figs-flush .x-fig{padding:0}
+/* light-blue volumetric cards (same family as hero and 'Mit uns') */
+.x-card-blue{position:relative;overflow:hidden;
+  background:radial-gradient(55% 70% at 90% 8%,#fff 0%,rgba(255,255,255,0) 60%),radial-gradient(70% 90% at 0% 110%,rgba(120,180,230,.45) 0%,rgba(120,180,230,0) 60%),linear-gradient(135deg,#eef5fc 0%,#dbeaf8 55%,#c6ddf3 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 0 0 1px rgba(22,121,180,.10),0 28px 56px -24px rgba(22,90,150,.32)}
+.x-card-blue::after{content:"";position:absolute;right:-20%;bottom:-75%;width:85%;height:150%;border-radius:50%;border:1.5px solid rgba(255,255,255,.9);box-shadow:0 0 0 36px rgba(255,255,255,.12);pointer-events:none}
+.x-card-blue>*{position:relative;z-index:1}
+.x-card-blue .x-ico{background:#fff;box-shadow:0 8px 20px -10px rgba(15,42,68,.3)}
+.x-card-blue .x-cert{box-shadow:0 8px 20px -10px rgba(15,42,68,.35)}
+.x-card-blue p{color:var(--ink-strong)}
