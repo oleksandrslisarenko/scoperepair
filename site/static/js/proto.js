@@ -51,8 +51,15 @@
       li.style.backgroundSize = w + 'px ' + h + 'px';
       li.style.backgroundPosition = (R - px) + 'px ' + (R - py) + 'px';
     }
-    bp.addEventListener('pointermove', function (e) { if (e.pointerType === 'touch') return; place(e.clientX, e.clientY); lens.classList.add('is-on'); bp.classList.add('is-used'); });
-    bp.addEventListener('pointerleave', function () { lens.classList.remove('is-on'); });
+    /* lens works only over the right half of the hero; the 'hover me' dot hides only while the pointer is there */
+    function inZone(cx) { var r = bp.getBoundingClientRect(); return cx >= r.left + r.width / 2; }
+    function off() { lens.classList.remove('is-on'); bp.classList.remove('is-used', 'is-zone'); }
+    bp.addEventListener('pointermove', function (e) {
+      if (e.pointerType === 'touch') return;
+      if (!inZone(e.clientX)) { off(); return; }
+      place(e.clientX, e.clientY); lens.classList.add('is-on'); bp.classList.add('is-used', 'is-zone');
+    });
+    bp.addEventListener('pointerleave', off);
     /* touch: tap to drop the lens */
     bp.addEventListener('pointerdown', function (e) { if (e.pointerType !== 'touch') return; place(e.clientX, e.clientY); lens.classList.add('is-on'); bp.classList.add('is-used'); });
   })();
