@@ -1433,3 +1433,8 @@ body.v2:has(.hdr-compact){--hdr:84px}
 .v2 .btn-blue{background:#fff;color:var(--navy-900)}
 .v2 .btn-blue:hover{background:#eaf4fb;color:var(--navy-900);filter:none}
 .v2 .input,.v2 .select,.v2 .textarea,.v2 .dp-btn,.v2 .tile-in{border-color:#cbd9e5}
+/* figures share the grid of the service cards above: same inset, gap and inner padding */
+.x-figs{margin:0 40px;gap:16px}
+.x-fig{padding:0 24px}
+@media (max-width:1100px){.x-figs{margin:0 24px;gap:32px 16px}}
+@media (max-width:900px){.x-figs{margin:0 12px}.x-fig{padding:0 18px}}
