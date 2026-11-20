@@ -36,7 +36,7 @@
   /* ── blueprint hero: magnifier shows the real photo under the cursor ── */
   (function () {
     var bp = $('[data-bp]'); if (!bp) return;
-    var lens = $('[data-lens]', bp), li = $('[data-lens-img]', bp), lines = $('img.x-bp-lines', bp);
+    var lens = $('[data-lens]', bp), li = $('[data-lens-img]', bp), lines = $('img.x-bp-lines:not(.x-bp-alt)', bp);
     var ZOOM = 1.6, R = 110;
     li.style.backgroundImage = 'url(/static/img/hero-photo.jpg)';
     var dot = $('[data-bp-dot]', bp);

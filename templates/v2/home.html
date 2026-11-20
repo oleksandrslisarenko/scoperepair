@@ -14,6 +14,7 @@
       <text x="1330" y="48" fill="#1679b4" stroke="none">C · Versorgungskabel</text>
     </g>
   </svg>
+  {% for i in range(1,5) %}<img class="x-bp-lines x-bp-alt" data-alt="{{ i }}" src="/static/img/hero-scn-{{ i }}.jpg?v={{ av }}" alt="" width="1600" height="900" loading="lazy">{% endfor %}
   <div class="x-lens" data-lens><div class="x-lens-img" data-lens-img></div><span class="x-lens-ring"></span></div>
   <span class="x-bp-dot" data-bp-dot><i></i><span>{{ icon('search') }}<b>{{ {'de':'Fahr über mich','en':'Hover over me','fr':'Survolez-moi','ru':'Наведи на меня'}[lang] }}</b></span></span>
 </div>
