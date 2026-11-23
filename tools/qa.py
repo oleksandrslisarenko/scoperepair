@@ -51,7 +51,7 @@ def run(variant, lang, pages, widths=(1440, 390), full=True):
         b = pw.chromium.launch(executable_path='/usr/bin/google-chrome', args=['--no-sandbox'])
         for w in widths:
             ctx = b.new_context(viewport={'width': w, 'height': 900 if w > 500 else 844}, device_scale_factor=1)
-            ctx.add_init_script("try{localStorage.setItem('sr-cookie','all')}catch(e){}")
+            ctx.add_init_script("try{localStorage.setItem('sr-cookie','all');sessionStorage.setItem('sr-pl','1')}catch(e){}")
             page = ctx.new_page()
             errs = []
             page.on('console', lambda m: errs.append(m.text) if m.type == 'error' else None)
