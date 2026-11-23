@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>scopeREPAIR – Preloader-Varianten</title>
+<link rel="stylesheet" href="/static/css/fonts.css">
+<style>
+:root{--navy:#193854;--navy-2:#0f2538;--blue:#2391cf;--light:#5ab8ea;--ink:#264152;--line:#dbe5ee;--ease:cubic-bezier(.16,1,.3,1)}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:"Barlow","Helvetica Neue",Arial,sans-serif;color:var(--ink);background:#eef4fa;display:flex;flex-direction:column}
+
+/* ── toolbar ── */
+.bar{display:flex;align-items:center;gap:20px;padding:14px 24px;background:#fff;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.bar h1{margin:0;font-size:16px;font-weight:700;color:var(--navy);margin-right:auto}
+.bar h1 span{color:#6b8091;font-weight:500}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tabs button{height:36px;padding:0 14px;border-radius:999px;border:0;background:#eef4fa;color:var(--navy);font:600 14px/1 inherit;font-family:inherit;cursor:pointer;display:flex;align-items:center;gap:8px}
+.tabs button b{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:#fff;font-size:12px}
+.tabs button:hover{background:#e0ecf7}
+.tabs button[aria-pressed="true"]{background:var(--navy);color:#fff}
+.tabs button[aria-pressed="true"] b{background:var(--blue);color:#fff}
+.ctl{display:flex;gap:6px}
+.ctl button{height:36px;padding:0 14px;border-radius:999px;border:1.5px solid var(--line);background:#fff;color:var(--navy);font:600 14px/1 inherit;font-family:inherit;cursor:pointer}
+.ctl button:hover{border-color:var(--blue)}
+.desc{padding:10px 24px;font-size:14px;color:#3b5266;background:#f7fafd;border-bottom:1px solid var(--line);min-height:40px}
+.desc b{color:var(--navy)}
+
+/* ── stage: the "site" behind the preloader ── */
+.stage{position:relative;flex:1;min-height:520px;overflow:hidden;background:#fff url(/static/img/preloader-bg.jpg) center top/cover no-repeat}
+.pl{position:absolute;inset:0;display:none;z-index:2}
+.pl.on{display:block}
+
+/* shared logo: SVG mark (9 segments) + wordmark clipped out of the real logo */
+.logo{position:relative;width:min(420px,72vw);aspect-ratio:900/342}
+.logo img{position:absolute;inset:0;width:100%;height:100%}
+.logo svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.seg path{stroke-width:0}
+.seg{transform-box:view-box;transform-origin:200px 160px}
+
+/* 1 · Segmente: segments light up one by one, wordmark slides in, white veil lifts */
+.v1{background:#fff;display:none;place-items:center}
+.v1.on{display:grid}
+.v1 .seg{opacity:0;transform:scale(.6)}
+.v1.run .seg{animation:v1seg .5s var(--ease) both;animation-delay:calc(var(--i) * 90ms)}
+.v1 img{opacity:0;transform:translateX(-18px)}
+.v1.run img{animation:v1word .7s var(--ease) 1s both}
+.v1.run{animation:fadeOut .6s ease 2.6s both}
+@keyframes v1seg{to{opacity:1;transform:none}}
+@keyframes v1word{to{opacity:1;transform:none}}
+
+/* 2 · Spinner: the mark spins as a loader with a light trail, snaps into place, wordmark appears */
+.v2{background:#fff;display:none;place-items:center}
+.v2.on{display:grid}
+.v2 .mark{transform-box:view-box;transform-origin:200px 160px}
+.v2.run .mark{animation:v2spin 2.4s cubic-bezier(.45,0,.2,1) both}
+.v2 .seg{opacity:.18}
+.v2.run .seg{animation:v2trail .8s linear calc(var(--i) * -88ms) 3,v2full .3s ease 2.4s forwards}
+.v2 img{opacity:0}
+.v2.run img{animation:v1word .6s var(--ease) 2.5s both}
+.v2 .pct{position:absolute;left:0;right:0;bottom:-56px;text-align:center;font:600 15px/1 "IBM Plex Mono",monospace;color:#6b8091;letter-spacing:.06em}
+.v2.run .pct{animation:fadeOut .3s ease 2.4s both}
+.v2.run{animation:fadeOut .6s ease 3.6s both}
+@keyframes v2spin{0%{transform:rotate(0)}85%{transform:rotate(-720deg)}100%{transform:rotate(-720deg)}}
+@keyframes v2trail{0%{opacity:1}100%{opacity:.18}}
+@keyframes v2full{to{opacity:1}}
+
+/* 3 · Fortschritt: segments are the progress bar (outline → filled), then the panel slides up */
+.v3{background:linear-gradient(160deg,#f4f8fc 0%,#e3eef9 100%);display:none;place-items:center}
+.v3.on{display:grid}
+.v3 .seg path{fill-opacity:0;stroke-width:3;stroke-opacity:.55}
+.v3.run .seg path{animation:v3fill .35s ease both;animation-delay:calc(var(--i) * 230ms + 200ms)}
+.v3 img{opacity:0}
+.v3.run img{animation:v1word .6s var(--ease) 2.4s both}
+.v3 .meter{position:absolute;left:50%;bottom:-64px;transform:translateX(-50%);width:200px;display:flex;justify-content:space-between;font:600 14px/1 "IBM Plex Mono",monospace;color:#3b5266}
+.v3.run{animation:slideUp .9s var(--ease) 3.2s both}
+@keyframes v3fill{to{fill-opacity:1;stroke-opacity:0}}
+@keyframes slideUp{to{transform:translateY(-100%)}}
+
+/* 4 · Linse: dark screen, mark glows, a circular "scope view" opens onto the site */
+.v4{background:radial-gradient(60% 60% at 50% 50%,#1d4568 0%,#0f2538 70%);display:none;place-items:center;--r:0px}
+.v4.on{display:grid}
+.v4 .logo{filter:drop-shadow(0 0 24px rgba(90,184,234,.35))}
+.v4 img{filter:brightness(0) invert(1);opacity:0}
+.v4 .seg{opacity:0}
+.v4.run .seg{animation:v4seg .45s ease both;animation-delay:calc(var(--i) * 70ms + 150ms)}
+.v4.run img{animation:v4word .6s ease .9s both}
+.v4.run .logo{animation:v4zoom .9s cubic-bezier(.7,0,.3,1) 2.1s both}
+.v4.run{-webkit-mask:radial-gradient(circle at 50% 50%,transparent var(--r),#000 calc(var(--r) + 1px));mask:radial-gradient(circle at 50% 50%,transparent var(--r),#000 calc(var(--r) + 1px));animation:v4open 1.2s cubic-bezier(.7,0,.2,1) 2.3s both}
+.v4.run::after{content:"";position:absolute;left:50%;top:50%;width:calc(var(--r) * 2);height:calc(var(--r) * 2);transform:translate(-50%,-50%);border-radius:50%;box-shadow:0 0 0 2px rgba(90,184,234,.7),0 0 40px 6px rgba(90,184,234,.35);animation:inherit;pointer-events:none}
+@keyframes v4seg{0%{opacity:0}60%{opacity:1;filter:brightness(1.8)}100%{opacity:1}}
+@keyframes v4word{to{opacity:1}}
+@keyframes v4zoom{to{transform:scale(.6);opacity:0}}
+@property --r{syntax:'<length>';inherits:false;initial-value:0px}
+@keyframes v4open{0%{--r:0px}100%{--r:110vmax}}
+
+/* 5 · Blueprint: mark is drawn as a technical outline on a grid, then filled */
+.v5{background:#f3f8fd;display:none;place-items:center}
+.v5.on{display:grid}
+.v5::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(22,121,180,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(22,121,180,.08) 1px,transparent 1px),linear-gradient(rgba(22,121,180,.14) 1px,transparent 1px),linear-gradient(90deg,rgba(22,121,180,.14) 1px,transparent 1px);background-size:20px 20px,20px 20px,100px 100px,100px 100px;background-position:center}
+.v5 .logo{z-index:1}
+.v5 .seg path{fill-opacity:0;stroke:#1679b4!important;stroke-width:2.5;stroke-dasharray:600;stroke-dashoffset:600}
+.v5.run .seg path{animation:v5draw 1s ease both,v5fill .5s ease both;animation-delay:calc(var(--i) * 80ms),calc(1.5s + var(--i) * 40ms)}
+.v5 .guide{stroke:#1679b4;stroke-opacity:.35;stroke-width:1.5;fill:none;stroke-dasharray:6 6;opacity:0}
+.v5.run .guide{animation:v4word .4s ease both,fadeOut .4s ease 1.6s forwards}
+.v5 img{opacity:0}
+.v5.run img{animation:v1word .6s var(--ease) 2s both}
+.v5.run{animation:fadeOut .6s ease 3.2s both}
+@keyframes v5draw{to{stroke-dashoffset:0}}
+@keyframes v5fill{to{fill-opacity:1;stroke-opacity:0}}
+
+@keyframes fadeOut{to{opacity:0;visibility:hidden}}
+.done-hint{position:absolute;left:50%;bottom:24px;transform:translateX(-50%);z-index:3;padding:10px 16px;border-radius:999px;background:rgba(25,56,84,.88);color:#fff;font-size:14px;opacity:0;transition:opacity .3s;pointer-events:none}
+.stage.is-done .done-hint{opacity:1}
+@media (prefers-reduced-motion:reduce){.pl.run,.pl.run *{animation-duration:.01ms!important;animation-delay:0s!important}}
+</style>
+</head>
+<body>
+<header class="bar">
+  <h1>scopeREPAIR · Preloader <span>– 5 Varianten</span></h1>
+  <nav class="tabs" aria-label="Varianten" data-tabs></nav>
+  <div class="ctl"><button type="button" data-prev aria-label="Vorherige">←</button><button type="button" data-replay>↻ Wiederholen</button><button type="button" data-next aria-label="Nächste">→</button></div>
+</header>
+<p class="desc" data-desc></p>
+<main class="stage" data-stage>
+  <div class="pl v1" data-v="1"></div>
+  <div class="pl v2" data-v="2"><span class="pct" data-pct>0 %</span></div>
+  <div class="pl v3" data-v="3"><div class="meter"><span>Wird geladen</span><span data-pct>0 %</span></div></div>
+  <div class="pl v4" data-v="4"></div>
+  <div class="pl v5" data-v="5"></div>
+  <span class="done-hint">Seite geladen · ↻ Wiederholen</span>
+</main>
+<script>
+(function () {
+  var V = [
+    ['Segmente', '<b>1 · Segmente.</b> Die neun Segmente des Logos leuchten nacheinander auf, dann gleitet der Schriftzug ein. Ruhig und markentreu.'],
+    ['Spinner', '<b>2 · Spinner.</b> Das Logo-Zeichen dreht sich als Ladekreis mit Lichtspur und Prozentanzeige, rastet in Position ein, dann erscheint der Schriftzug.'],
+    ['Fortschritt', '<b>3 · Fortschritt.</b> Die Segmente sind der Ladebalken: von der Kontur zur Fläche, Segment für Segment. Danach gleitet die Fläche nach oben weg.'],
+    ['Linse', '<b>4 · Linse.</b> Dunkler Bildschirm, das Logo leuchtet auf, dann öffnet sich ein runder „Endoskop-Blick“ auf die Seite.'],
+    ['Blueprint', '<b>5 · Blueprint.</b> Das Zeichen wird wie eine technische Zeichnung auf Raster konstruiert und anschließend gefüllt – passt zur Blueprint-Startseite.']
+  ];
+  /* logo mark: the 9 segments vectorised from the scopeREPAIR logo, ordered small → large */
+  var SEG = [["M284.5,37.2 284.2,39.8 285.8,43.0 289.2,46.0 295.0,48.2 301.0,48.8 305.2,48.0 308.8,45.5 309.8,43.2 309.5,40.8 307.0,37.2 303.0,34.8 298.8,33.2 295.5,32.8 289.2,33.2 286.8,34.5Z","#26a9e0"],["M231.8,28.8 231.8,30.8 232.5,32.8 236.0,36.8 240.2,39.2 247.5,41.5 255.5,41.5 259.2,40.5 264.2,37.5 266.5,33.5 266.2,30.8 265.2,28.8 262.2,25.8 258.2,23.5 251.8,21.5 242.8,21.2 238.2,22.2 235.0,24.0 232.8,26.2Z","#26a9df"],["M170.0,31.0 170.2,33.8 171.5,36.5 176.0,40.8 182.2,43.8 189.5,45.2 199.8,45.0 206.0,43.2 209.2,41.5 212.8,38.2 214.5,35.2 215.0,33.2 214.8,30.5 213.8,28.2 210.2,24.5 205.5,21.8 196.5,19.8 186.5,20.0 179.0,21.8 175.2,23.8 172.5,26.0Z","#26a8df"],["M161.2,49.2 160.0,46.0 158.2,43.5 151.5,36.8 144.0,33.8 136.5,33.2 132.8,33.8 126.2,35.8 114.0,42.0 110.0,46.2 108.8,49.0 108.5,52.0 110.2,55.8 113.0,58.5 121.5,64.0 129.0,66.5 138.0,66.8 144.8,65.2 156.2,59.2 160.2,54.8 161.2,52.0Z","#269fd3"],["M115.8,80.5 113.5,77.2 110.8,74.8 97.8,67.8 93.8,66.5 89.5,66.0 81.5,66.8 73.2,70.2 66.2,76.5 59.8,85.5 58.5,89.2 58.5,93.0 61.0,98.5 64.2,101.5 69.0,104.0 85.2,107.8 95.2,107.2 103.0,104.5 107.0,101.8 110.2,98.2 115.0,91.8 116.5,88.5 116.8,83.5Z","#2695c5"],["M39.2,125.0 37.0,129.2 36.0,134.5 35.2,144.2 35.5,156.5 36.2,160.8 37.8,164.0 41.2,168.0 43.8,169.8 48.5,171.5 54.2,172.0 86.5,167.8 90.5,166.5 93.8,164.8 98.5,160.0 99.8,156.5 99.0,146.0 99.2,132.5 97.2,128.2 92.8,124.5 89.5,123.0 82.8,121.5 66.2,119.5 58.8,118.0 52.0,117.8 48.5,118.5 43.8,120.8Z","#2689b5"],["M107.0,183.0 103.2,182.5 94.5,182.8 59.2,191.5 53.5,194.5 50.0,198.2 48.2,202.0 47.8,206.8 48.8,211.5 51.5,216.8 60.8,229.5 67.8,237.8 76.5,246.8 81.0,250.0 89.8,253.5 94.2,254.2 98.5,254.2 103.2,253.2 107.5,251.2 135.5,230.0 138.5,226.2 140.0,223.0 140.2,217.8 139.5,215.2 137.2,211.5 127.2,201.0 119.2,190.5 116.0,187.2 110.2,184.0Z","#26799e"],["M124.5,277.5 124.0,280.5 124.8,283.2 128.0,287.5 132.8,290.8 151.5,299.2 168.5,305.5 188.8,311.5 215.8,317.0 223.2,317.0 226.0,316.2 229.8,314.2 232.0,311.8 233.2,308.8 237.2,264.0 237.2,258.2 236.5,255.8 235.0,253.5 229.8,250.0 219.0,248.0 206.0,244.8 191.0,239.8 176.8,233.5 173.0,232.5 170.2,232.5 166.5,233.5 163.0,235.5 128.5,272.0Z","#265f7b"],["M384.2,287.5 381.5,282.8 343.2,243.2 338.0,238.2 331.8,235.0 329.5,234.5 324.8,234.8 305.0,242.0 291.5,245.2 269.0,248.2 265.5,249.8 263.0,252.2 261.5,255.5 261.5,262.2 263.0,270.8 265.0,291.0 266.5,299.0 267.0,306.8 268.2,314.2 269.2,316.5 271.8,319.5 279.2,323.2 282.2,323.8 293.5,323.5 317.0,320.0 339.5,314.5 351.2,310.8 366.5,304.8 379.0,298.5 382.0,295.8 383.5,293.5 384.5,289.8Z","#264659"]], cx = 200, cy = 160;
+  function mark(guide) {
+    var s = '<svg viewBox="0 0 900 342" aria-hidden="true">';
+    if (guide) s += '<circle class="guide" cx="' + cx + '" cy="' + cy + '" r="140"/><circle class="guide" cx="' + cx + '" cy="' + cy + '" r="88"/><path class="guide" d="M' + cx + ' 0V342M20 ' + cy + 'H380"/>';
+    s += '<g class="mark">';
+    SEG.forEach(function (g, i) { s += '<g class="seg" style="--i:' + i + '"><path d="' + g[0] + '" fill="' + g[1] + '" stroke="' + g[1] + '"/></g>'; });
+    return s + '</g></svg>';
+  }
+  var stage = document.querySelector('[data-stage]'), tabs = document.querySelector('[data-tabs]'), desc = document.querySelector('[data-desc]');
+  document.querySelectorAll('.pl').forEach(function (p) {
+    var l = document.createElement('div'); l.className = 'logo';
+    l.innerHTML = mark(p.dataset.v === '5') + '<img src="/static/img/logo-wordmark.png" alt="scopeREPAIR GmbH">';
+    var pct = p.querySelector('.pct'); if (pct) l.appendChild(pct);
+    var met = p.querySelector('.meter'); if (met) l.appendChild(met);
+    p.prepend(l);
+  });
+  V.forEach(function (v, i) {
+    var b = document.createElement('button'); b.type = 'button'; b.innerHTML = '<b>' + (i + 1) + '</b>' + v[0];
+    b.onclick = function () { show(i); }; tabs.appendChild(b);
+  });
+  var cur = 0, timers = [];
+  function counter(p, ms) {
+    var el = p.querySelector('[data-pct]'); if (!el) return;
+    var t0 = performance.now();
+    (function tick(now) { var k = Math.min(1, (now - t0) / ms); el.textContent = Math.round(100 * (1 - Math.pow(1 - k, 2))) + ' %'; if (k < 1) timers.push(requestAnimationFrame(tick)); })(t0);
+  }
+  function show(i) {
+    cur = (i + V.length) % V.length;
+    timers.forEach(cancelAnimationFrame); timers = [];
+    stage.classList.remove('is-done');
+    document.querySelectorAll('.pl').forEach(function (p, k) {
+      p.classList.remove('run', 'on');
+      if (k === cur) { p.classList.add('on'); void p.offsetWidth; p.classList.add('run'); }
+    });
+    var p = document.querySelectorAll('.pl')[cur];
+    counter(p, cur === 2 ? 2300 : 2400);
+    tabs.querySelectorAll('button').forEach(function (b, k) { b.setAttribute('aria-pressed', k === cur ? 'true' : 'false'); });
+    desc.innerHTML = V[cur][1];
+    history.replaceState(null, '', '#' + (cur + 1));
+    var total = [3200, 4200, 4100, 3300, 3800][cur];
+    clearTimeout(show.t); show.t = setTimeout(function () { stage.classList.add('is-done'); }, total);
+  }
+  document.querySelector('[data-replay]').onclick = function () { show(cur); };
+  document.querySelector('[data-prev]').onclick = function () { show(cur - 1); };
+  document.querySelector('[data-next]').onclick = function () { show(cur + 1); };
+  stage.onclick = function () { if (stage.classList.contains('is-done')) show(cur); };
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight') show(cur + 1); else if (e.key === 'ArrowLeft') show(cur - 1); else if (e.key === ' ' || e.key === 'r') { e.preventDefault(); show(cur); }
+    else if (/^[1-5]$/.test(e.key)) show(+e.key - 1);
+  });
+  show(Math.max(0, Math.min(4, (parseInt(location.hash.slice(1), 10) || 1) - 1)));
+})();
+</script>
+</body>
+</html>

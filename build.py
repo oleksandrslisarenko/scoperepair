@@ -377,6 +377,11 @@ def copy_static():
     if os.path.exists(dst):
         shutil.rmtree(dst)
     shutil.copytree(os.path.join(ROOT, 'static'), dst)
+    # standalone demo pages (e.g. preloader variants) at the site root
+    for fn in ('preloader.html',):
+        src = os.path.join(ROOT, 'pages', fn)
+        if os.path.exists(src):
+            shutil.copy(src, os.path.join(SITE, fn))
     # v2 = v1 component layer + v2 visual layer
     over = os.path.join(ROOT, 'static', 'css', 'v2.over.css')
     if os.path.exists(over):
