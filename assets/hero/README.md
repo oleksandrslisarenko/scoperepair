@@ -11,5 +11,6 @@ Ein Bild pro Seite. Datei ersetzen (gleicher Name, .jpg/.png/.webp), dann `pytho
 | 05-endoskopie-anlagen | Endoskopie-Anlagen |
 | 06-ueber-uns | Über uns |
 | 07-kontakt | Kontakt |
+| 08-kostenrechner | Kostenrechner |
 
-Seiten ohne Hero-Bild: Kostenrechner, Gebrauchte Endoskope, Produktseiten, Formulare, Rechtliches.
+Seiten ohne Hero-Bild: Gebrauchte Endoskope, Produktseiten, Formulare, Rechtliches.

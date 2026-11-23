@@ -68,7 +68,7 @@ DEMO_PRODUCT = 'gastroskop-pentax-eg-1580k'
 HERO_DIR = os.path.join(ROOT, 'assets', 'hero')
 HERO_NAMES = {'hero-endoscopes': '01-startseite', 'banner-repair': '02-reparatur', 'banner-pickup': '03-leihgeraete',
               'banner-buy': '04-ankauf', 'banner-systems': '05-endoskopie-anlagen', 'banner-about': '06-ueber-uns',
-              'banner-contact': '07-kontakt'}
+              'banner-contact': '07-kontakt', 'banner-calc': '08-kostenrechner'}
 
 
 def build_images():
@@ -126,6 +126,7 @@ def build_images():
         'banner-pickup': ('pages/abholauftrag/scopeREPAIR-GmbH-Abholauftrag.webp', (0, 0, 2400, 760)),
         'banner-about': ('pages/ueber-uns/scopeREPAIR-Ueber-uns_2.webp', (0, 0, 2400, 760)),
         'banner-contact': ('pages/kontakt/scopeREPAIR-GmbH-Kontakt.webp', (0, 0, 2400, 760)),
+        'banner-calc': ('pages/kontakt/scopeREPAIR-GmbH-Kontakt.webp', (0, 0, 2400, 760)),  # source is assets/hero/08-kostenrechner.png
     }
     # assets/hero/<page>.(jpg|png|webp) is the editable source of every hero image;
     # if a file is missing there, it is re-created from the live-site crop above.
